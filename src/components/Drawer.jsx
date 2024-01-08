@@ -146,9 +146,15 @@ const MiniDrawer = () => {
             <NavLink
               key={link.to}
               to={link.to}
-              style={{ textDecoration: "none", color: "inherit" }}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+              }}
             >
-              <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItem
+                disablePadding
+                sx={{ display: "block", marginTop: "1rem" }}
+              >
                 <ListItemButton
                   sx={{
                     minHeight: 48,
