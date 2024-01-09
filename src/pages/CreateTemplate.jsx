@@ -8,6 +8,11 @@ import ExericseList from "../components/ExerciseList";
 import { useState } from "react";
 import TemplateContent from "../components/templateContent";
 import Button from "@mui/material/Button";
+import TemplateItem from "../components/templateContent";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+
+import "../styles/styles.css";
 
 const CreateTemplatePage = () => {
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -16,9 +21,10 @@ const CreateTemplatePage = () => {
 
   const handleExercise = (exerciseName) => {
     setSelectedExercise(exerciseName);
-    setExercises();
   };
-  const handleAddExercise = () => {};
+  const handleAddExercise = (exercise) => {
+    setExercises((prev) => [...prev, exercise]);
+  };
   return (
     <>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
@@ -48,24 +54,26 @@ const CreateTemplatePage = () => {
               <ExericseList
                 onExerciseChange={handleExercise}
                 selectedExercise={selectedExercise}
+                onAddExercise={handleAddExercise}
               />
-              {selectedExercise && (
-                <Button
-                  className="customFont"
-                  variant="contained"
-                  style={{
-                    alignSelf: "flex-end",
-                    marginTop: "1.5rem",
-                    backgroundColor: "#0B0D12",
-                  }}
-                  onClick={handleAddExercise}
-                >
-                  Add Exericse
-                </Button>
-              )}
-
-              <TemplateContent selectedExercise={selectedExercise} />
+              {exercises.map((exercise, index) => (
+                <TemplateItem
+                  key={index}
+                  selectedExercise={selectedExercise}
+                  name={exercise}
+                />
+              ))}
             </Box>
+            <Divider light sx={{ marginTop: 3, marginBottom: 3 }} />
+            {exercises.length > 0 && (
+              <Button
+                variant="contained"
+                className="customFont"
+                style={{ backgroundColor: "#0B0D12" }}
+              >
+                Save Template
+              </Button>
+            )}
           </Grid>
         </Grid>
       </Container>

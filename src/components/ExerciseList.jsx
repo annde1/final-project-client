@@ -8,12 +8,19 @@ import exercises from "../service/exercises";
 import Button from "@mui/material/Button";
 import "../styles/styles.css";
 
-const ExericseList = ({ onExerciseChange }) => {
+const ExericseList = ({
+  onExerciseChange,
+  selectedExercise,
+  onAddExercise,
+}) => {
   const handleExerciseChange = (e) => {
     const selected = e.target.value;
     onExerciseChange(selected);
   };
 
+  const handleAddExercise = () => {
+    onAddExercise(selectedExercise);
+  };
   return (
     <Box sx={{ minWidth: 120, marginTop: 3 }}>
       <FormControl fullWidth>
@@ -31,6 +38,20 @@ const ExericseList = ({ onExerciseChange }) => {
           ))}
         </Select>
       </FormControl>
+      {selectedExercise && (
+        <Button
+          className="customFont"
+          variant="contained"
+          style={{
+            alignSelf: "flex-end",
+            marginTop: "1.5rem",
+            backgroundColor: "#0B0D12",
+          }}
+          onClick={handleAddExercise}
+        >
+          Add Exericse
+        </Button>
+      )}
     </Box>
   );
 };

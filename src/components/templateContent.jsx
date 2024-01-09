@@ -9,7 +9,7 @@ import Set from "./Set";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 
-const TemplateContent = ({ selectedExercise }) => {
+const TemplateItem = ({ selectedExercise, name }) => {
   const [numberOfSets, setNumberOfSets] = useState(1);
   const handleShowModal = () => {
     console.log("hello");
@@ -31,7 +31,7 @@ const TemplateContent = ({ selectedExercise }) => {
             }}
           >
             <Typography variant="h5" className="customFont">
-              {selectedExercise}
+              {name}
             </Typography>
             <IconButton>
               <MoreVertIcon />
@@ -91,4 +91,4 @@ const TemplateContent = ({ selectedExercise }) => {
     </Container>
   );
 };
-export default TemplateContent;
+export default TemplateItem;
