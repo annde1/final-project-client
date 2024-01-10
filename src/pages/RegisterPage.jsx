@@ -13,31 +13,61 @@ import MenuItem from "@mui/material/MenuItem";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
-
+import { useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "../styles/styles.css";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
+import validateRegistration from "../validation/userRegisterValidation";
+import normalizeUserData from "../service/nomralizeUserData";
+import axios from "axios";
 const RegisterPage = () => {
-  const handleSubmit = (event) => {};
+  const [inputs, setInputs] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
+    age: "",
+    height: "",
+    weight: "",
+    isPremium: false,
+    userType: "",
+  });
+  const handleInputsChange = (event) => {
+    setInputs((current) => ({
+      ...current,
+      [event.target.id]: event.target.value,
+    }));
+  };
+  const handleCheckboxChange = (e) => {
+    setInputs((current) => ({
+      ...current,
+      isPremium: e.target.checked,
+    }));
+  };
+  const handleSelectChange = (e) => {
+    setInputs((current) => ({
+      ...current,
+      userType: e.target.value,
+    }));
+  };
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      //Validate user data
+      const errors = validateRegistration(inputs);
+      console.log(errors);
+      //if error return early
+      if (errors) return;
+      const userData = normalizeUserData(inputs);
+      console.log(userData);
+      console.log(axios.defaults.baseURL);
+      const response = await axios.post("/users", userData);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -72,6 +102,8 @@ const RegisterPage = () => {
                   label="First Name"
                   autoFocus
                   className="customFont"
+                  value={inputs.firstName}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -82,6 +114,8 @@ const RegisterPage = () => {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  value={inputs.lastName}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -92,6 +126,8 @@ const RegisterPage = () => {
                   label="User Name"
                   name="userName"
                   autoComplete="user-name"
+                  value={inputs.userName}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -102,6 +138,8 @@ const RegisterPage = () => {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={inputs.email}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -113,6 +151,8 @@ const RegisterPage = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={inputs.password}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -123,6 +163,8 @@ const RegisterPage = () => {
                   label="Age"
                   type="number"
                   id="age"
+                  value={inputs.age}
+                  onChange={handleInputsChange}
                   autoComplete="new-age"
                 />
               </Grid>
@@ -135,6 +177,8 @@ const RegisterPage = () => {
                   type="number"
                   id="height"
                   autoComplete="new-height"
+                  value={inputs.height}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -146,16 +190,19 @@ const RegisterPage = () => {
                   type="number"
                   id="weight"
                   autoComplete="new-weight"
+                  value={inputs.weight}
+                  onChange={handleInputsChange}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Select
                   labelId="account-type-label"
-                  id="account-type"
+                  id="userType"
                   fullWidth
                   name="Account Type"
                   label="Account Type"
-                  onChange={handleSubmit}
+                  value={inputs.userType}
+                  onChange={handleSelectChange}
                 >
                   <MenuItem value="trainee">Trainee</MenuItem>
                   <MenuItem value="trainer">Trainer</MenuItem>
@@ -165,7 +212,11 @@ const RegisterPage = () => {
               <Grid item xs={6}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox
+                      color="primary"
+                      onChange={handleCheckboxChange}
+                      value={inputs.isPremium}
+                    />
                   }
                   label="Premium Account"
                 />
@@ -177,6 +228,7 @@ const RegisterPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
               className="customFont"
+              onClick={handleSubmit}
             >
               Sign Up
             </Button>
@@ -189,7 +241,6 @@ const RegisterPage = () => {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
       </Container>
     </>
   );

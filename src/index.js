@@ -4,7 +4,10 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import axios from "axios";
 
+axios.defaults.baseURL = process.env.REACT_APP_ZEN_FIT_SERVER_URL;
+// console.log(axios.defaults.baseURL);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

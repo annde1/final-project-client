@@ -13,17 +13,34 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "../styles/styles.css";
+import axios from "axios";
+import { useState } from "react";
+import validateUserLogin from "../validation/user-login-validation";
 const defaultTheme = createTheme();
 const LoginPage = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+  });
 
+  const handleInputsChange = (e) => {
+    setInputs((current) => ({
+      ...current,
+      [e.target.id]: e.target.value,
+    }));
+  };
+  const handleUserLogin = async (e) => {
+    try {
+      e.preventDefault();
+      const errors = validateUserLogin(inputs);
+      console.log(errors);
+      if (errors) return;
+      const { data } = await axios.post("/users/login", inputs);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -39,12 +56,7 @@ const LoginPage = () => {
           <Typography component="h1" variant="h5" className="customFont">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -54,6 +66,8 @@ const LoginPage = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              value={inputs.email}
+              onChange={handleInputsChange}
             />
             <TextField
               margin="normal"
@@ -63,6 +77,8 @@ const LoginPage = () => {
               label="Password"
               type="password"
               id="password"
+              value={inputs.password}
+              onChange={handleInputsChange}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -76,6 +92,7 @@ const LoginPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
               className="customFont"
+              onClick={handleUserLogin}
             >
               Sign In
             </Button>
