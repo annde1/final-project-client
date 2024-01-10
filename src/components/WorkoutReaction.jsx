@@ -1,4 +1,6 @@
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -10,13 +12,13 @@ const WorkoutReaction = () => {
         sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}
       >
         <IconButton>
-          <ThumbUpIcon />
+          <ThumbUpOffAltIcon />
         </IconButton>
         <IconButton>
           <ChatBubbleOutlineIcon />
         </IconButton>
         <IconButton>
-          <DeleteIcon />
+          <DeleteOutlineIcon />
         </IconButton>
       </Box>
     </>

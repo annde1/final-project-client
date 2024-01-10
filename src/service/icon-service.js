@@ -9,12 +9,13 @@ import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import EditIcon from "@mui/icons-material/Edit";
 import { ROUTES } from "../routes/routes";
+import SettingsIcon from "@mui/icons-material/Settings";
 export const getIcon = (to) => {
   switch (to) {
     case ROUTES.MYPROFILE:
       return <PersonIcon />;
     case ROUTES.EDITPROFILE:
-      return <EditIcon />;
+      return <SettingsIcon />;
     case ROUTES.MYTEMPLATES:
       return <WysiwygIcon />;
     case ROUTES.CREATETEMPLATE:

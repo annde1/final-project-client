@@ -7,12 +7,14 @@ import MyProfilePage from "../pages/MyProfile";
 import MyWorkoutsPage from "../pages/MyWorkouts";
 import MyTemplatesPage from "../pages/MyTemplates";
 import AboutPage from "../pages/About";
+import EditProfilePage from "../pages/EditProfile";
 
 export const Router = () => {
   return (
     <Routes>
       <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
       <Route path={ROUTES.CREATETEMPLATE} element={<CreateTemplatePage />} />
+      <Route path={ROUTES.EDITPROFILE} element={<EditProfilePage />} />
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.MYPROFILE} element={<MyProfilePage />} />
       <Route path={ROUTES.MYWORKOUTS} element={<MyWorkoutsPage />} />

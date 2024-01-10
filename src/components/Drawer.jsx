@@ -174,7 +174,7 @@ const MiniDrawer = () => {
                   <ListItemText
                     primary={link.children}
                     sx={{ opacity: open ? 1 : 0 }}
-                    className="customFon"
+                    className="customFont"
                   />
                 </ListItemButton>
               </ListItem>

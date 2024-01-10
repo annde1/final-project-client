@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import UserDetails from "./UserDetails";
 import WorkoutDetails from "./WorkoutDetails";
 import Divider from "@mui/material/Divider";
@@ -8,6 +7,7 @@ import { useState } from "react";
 import WorkoutExercise from "./WorkoutExercise";
 import Button from "@mui/material/Button";
 import WorkoutReaction from "./WorkoutReaction";
+import AddComment from "./AddComment";
 
 const Workout = () => {
   const [workoutExercises, setWorkoutExercises] = useState([
@@ -78,7 +78,10 @@ const Workout = () => {
             0 comments
           </Typography>
         </Box>
+        <Divider light sx={{ marginTop: 1, marginBottom: 1, width: "100%" }} />
         <WorkoutReaction />
+        <Divider light sx={{ marginTop: 1, marginBottom: 3, width: "100%" }} />
+        <AddComment />
       </Box>
     </>
   );
