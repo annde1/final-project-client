@@ -4,11 +4,16 @@ import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ActionsList from "./ActionsList";
 import { useState } from "react";
+import { Popover } from "@mui/material";
 const Template = (props) => {
-  const [showActionList, setShowActionList] = useState(false);
-  const handleShowList = () => {
-    setShowActionList(!showActionList);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleShowList = (e) => {
+    setAnchorEl(e.currentTarget);
   };
+  const handleCloseList = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
   return (
     <>
       <Container>
@@ -31,7 +36,21 @@ const Template = (props) => {
             <IconButton onClick={handleShowList}>
               <MoreVertIcon />
             </IconButton>
-            {showActionList && <ActionsList open={showActionList} />}
+            <Popover
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleCloseList}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              {open && <ActionsList />}
+            </Popover>
           </Box>
         </Box>
       </Container>

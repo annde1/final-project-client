@@ -10,7 +10,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Popover from "@mui/material/Popover";
 const ActionsList = ({ open }) => {
-  const handleClosePopover = () => {};
+  return (
+    <>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <IconButton>
+          <DeleteIcon />
+        </IconButton>
+        <Typography>Delete Template</Typography>
+      </Box>
+    </>
+  );
 };
 export default ActionsList;
 // /            <IconButton>

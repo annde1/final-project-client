@@ -1,13 +1,32 @@
 import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Template from "../components/Template";
+import { useSelector } from "react-redux";
+import axios from "axios";
 const MyTemplatesPage = () => {
-  const [userTemplates, setUserTemplates] = useState([
-    "Dumbbells",
-    "Barbell 5x5",
-    "Accessories",
-  ]);
+  const [userTemplates, setUserTemplates] = useState([]);
+  const userId = useSelector(
+    (store) => store.authenticationSlice.userData?._id
+  );
+
+  useEffect(() => {
+    const getUserTemplates = async () => {
+      try {
+        const { data } = await axios.get("/templates/my-templates");
+        console.log(data);
+        console.log(data.templates);
+        setUserTemplates(data.templates);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserTemplates();
+  }, []);
+  const handleDeleteTemplate = () => {
+    //api call
+    //filter
+  };
   return (
     <>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
@@ -28,10 +47,10 @@ const MyTemplatesPage = () => {
                   marginBottom: "2rem",
                 }}
               >
-                My Templates (3)
+                My Templates ({userTemplates.length})
               </Typography>
-              {userTemplates.map((template) => (
-                <Template name={template} />
+              {userTemplates.map((template, index) => (
+                <Template name={template.name} key={index} />
               ))}
             </Box>
           </Grid>

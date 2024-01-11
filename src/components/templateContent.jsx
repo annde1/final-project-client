@@ -7,15 +7,20 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Set from "./Set";
 import Button from "@mui/material/Button";
-import { useState } from "react";
 
-const TemplateItem = ({ selectedExercise, name }) => {
-  const [numberOfSets, setNumberOfSets] = useState(1);
-  const handleShowModal = () => {
-    console.log("hello");
-  };
+const TemplateItem = ({
+  selectedExercise,
+  name,
+  onAddWeight,
+  onAddReps,
+  exerciseIndex,
+  exercise,
+  onAddSet,
+}) => {
+  const handleShowModal = () => {};
   const handleAddSet = () => {
-    setNumberOfSets((prev) => prev + 1);
+    console.log("Adding set");
+    onAddSet(exerciseIndex);
   };
   return (
     <Container>
@@ -49,8 +54,14 @@ const TemplateItem = ({ selectedExercise, name }) => {
             <Typography className="customFont">KG</Typography>
             <Typography className="customFont">REPS</Typography>
           </Box>
-          {[...Array(numberOfSets)].map((_, index) => (
-            <Set key={index} />
+          {exercise.sets.map((_, index) => (
+            <Set
+              key={`${exerciseIndex}-${index}`}
+              onAddReps={onAddReps}
+              onAddWeight={onAddWeight}
+              exerciseIndex={exerciseIndex}
+              setIndex={index}
+            />
           ))}
           <Box
             style={{

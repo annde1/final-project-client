@@ -5,7 +5,16 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 
-const Set = () => {
+const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex }) => {
+  const handleAddReps = (e) => {
+    const reps = e.target.value;
+    onAddReps(exerciseIndex, setIndex, reps);
+  };
+
+  const handleAddWeight = (e) => {
+    const weight = e.target.value;
+    onAddWeight(exerciseIndex, setIndex, weight);
+  };
   return (
     <Box
       style={{
@@ -25,10 +34,22 @@ const Set = () => {
         </FormControl>
       </Box>
       <Box>
-        <TextField required id="kg" name="kg" autoComplete="kg" />
+        <TextField
+          required
+          id={`weight-${setIndex}`}
+          name="kg"
+          autoComplete="kg"
+          onChange={handleAddWeight}
+        />
       </Box>
       <Box>
-        <TextField required id="kg" name="kg" autoComplete="kg" />
+        <TextField
+          required
+          id={`reps-${setIndex}`}
+          name="kreps"
+          autoComplete="reps"
+          onChange={handleAddReps}
+        />
       </Box>
     </Box>
   );

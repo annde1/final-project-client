@@ -16,18 +16,24 @@ import "../styles/styles.css";
 import axios from "axios";
 import { useState } from "react";
 import validateUserLogin from "../validation/user-login-validation";
+import { storeToken } from "../service/login-service";
+import useAutoLogin from "../hooks/useAutoLogin";
 const defaultTheme = createTheme();
 const LoginPage = () => {
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
-
+  const [rememberMe, setRememberMe] = useState(true);
+  const autoLogin = useAutoLogin();
   const handleInputsChange = (e) => {
     setInputs((current) => ({
       ...current,
       [e.target.id]: e.target.value,
     }));
+  };
+  const handleRememberMe = (e) => {
+    setRememberMe(e.target.checked);
   };
   const handleUserLogin = async (e) => {
     try {
@@ -36,7 +42,11 @@ const LoginPage = () => {
       console.log(errors);
       if (errors) return;
       const { data } = await axios.post("/users/login", inputs);
+      //store token
       console.log(data);
+
+      storeToken(data.token.token, rememberMe);
+      autoLogin(true);
     } catch (err) {
       console.log(err);
     }
@@ -82,9 +92,10 @@ const LoginPage = () => {
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value={rememberMe} color="primary" />}
               label="Remember me"
               style={{ fontFamily: "Montserrat" }}
+              onChange={handleRememberMe}
             />
             <Button
               type="submit"

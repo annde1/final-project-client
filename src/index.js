@@ -5,15 +5,27 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
-
+import { Provider } from "react-redux";
+import store from "../src/store/store-config";
+import { getToken } from "./service/login-service";
 axios.defaults.baseURL = process.env.REACT_APP_ZEN_FIT_SERVER_URL;
 // console.log(axios.defaults.baseURL);
+
+axios.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
