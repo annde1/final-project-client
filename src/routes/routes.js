@@ -2,7 +2,7 @@ export const ROUTES = {
   CREATETEMPLATE: "/createtemplate",
   MYTEMPLATES: "/mytemplates",
   EDITTEMPLATE: "/edittemplate",
-  STARTWORKOUT: "/startworkout",
+  STARTWORKOUT: "/newworkout",
   MYWORKOUTS: "/myworkouts",
   EDITWORKOUT: "/editworkout",
   MYPROFILE: "/myprofile",

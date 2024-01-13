@@ -5,6 +5,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Box, Grid, Container } from "@mui/material";
 
 const MyProfilePage = () => {
+  //TODO fetch user Data by id (take from redux) and display wowrkouts, height, weight, age
+  //TODO add a button to calculate BMI and siplay modal with user bmi
   return (
     <>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>

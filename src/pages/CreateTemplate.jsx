@@ -124,6 +124,8 @@ const CreateTemplatePage = () => {
       }
       const { data } = await axios.post("/templates", templateData);
       console.log(data);
+
+      //TODO: redirect to my templates
     } catch (err) {
       console.log(err);
     }

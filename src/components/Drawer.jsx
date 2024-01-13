@@ -88,6 +88,7 @@ const DrawerStyled = styled(Drawer, {
 }));
 
 const MiniDrawer = () => {
+  //TODO: Conditional Rendering for menu
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 

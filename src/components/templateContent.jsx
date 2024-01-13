@@ -16,6 +16,7 @@ const TemplateItem = ({
   exerciseIndex,
   exercise,
   onAddSet,
+  exercises,
 }) => {
   const handleShowModal = () => {};
   const handleAddSet = () => {
@@ -24,7 +25,7 @@ const TemplateItem = ({
   };
   return (
     <Container>
-      {selectedExercise ? (
+      {exercise ? (
         <Container>
           <Box
             style={{
@@ -61,6 +62,7 @@ const TemplateItem = ({
               onAddWeight={onAddWeight}
               exerciseIndex={exerciseIndex}
               setIndex={index}
+              exercise={exercise}
             />
           ))}
           <Box

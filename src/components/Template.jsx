@@ -42,14 +42,21 @@ const Template = (props) => {
               onClose={handleCloseList}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "right",
+                horizontal: "right-32",
               }}
               transformOrigin={{
                 vertical: "top",
-                horizontal: "right",
+                horizontal: "left",
               }}
             >
-              {open && <ActionsList />}
+              {open && (
+                <ActionsList
+                  onDelete={props.onDelete}
+                  onEdit={props.onEdit}
+                  onStartWorkout={props.onStartWorkout}
+                  templateId={props.templateId}
+                />
+              )}
             </Popover>
           </Box>
         </Box>

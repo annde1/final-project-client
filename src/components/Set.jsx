@@ -4,8 +4,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-
-const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex }) => {
+import Typography from "@mui/material/Typography";
+import "../styles/styles.css";
+import { useEffect } from "react";
+const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex, exercise }) => {
   const handleAddReps = (e) => {
     const reps = e.target.value;
     onAddReps(exerciseIndex, setIndex, reps);
@@ -15,6 +17,12 @@ const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex }) => {
     const weight = e.target.value;
     onAddWeight(exerciseIndex, setIndex, weight);
   };
+  useEffect(() => {
+    console.log("SET");
+    console.log(exercise);
+    console.log(exercise.sets);
+    console.log(exercise.sets[setIndex]);
+  }, [exercise, setIndex]);
   return (
     <Box
       style={{
@@ -25,13 +33,9 @@ const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex }) => {
       }}
     >
       <Box>
-        <FormControl>
-          <Select labelId="demo-simple-select-label" id="demo-simple-select">
-            <MenuItem value={"Warm up"}>Warm up</MenuItem>
-            <MenuItem value={"Normal"}>Normal</MenuItem>
-            <MenuItem value="Failure">Failure</MenuItem>
-          </Select>
-        </FormControl>
+        <Typography className="customFont" sx={{ fontSize: "28px" }}>
+          {setIndex + 1}
+        </Typography>
       </Box>
       <Box>
         <TextField
@@ -40,15 +44,17 @@ const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex }) => {
           name="kg"
           autoComplete="kg"
           onChange={handleAddWeight}
+          value={exercise.sets[setIndex].weight}
         />
       </Box>
       <Box>
         <TextField
           required
           id={`reps-${setIndex}`}
-          name="kreps"
+          name="reps"
           autoComplete="reps"
           onChange={handleAddReps}
+          value={exercise.sets[setIndex].reps}
         />
       </Box>
     </Box>

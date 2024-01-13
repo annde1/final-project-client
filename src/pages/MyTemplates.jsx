@@ -2,20 +2,17 @@ import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import Template from "../components/Template";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ROUTES } from "../routes/routes";
 const MyTemplatesPage = () => {
   const [userTemplates, setUserTemplates] = useState([]);
-  const userId = useSelector(
-    (store) => store.authenticationSlice.userData?._id
-  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUserTemplates = async () => {
       try {
         const { data } = await axios.get("/templates/my-templates");
-        console.log(data);
-        console.log(data.templates);
         setUserTemplates(data.templates);
       } catch (err) {
         console.log(err);
@@ -23,9 +20,25 @@ const MyTemplatesPage = () => {
     };
     getUserTemplates();
   }, []);
-  const handleDeleteTemplate = () => {
-    //api call
-    //filter
+  const handleDeleteTemplate = async (_id) => {
+    try {
+      const { data } = await axios.delete(`/templates/${_id}`);
+      console.log(data);
+      setUserTemplates((current) =>
+        current.filter((template) => template._id !== _id)
+      );
+      console.log("TEMPLATE DELETED");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleEditTemplate = (_id) => {
+    navigate(`${ROUTES.EDITTEMPLATE}/${_id}`);
+  };
+
+  const handleStartWorkout = (_id) => {
+    navigate(`${ROUTES.STARTWORKOUT}/${_id}`);
   };
   return (
     <>
@@ -50,7 +63,14 @@ const MyTemplatesPage = () => {
                 My Templates ({userTemplates.length})
               </Typography>
               {userTemplates.map((template, index) => (
-                <Template name={template.name} key={index} />
+                <Template
+                  name={template.name}
+                  key={index}
+                  templateId={template._id}
+                  onDelete={handleDeleteTemplate}
+                  onEdit={handleEditTemplate}
+                  onStartWorkout={handleStartWorkout}
+                />
               ))}
             </Box>
           </Grid>

@@ -8,6 +8,8 @@ import MyWorkoutsPage from "../pages/MyWorkouts";
 import MyTemplatesPage from "../pages/MyTemplates";
 import AboutPage from "../pages/About";
 import EditProfilePage from "../pages/EditProfile";
+import EditTemplatePage from "../pages/EditTemplate";
+import NewWorkout from "../pages/NewWorkout";
 
 export const Router = () => {
   return (
@@ -18,7 +20,12 @@ export const Router = () => {
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.MYPROFILE} element={<MyProfilePage />} />
       <Route path={ROUTES.MYWORKOUTS} element={<MyWorkoutsPage />} />
+      <Route path={`${ROUTES.STARTWORKOUT}/:id`} element={<NewWorkout />} />
       <Route path={ROUTES.MYTEMPLATES} element={<MyTemplatesPage />} />
+      <Route
+        path={`${ROUTES.EDITTEMPLATE}/:id`}
+        element={<EditTemplatePage />}
+      />
       <Route path={ROUTES.ABOUT} element={<AboutPage />} />
     </Routes>
   );
