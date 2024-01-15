@@ -1,10 +1,38 @@
 import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import Workout from "../components/Workout";
-
+import { useEffect } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 const MyWorkoutsPage = () => {
+  //TODO: display the fetched workout data and user details (workout -map)
+  const userId = useSelector(
+    (store) => store.authenticationSlice.userData?._id
+  );
+
+  useEffect(() => {
+    const fetchUserWorkouts = async () => {
+      try {
+        const { data } = await axios.get("/workouts/my-workouts");
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUserWorkouts();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { data } = await axios.get(`/users/${userId}`);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUserData();
+  }, [userId]);
   return (
     <>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>

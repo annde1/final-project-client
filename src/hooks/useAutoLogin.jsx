@@ -9,9 +9,10 @@ const useAutoLogin = () => {
     try {
       const token = getToken();
       console.log(token);
-      if (!token) return;
+      if (!token) {
+        return;
+      }
       const userData = jwtDecode(token);
-      console.log(userData);
       const id = userData._id;
       if (skipTokenTest) await axios.get(`/users/${id}`);
       dispatch(authActions.login(userData));

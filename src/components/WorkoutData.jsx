@@ -20,13 +20,13 @@ const WorkoutData = ({ volume, sets }) => {
         <Typography className="customFont" sx={{ fontWeight: "bold" }}>
           Volume
         </Typography>
-        <Typography className="customFont">0 kg</Typography>
+        <Typography className="customFont">{volume} kg</Typography>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography className="customFont" sx={{ fontWeight: "bold" }}>
           Sets
         </Typography>
-        <Typography className="customFont">0</Typography>
+        <Typography className="customFont">{sets}</Typography>
       </Box>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -16,9 +16,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Link, NavLink } from "react-router-dom";
-import { testLinks } from "../service/links";
+import { NavLink } from "react-router-dom";
 import { getIcon } from "../service/icon-service";
+import { useSelector } from "react-redux";
+import { loggedInLinks, loggedOutLinks } from "../service/links";
 import "../styles/styles.css";
 const drawerWidth = 240;
 
@@ -88,9 +89,15 @@ const DrawerStyled = styled(Drawer, {
 }));
 
 const MiniDrawer = () => {
-  //TODO: Conditional Rendering for menu
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const isLoggedIn = useSelector(
+    (store) => store.authenticationSlice.isLoggedIn
+  );
+
+  useEffect(() => {
+    console.log("LOGGEDIN STATUS: ", isLoggedIn);
+  }, [isLoggedIn]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -143,44 +150,84 @@ const MiniDrawer = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          {testLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-              }}
-            >
-              <ListItem
-                disablePadding
-                sx={{ display: "block", marginTop: "1rem" }}
+          {isLoggedIn &&
+            loggedInLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
               >
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
+                <ListItem
+                  disablePadding
+                  sx={{ display: "block", marginTop: "1rem" }}
                 >
-                  <ListItemIcon
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
                     }}
                   >
-                    {getIcon(link.to)}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={link.children}
-                    sx={{ opacity: open ? 1 : 0 }}
-                    className="customFont"
-                  />
-                </ListItemButton>
-              </ListItem>
-            </NavLink>
-          ))}
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {getIcon(link.to)}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={link.children}
+                      sx={{ opacity: open ? 1 : 0 }}
+                      className="customFont"
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
+            ))}
+          {!isLoggedIn &&
+            loggedOutLinks.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <ListItem
+                  disablePadding
+                  sx={{ display: "block", marginTop: "1rem" }}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {getIcon(link.to)}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={link.children}
+                      sx={{ opacity: open ? 1 : 0 }}
+                      className="customFont"
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
+            ))}
         </List>
       </DrawerStyled>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

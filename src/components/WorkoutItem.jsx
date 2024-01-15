@@ -1,5 +1,4 @@
 import Container from "@mui/material/Container";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import "../styles/styles.css";
@@ -7,13 +6,15 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect, useState } from "react";
+import FormControl from "@mui/material/FormControl";
+
 const WorkoutItem = ({
   exercise,
   onAddWeight,
   onAddReps,
   exerciseIndex,
   onAddVolume,
+  onRemoveVolume,
 }) => {
   const handleAddReps = (e, setIndex) => {
     const reps = e.target.value;
@@ -25,19 +26,36 @@ const WorkoutItem = ({
     onAddWeight(exerciseIndex, setIndex, weight);
   };
 
+  const handleAddDetails = (setIndex, checked) => {
+    const total = exercise.sets.reduce((acc, set, index) => {
+      if (index === setIndex) {
+        console.log("Weight", set.weight);
+        console.log("Reps", set.reps);
+
+        return acc + Number(set.weight) * Number(set.reps);
+      }
+      return acc;
+    }, 0);
+    if (checked) {
+      //TODO: if checked then update the state of reps and weight
+      onAddVolume(total);
+    } else {
+      onRemoveVolume(total);
+    }
+  };
   return (
     <Container>
       <Container>
         <Box
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
             alignItems: "center",
             marginTop: "2rem",
           }}
         >
           <Typography
-            variant="h5"
+            variant="h6"
             className="customFont"
             sx={{ fontWeight: "bold" }}
           >
@@ -51,7 +69,8 @@ const WorkoutItem = ({
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
+
             marginTop: "2rem",
           }}
         >
@@ -66,17 +85,17 @@ const WorkoutItem = ({
           </Typography>
         </Box>
         {exercise.sets.map((_, index) => (
-          <Box>
+          <Box key={index}>
             <Box
               style={{
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "space-between",
+                justifyContent: "space-around",
                 marginTop: "2rem",
               }}
             >
               <Box>
-                <Typography className="customFont" sx={{ fontSize: "28px" }}>
+                <Typography className="customFont" sx={{ fontSize: "25px" }}>
                   {index + 1}
                 </Typography>
               </Box>
@@ -90,6 +109,7 @@ const WorkoutItem = ({
                     handleAddWeight(e, index);
                   }}
                   value={exercise.sets[index].weight}
+                  size="small"
                 />
               </Box>
               <Box>
@@ -102,9 +122,16 @@ const WorkoutItem = ({
                     handleAddReps(e, index);
                   }}
                   value={exercise.sets[index].reps}
+                  size="small"
                 />
               </Box>
-              <Checkbox color="success" sx={{ alignSelf: "center" }} />
+              <Checkbox
+                color="success"
+                sx={{ alignSelf: "center" }}
+                onChange={(e) => {
+                  handleAddDetails(index, e.target.checked);
+                }}
+              />
             </Box>
           </Box>
         ))}

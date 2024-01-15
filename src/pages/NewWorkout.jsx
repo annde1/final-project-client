@@ -1,50 +1,56 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import ExericseList from "../components/ExerciseList";
 import { useState } from "react";
-import TemplateContent from "../components/templateContent";
 import Button from "@mui/material/Button";
-import TemplateItem from "../components/templateContent";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import { useEffect } from "react";
 import "../styles/styles.css";
-import exercises from "../service/exercises";
-import { normalizeTemplateData } from "../service/normalize-template-data";
-import { validateTemplate } from "../validation/template-validation";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import Workout from "../components/Workout";
 import WorkoutTimer from "../components/Timer";
 import WorkoutData from "../components/WorkoutData";
 import WorkoutItem from "../components/WorkoutItem";
+import { normalizeWorkout } from "../service/normalize-workout";
+import validateWorkout from "../validation/workout-validation";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useRef } from "react";
 const NewWorkout = () => {
-  const [exercises, setExercises] = useState({});
+  const [exercises, setExercises] = useState([]);
   const [templateName, setTemplateName] = useState("");
   const [workoutDetails, setWorkoutDetails] = useState({
     volume: 0,
     sets: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [seconds, setSeconds] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
   const { id: _id } = useParams();
-
-  //TODO: a spinner, only after the template has been fetched display the button
-
+  const navigate = useNavigate();
+  const startedAt = useRef(null); //useRef so the Date won't change between re-renders
   //TODO: when volume is 0 and user clicks finish workout then show a modal that this workout has no values
+  //TODO: if the set doesnt have checked status don't update the state
 
-  //TODO: Add a button to discard workout. When user will click on it it will redirect him to my templates page
+  useEffect(() => {
+    startedAt.current = new Date();
+    console.log(startedAt.current);
+  }, []);
+
   useEffect(() => {
     const fetchTemplateData = async (_id) => {
       try {
         const { data } = await axios.get(`/templates/${_id}`);
-        setExercises(data.templateDetails.exercises);
-        setTemplateName(data.templateDetails.name);
+        const exercises = data.templateDetails.exercises.map(
+          ({ sets, name }) => ({
+            sets: sets.map(({ _id, ...rest }) => rest),
+            name,
+          })
+        );
+        setExercises(exercises);
+        setTemplateName(data.templateDetails?.name);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -52,6 +58,9 @@ const NewWorkout = () => {
     fetchTemplateData(_id);
   }, [_id]);
 
+  useEffect(() => {
+    console.log(workoutDetails);
+  }, [workoutDetails]);
   //Timer
   useEffect(() => {
     const timer = setInterval(() => {
@@ -69,9 +78,6 @@ const NewWorkout = () => {
     return () => clearInterval(timer);
   }, [minutes, seconds, hours]);
 
-  useEffect(() => {
-    console.log(exercises);
-  }, [exercises]);
   const handleAddWeight = (exerIndex, setIndex, weight) => {
     setExercises((prev) => {
       //Copy of exercises array
@@ -121,19 +127,51 @@ const NewWorkout = () => {
 
   const handleAddVolume = (newVolume) => {
     setWorkoutDetails((previous) => ({
-      ...previous,
+      sets: previous.sets + 1,
       volume: previous.volume + newVolume,
     }));
   };
 
-  //TODO: handler for finishing workout. POST request to "/wourkouts"
+  const handleRemoveVolume = (newVolume) => {
+    setWorkoutDetails((previous) => ({
+      sets: previous.sets - 1,
+      volume: previous.volume - newVolume,
+    }));
+  };
+
   const handleSubmitWorkout = async () => {
-    //TODO: workout normalization and validation function
-    //TODO: Joi workout validation
     try {
+      const normalizedData = normalizeWorkout({
+        title: templateName,
+        //TODO: change the duration to startedAt
+        duration: {
+          hours: hours,
+          minutes: minutes,
+          seconds: seconds,
+        },
+        template: {
+          name: templateName,
+          exercises: exercises,
+        },
+        volume: workoutDetails.volume,
+      });
+
+      const errors = validateWorkout(normalizedData);
+      if (errors) {
+        return;
+      }
+
+      const { data } = await axios.post("/workouts", normalizedData);
+      console.log(data);
+      //TODO: create home route and redirect there
+      navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleDiscardWorkout = () => {
+    navigate(ROUTES.MYTEMPLATES);
   };
   return (
     <>
@@ -151,7 +189,10 @@ const NewWorkout = () => {
               }}
             >
               <WorkoutTimer seconds={seconds} minutes={minutes} hours={hours} />
-              <WorkoutData />
+              <WorkoutData
+                volume={workoutDetails.volume}
+                sets={workoutDetails.sets}
+              />
             </Box>
           </Grid>
           <Grid item xs={12} md={12}>
@@ -183,19 +224,37 @@ const NewWorkout = () => {
                       exerciseIndex={index}
                       onAddReps={handleAddRep}
                       onAddVolume={handleAddVolume}
+                      onRemoveVolume={handleRemoveVolume}
                     />
                   ))}
               </Box>
             </Box>
           </Grid>
           <Grid item xs={12} md={12}>
-            <Button
-              variant="contained"
-              className="customFont"
-              style={{ backgroundColor: "#0B0D12", marginTop: "3rem" }}
-            >
-              Finish Workout
-            </Button>
+            {isLoading ? (
+              <CircularProgress color="inherit" />
+            ) : (
+              <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  className="customFont"
+                  style={{ backgroundColor: "#0B0D12", marginTop: "3rem" }}
+                  onClick={handleSubmitWorkout}
+                >
+                  Finish Workout
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  className="customFont"
+                  style={{ backgroundColor: "#0B0D12", marginTop: "3rem" }}
+                  onClick={handleDiscardWorkout}
+                >
+                  Discard Workout
+                </Button>
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Container>

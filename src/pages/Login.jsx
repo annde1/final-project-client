@@ -18,6 +18,8 @@ import { useState } from "react";
 import validateUserLogin from "../validation/user-login-validation";
 import { storeToken } from "../service/login-service";
 import useAutoLogin from "../hooks/useAutoLogin";
+import { useNavigate } from "react-router-dom";
+
 const defaultTheme = createTheme();
 const LoginPage = () => {
   const [inputs, setInputs] = useState({
@@ -39,12 +41,9 @@ const LoginPage = () => {
     try {
       e.preventDefault();
       const errors = validateUserLogin(inputs);
-      console.log(errors);
       if (errors) return;
       const { data } = await axios.post("/users/login", inputs);
       //store token
-      console.log(data);
-
       storeToken(data.token.token, rememberMe);
       autoLogin(true);
     } catch (err) {
