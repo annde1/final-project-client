@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useRef } from "react";
+import ModalComponent from "../components/Modal";
 const NewWorkout = () => {
   const [exercises, setExercises] = useState([]);
   const [templateName, setTemplateName] = useState("");
@@ -29,6 +30,7 @@ const NewWorkout = () => {
   const [hours, setHours] = useState(0);
   const { id: _id } = useParams();
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const startedAt = useRef(null); //useRef so the Date won't change between re-renders
   //TODO: when volume is 0 and user clicks finish workout then show a modal that this workout has no values
   //TODO: if the set doesnt have checked status don't update the state
@@ -141,20 +143,20 @@ const NewWorkout = () => {
 
   const handleSubmitWorkout = async () => {
     try {
+      if (workoutDetails.volume === 0) {
+        setShowModal(true);
+        return;
+      }
       const normalizedData = normalizeWorkout({
         title: templateName,
-        //TODO: change the duration to startedAt
-        duration: {
-          hours: hours,
-          minutes: minutes,
-          seconds: seconds,
-        },
+        startedAt: startedAt.current,
         template: {
           name: templateName,
           exercises: exercises,
         },
         volume: workoutDetails.volume,
       });
+      console.log("NORMALIZED", normalizedData);
 
       const errors = validateWorkout(normalizedData);
       if (errors) {
@@ -163,8 +165,8 @@ const NewWorkout = () => {
 
       const { data } = await axios.post("/workouts", normalizedData);
       console.log(data);
-      //TODO: create home route and redirect there
-      navigate(ROUTES.MYTEMPLATES);
+      //TODO: update the template
+      navigate(ROUTES.MYWORKOUTS);
     } catch (err) {
       console.log(err);
     }
@@ -173,13 +175,16 @@ const NewWorkout = () => {
   const handleDiscardWorkout = () => {
     navigate(ROUTES.MYTEMPLATES);
   };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   return (
     <>
       <Typography sx={{ fontFamily: "Montserrat, sans-serif" }} variant="h4">
         New Workout
       </Typography>
       <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
           <Grid item xs={12} md={12}>
             <Box
               sx={{
@@ -254,6 +259,13 @@ const NewWorkout = () => {
                   Discard Workout
                 </Button>
               </Box>
+            )}
+            {showModal && (
+              <ModalComponent
+                open={showModal}
+                onCloseModal={handleCloseModal}
+                templateName={templateName}
+              />
             )}
           </Grid>
         </Grid>

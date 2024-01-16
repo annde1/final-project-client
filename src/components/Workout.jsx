@@ -8,13 +8,36 @@ import WorkoutExercise from "./WorkoutExercise";
 import Button from "@mui/material/Button";
 import WorkoutReaction from "./WorkoutReaction";
 import AddComment from "./AddComment";
+import { calculateTimePassed } from "../service/workout-service";
+import { convertMsToHoursAndMinutes } from "../service/workout-service";
+const Workout = ({
+  userData,
+  workout,
+  onDeleteWorkout,
+  onLikeWorkout,
+  isLiked,
+}) => {
+  const [visibleExercises, setVisibleExercises] = useState(3);
+  const [showMessage, setShowMessage] = useState(false);
+  const exercises = workout.template.exercises;
+  //workout.template.exercises is an array of object
+  const createdAt = calculateTimePassed(workout.createdAt);
+  const duration = convertMsToHoursAndMinutes(workout.duration);
+  const workoutVolume = workout.volume;
+  const numOfLikes = workout.likes.length;
 
-const Workout = () => {
-  const [workoutExercises, setWorkoutExercises] = useState([
-    { name: "Barbell Back Squat", sets: 5 },
-    { name: "Sumo Deadlift", sets: 5 },
-    { name: "Bench Press", sets: 5 },
-  ]);
+  const handleShowMoreExercises = () => {
+    // console.log(" exercises length", exercises.length);
+    // console.log("next exercises", visibleExercises + 3);
+    if (visibleExercises < exercises.length) {
+      setVisibleExercises((previous) =>
+        Math.min(previous + 3, exercises.length)
+      );
+    } else {
+      setShowMessage(true);
+    }
+    console.log("showMessage:", showMessage);
+  };
   return (
     <>
       <Box
@@ -22,9 +45,14 @@ const Workout = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
+          marginTop: 8,
         }}
       >
-        <UserDetails />
+        <UserDetails
+          userName={userData.userName}
+          createdAt={createdAt}
+          // image={userData.image.url}
+        />
         <Typography
           style={{
             fontFamily: "Montserrat, sans-serif",
@@ -32,9 +60,9 @@ const Workout = () => {
             fontWeight: "bold",
           }}
         >
-          Barbel 5x5
+          {workout.title}
         </Typography>
-        <WorkoutDetails />
+        <WorkoutDetails duration={duration} volume={workoutVolume} />
         <Divider light sx={{ marginTop: 3, marginBottom: 3, width: "100%" }} />
         <Typography
           sx={{ fontFamily: "Montserrat, sans-serif", marginBottom: "2rem" }}
@@ -42,20 +70,40 @@ const Workout = () => {
         >
           Workout
         </Typography>
-        {workoutExercises.map((exercise) => (
-          <WorkoutExercise name={exercise.name} sets={exercise.sets} />
+        {exercises.slice(0, visibleExercises).map((exercise) => (
+          <WorkoutExercise
+            key={exercise._id}
+            name={exercise.name}
+            sets={exercise.sets.length + 1}
+          />
         ))}
-        <Button
-          variant="text"
-          sx={{
-            alignSelf: "center",
-            color: "#0B0D12",
-            fontFamily: "Montserrat, sans-serif",
-            marginBottom: "2rem",
-          }}
-        >
-          See more exercises
-        </Button>
+        {!showMessage && (
+          <Button
+            variant="text"
+            sx={{
+              alignSelf: "center",
+              color: "#0B0D12",
+              fontFamily: "Montserrat, sans-serif",
+              marginBottom: "2rem",
+            }}
+            onClick={handleShowMoreExercises}
+          >
+            See more exercises
+          </Button>
+        )}
+        {showMessage && (
+          <Typography
+            variant="body2"
+            sx={{
+              fontFamily: "Montserrat, sans-serif",
+              alignSelf: "center",
+              marginBottom: "2rem",
+              fontWeight: "bold",
+            }}
+          >
+            No more exercises left!
+          </Typography>
+        )}
         <Box
           sx={{
             display: "flex",
@@ -69,7 +117,7 @@ const Workout = () => {
             sx={{ fontFamily: "Montserrat, sans-serif" }}
             variant="subtitle2"
           >
-            0 likes
+            {numOfLikes} {numOfLikes === 1 ? "like" : "likes"}
           </Typography>
           <Typography
             sx={{ fontFamily: "Montserrat, sans-serif" }}
@@ -79,7 +127,12 @@ const Workout = () => {
           </Typography>
         </Box>
         <Divider light sx={{ marginTop: 1, marginBottom: 1, width: "100%" }} />
-        <WorkoutReaction />
+        <WorkoutReaction
+          onDeleteWorkout={onDeleteWorkout}
+          onLikeWorkout={onLikeWorkout}
+          workoutId={workout._id}
+          isLiked={isLiked}
+        />
         <Divider light sx={{ marginTop: 1, marginBottom: 3, width: "100%" }} />
         <AddComment />
       </Box>

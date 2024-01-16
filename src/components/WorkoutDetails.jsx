@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import "../styles/styles.css";
-const WorkoutDetails = () => {
+const WorkoutDetails = ({ duration, volume }) => {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "row", marginTop: "1.5rem" }}>
@@ -15,7 +15,7 @@ const WorkoutDetails = () => {
             variant="subtitle2"
             sx={{ fontWeight: "bold" }}
           >
-            2h 5min
+            {duration.hours}h {duration.minutes}min
           </Typography>
         </Box>
         <Box sx={{ marginRight: "3rem" }}>
@@ -27,7 +27,7 @@ const WorkoutDetails = () => {
             variant="subtitle2"
             sx={{ fontWeight: "bold" }}
           >
-            5,510 kg
+            {volume} kg
           </Typography>
         </Box>
         <Box sx={{ marginRight: "3rem" }}>

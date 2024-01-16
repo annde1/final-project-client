@@ -2,11 +2,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 
-const UserDetails = () => {
+const UserDetails = ({ userName, createdAt, image }) => {
   return (
     <>
       <Box sx={{ display: "flex" }}>
-        <Avatar sx={{ width: "60px", height: "60px", marginRight: "2rem" }} />
+        <Avatar
+          sx={{ width: "60px", height: "60px", marginRight: "2rem" }}
+          src="https://i.pravatar.cc/48?u"
+        />
         <Box
           sx={{
             display: "flex",
@@ -18,13 +21,13 @@ const UserDetails = () => {
             variant="subtitle1"
             style={{ fontFamily: "Montserrat, sans-serif" }}
           >
-            annad
+            {userName}
           </Typography>
           <Typography
             variant="subtitle2"
             style={{ fontFamily: "Montserrat, sans-serif" }}
           >
-            6 hours ago
+            {createdAt}
           </Typography>
         </Box>
       </Box>

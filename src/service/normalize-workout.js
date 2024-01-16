@@ -1,14 +1,17 @@
-const timeToMinutes = (hours, minutes, seconds) => {
-  return hours * 60 + minutes + seconds / 60;
+const calculateDuration = (startedAt) => {
+  const now = new Date();
+  const started = new Date(startedAt);
+  const timeInMs = now - started;
+  console.log(timeInMs);
+  return timeInMs;
 };
 export const normalizeWorkout = (data) => {
-  const { hours, minutes, seconds } = data.duration;
-
+  console.log(data.startedAt);
   const normalizedWorkout = {
     title: data.title, // Corrected property name
     createdAt: new Date(),
     //TODO: replace this
-    duration: timeToMinutes(hours, minutes, seconds),
+    duration: calculateDuration(data.startedAt),
     template: {
       name: data.template.name,
       exercises: data.template.exercises.map((exercise) => {
@@ -24,5 +27,6 @@ export const normalizeWorkout = (data) => {
     },
     volume: data.volume,
   };
+
   return normalizedWorkout;
 };

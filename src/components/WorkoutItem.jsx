@@ -91,7 +91,7 @@ const WorkoutItem = ({
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-around",
-                marginTop: "2rem",
+                marginTop: "1rem",
               }}
             >
               <Box>

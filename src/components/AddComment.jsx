@@ -11,6 +11,7 @@ const AddComment = () => {
         sx={{
           display: "flex",
           alignItems: "flex-end",
+          width: "100%",
         }}
       >
         <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
