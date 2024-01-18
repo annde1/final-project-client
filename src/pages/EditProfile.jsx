@@ -22,6 +22,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "../styles/styles.css";
 const EditProfilePage = () => {
+  //TODO: Split the area to update password and change user data
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

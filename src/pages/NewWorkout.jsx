@@ -17,6 +17,7 @@ import { ROUTES } from "../routes/routes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useRef } from "react";
 import ModalComponent from "../components/Modal";
+import { normalizeTemplateData } from "../service/normalize-template-data";
 const NewWorkout = () => {
   const [exercises, setExercises] = useState([]);
   const [templateName, setTemplateName] = useState("");
@@ -50,6 +51,7 @@ const NewWorkout = () => {
             name,
           })
         );
+        console.log(data);
         setExercises(exercises);
         setTemplateName(data.templateDetails?.name);
         setIsLoading(false);
@@ -60,9 +62,6 @@ const NewWorkout = () => {
     fetchTemplateData(_id);
   }, [_id]);
 
-  useEffect(() => {
-    console.log(workoutDetails);
-  }, [workoutDetails]);
   //Timer
   useEffect(() => {
     const timer = setInterval(() => {
@@ -165,7 +164,11 @@ const NewWorkout = () => {
 
       const { data } = await axios.post("/workouts", normalizedData);
       console.log(data);
-      //TODO: update the template
+      const template = normalizeTemplateData({
+        name: templateName,
+        exercises: exercises,
+      });
+      await axios.put(`/templates/${_id}`, template);
       navigate(ROUTES.MYWORKOUTS);
     } catch (err) {
       console.log(err);

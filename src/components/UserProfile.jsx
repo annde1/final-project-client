@@ -21,7 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "../styles/styles.css";
 
-const UserProfile = () => {
+const UserProfile = ({ userData, workouts }) => {
   return (
     <Container>
       <Box
@@ -36,19 +36,25 @@ const UserProfile = () => {
         <Avatar
           style={{ width: "100px", height: "100px", marginBottom: "1rem" }}
         ></Avatar>
-        <Typography className="customFont">annad</Typography>
-        <Typography className="customFont">Anna</Typography>
+        <Typography className="customFont">{userData.userName}</Typography>
+        <Typography
+          className="customFont"
+          variant="subtitle2"
+          sx={{ fontWeight: "bold" }}
+        >
+          {userData.name?.firstName}
+        </Typography>
       </Box>
 
       <Box style={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="body2" className="customFont">
-          Workouts {153}
+        <Typography variant="subtitle2" className="customFont">
+          Workouts {workouts.length}
         </Typography>
-        <Typography variant="body2" className="customFont">
-          Followers {0}
+        <Typography variant="subtitle2" className="customFont">
+          Weight {userData.weight} kg
         </Typography>
-        <Typography variant="body2" className="customFont">
-          Following {0}
+        <Typography variant="subtitle2" className="customFont">
+          Height {userData.height} cm
         </Typography>
       </Box>
     </Container>

@@ -20,9 +20,56 @@ import { NavLink } from "react-router-dom";
 import { getIcon } from "../service/icon-service";
 import { useSelector } from "react-redux";
 import { loggedInLinks, loggedOutLinks } from "../service/links";
+import SearchIcon from "@mui/icons-material/Search";
 import "../styles/styles.css";
+import InputBase from "@mui/material/InputBase";
+import axios from "axios";
+import Popover from "@mui/material/Popover";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
+import { alpha } from "@mui/material/styles";
+import { useRef } from "react";
+import Container from "@mui/material/Container";
+
 const drawerWidth = 240;
 
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(3),
+    width: "auto",
+  },
+}));
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
+}));
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -91,13 +138,17 @@ const DrawerStyled = styled(Drawer, {
 const MiniDrawer = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const searchInputRef = useRef(null);
   const isLoggedIn = useSelector(
     (store) => store.authenticationSlice.isLoggedIn
   );
 
   useEffect(() => {
-    console.log("LOGGEDIN STATUS: ", isLoggedIn);
-  }, [isLoggedIn]);
+    console.log(searchResults);
+  }, [searchResults]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -107,6 +158,31 @@ const MiniDrawer = () => {
     setOpen(false);
   };
 
+  const handleInputChange = async (e) => {
+    setQuery(e.target.value);
+
+    try {
+      const { data } = await axios.get(`/users?query=${query}`);
+      console.log(query);
+      console.log(data);
+      setSearchResults(data.users || []);
+      setShowDropdown(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleFollow = async (_id) => {
+    try {
+      const { data } = await axios.post(`/follow/${_id}`);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -136,8 +212,69 @@ const MiniDrawer = () => {
           >
             Zen Fit
           </Typography>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search" }}
+              value={query}
+              onChange={handleInputChange}
+              ref={searchInputRef}
+            />
+            {searchResults.length > 0 && (
+              <Popover
+                id="user-dropdown"
+                open={showDropdown}
+                anchorEl={searchInputRef.current}
+                onClose={toggleDropdown}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                disableRestoreFocus
+                disableAutoFocus={true}
+              >
+                <List
+                  sx={{
+                    maxHeight: "200px", // Set your desired maxHeight
+                    overflowY: "auto",
+                    width: "235px",
+                  }}
+                >
+                  {searchResults.map((result, index) => (
+                    <ListItem key={index} alignItems="center">
+                      <ListItemAvatar>
+                        <Avatar alt={result.userName} src={result.avatar} />
+                      </ListItemAvatar>
+
+                      <Typography variant="subtitle2">
+                        {result.userName}
+                      </Typography>
+                      <IconButton
+                        size="medium"
+                        sx={{ alignSelf: "flex-end" }}
+                        onClick={() => {
+                          console.log(result._id);
+                          handleFollow(result._id);
+                        }}
+                      >
+                        +
+                      </IconButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Popover>
+            )}
+          </Search>
         </Toolbar>
       </AppBarStyled>
+
       <DrawerStyled variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
