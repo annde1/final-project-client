@@ -1,8 +1,7 @@
 import "./App.css";
 import "./styles/styles.css";
-
-import NavBar from "./components/NavBar";
 import Layout from "./layout/Layout";
+import { ToastContainer } from "react-toastify";
 import { Router } from "./routes/Router";
 function App() {
   return (

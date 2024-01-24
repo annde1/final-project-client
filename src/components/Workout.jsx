@@ -7,7 +7,6 @@ import { useState } from "react";
 import WorkoutExercise from "./WorkoutExercise";
 import Button from "@mui/material/Button";
 import WorkoutReaction from "./WorkoutReaction";
-import AddComment from "./AddComment";
 import { calculateTimePassed } from "../service/workout-service";
 import { convertMsToHoursAndMinutes } from "../service/workout-service";
 const Workout = ({
@@ -20,15 +19,12 @@ const Workout = ({
   const [visibleExercises, setVisibleExercises] = useState(3);
   const [showMessage, setShowMessage] = useState(false);
   const exercises = workout.template.exercises;
-  //workout.template.exercises is an array of object
   const createdAt = calculateTimePassed(workout.createdAt);
   const duration = convertMsToHoursAndMinutes(workout.duration);
   const workoutVolume = workout.volume;
   const numOfLikes = workout.likes.length;
 
   const handleShowMoreExercises = () => {
-    // console.log(" exercises length", exercises.length);
-    // console.log("next exercises", visibleExercises + 3);
     if (visibleExercises < exercises.length) {
       setVisibleExercises((previous) =>
         Math.min(previous + 3, exercises.length)
@@ -48,11 +44,7 @@ const Workout = ({
           marginTop: 8,
         }}
       >
-        <UserDetails
-          userName={userData.userName}
-          createdAt={createdAt}
-          // image={userData.image.url}
-        />
+        <UserDetails userName={userData.userName} createdAt={createdAt} />
         <Typography
           style={{
             fontFamily: "Montserrat, sans-serif",
@@ -114,16 +106,10 @@ const Workout = ({
           }}
         >
           <Typography
-            sx={{ fontFamily: "Montserrat, sans-serif" }}
+            sx={{ fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
             variant="subtitle2"
           >
             {numOfLikes} {numOfLikes === 1 ? "like" : "likes"}
-          </Typography>
-          <Typography
-            sx={{ fontFamily: "Montserrat, sans-serif" }}
-            variant="subtitle2"
-          >
-            0 comments
           </Typography>
         </Box>
         <Divider light sx={{ marginTop: 1, marginBottom: 1, width: "100%" }} />
@@ -132,9 +118,9 @@ const Workout = ({
           onLikeWorkout={onLikeWorkout}
           workoutId={workout._id}
           isLiked={isLiked}
+          userId={workout.userId}
         />
         <Divider light sx={{ marginTop: 1, marginBottom: 3, width: "100%" }} />
-        <AddComment />
       </Box>
     </>
   );

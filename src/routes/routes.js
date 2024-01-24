@@ -10,4 +10,6 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   ABOUT: "/about",
+  SOCIAL: "/social",
+  FEEDS: "/feeds",
 };

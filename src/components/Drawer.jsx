@@ -29,7 +29,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { alpha } from "@mui/material/styles";
 import { useRef } from "react";
-import Container from "@mui/material/Container";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 
@@ -142,14 +145,31 @@ const MiniDrawer = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const searchInputRef = useRef(null);
+  const [userName, setUserName] = useState("");
   const isLoggedIn = useSelector(
     (store) => store.authenticationSlice.isLoggedIn
   );
+  const userId = useSelector(
+    (store) => store.authenticationSlice.userData?._id
+  );
 
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const { data } = await axios.get(`/users/${userId}`);
+        setUserName(data.userData.userName);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUserName();
+  }, [userId]);
   useEffect(() => {
     console.log(searchResults);
   }, [searchResults]);
-
+  useEffect(() => {
+    console.log(userId);
+  }, [userId]);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -165,7 +185,11 @@ const MiniDrawer = () => {
       const { data } = await axios.get(`/users?query=${query}`);
       console.log(query);
       console.log(data);
-      setSearchResults(data.users || []);
+      const updatedUsers = data.users.map((user) => ({
+        ...user,
+        isFollowed: user.followers.includes(userId),
+      }));
+      setSearchResults(updatedUsers || []);
       setShowDropdown(true);
     } catch (err) {
       console.log(err);
@@ -177,8 +201,15 @@ const MiniDrawer = () => {
 
   const handleFollow = async (_id) => {
     try {
-      const { data } = await axios.post(`/follow/${_id}`);
+      const { data } = await axios.patch(`/users/follow/${_id}`);
       console.log(data);
+      ///Update the search result isFollowed
+      setSearchResults((previous) => {
+        //loop on the searchResults array and if the user's id matches the _id then toggle isFollowed else return unchanged user
+        return previous.map((user) =>
+          user._id === _id ? { ...user, isFollowed: !user.isFollowed } : user
+        );
+      });
     } catch (err) {
       console.log(err);
     }
@@ -191,7 +222,7 @@ const MiniDrawer = () => {
         open={open}
         sx={{ backgroundColor: "#0B0D13" }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", flexDirection: "row" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -204,6 +235,11 @@ const MiniDrawer = () => {
           >
             <MenuIcon />
           </IconButton>
+          {/* <img
+            src="/assets/images/logo-no-background.png"
+            alt="logo"
+            style={{ height: "3rem", width: "2.5rem" }}
+          ></img> */}
           <Typography
             variant="h6"
             noWrap
@@ -212,66 +248,137 @@ const MiniDrawer = () => {
           >
             Zen Fit
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              value={query}
-              onChange={handleInputChange}
-              ref={searchInputRef}
-            />
-            {searchResults.length > 0 && (
-              <Popover
-                id="user-dropdown"
-                open={showDropdown}
-                anchorEl={searchInputRef.current}
-                onClose={toggleDropdown}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                disableRestoreFocus
-                disableAutoFocus={true}
-              >
-                <List
+
+          {isLoggedIn && (
+            <Search
+              sx={{
+                marginLeft: "auto",
+                [theme.breakpoints.up("md")]: {
+                  marginLeft: 28,
+                  width: "25rem",
+                },
+                [theme.breakpoints.up("lg")]: {
+                  marginLeft: 38,
+                  width: "25rem",
+                },
+                [theme.breakpoints.up("xl")]: {
+                  marginLeft: 52,
+                  width: "25rem",
+                },
+              }}
+            >
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                value={query}
+                onChange={handleInputChange}
+                ref={searchInputRef}
+              />
+              {searchResults.length > 0 && (
+                <Popover
+                  id="user-dropdown"
+                  open={showDropdown}
+                  anchorEl={searchInputRef.current}
+                  onClose={toggleDropdown}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  disableRestoreFocus
+                  disableAutoFocus={true}
                   sx={{
-                    maxHeight: "200px", // Set your desired maxHeight
-                    overflowY: "auto",
-                    width: "235px",
+                    // "& .MuiPaper-root": {
+                    //   width: "25rem", // Set your desired width
+                    //   // maxWidth: "100%", // Ensure it doesn't exceed the search bar width
+                    // },
+                    // marginLeft: "auto",
+                    [theme.breakpoints.up("md")]: {
+                      marginRight: 38,
+                    },
+                    [theme.breakpoints.up("lg")]: {
+                      marginRight: 28,
+                    },
+                    [theme.breakpoints.up("xl")]: {
+                      marginLeft: 52,
+                    },
                   }}
                 >
-                  {searchResults.map((result, index) => (
-                    <ListItem key={index} alignItems="center">
-                      <ListItemAvatar>
-                        <Avatar alt={result.userName} src={result.avatar} />
-                      </ListItemAvatar>
+                  <List
+                    sx={{
+                      maxHeight: "200px", // Set your desired maxHeight
+                      overflowY: "auto",
+                    }}
+                  >
+                    {searchResults.map((result, index) => (
+                      <ListItem key={index} alignItems="center">
+                        <ListItemAvatar>
+                          <Avatar alt={result.userName} src={result.avatar} />
+                        </ListItemAvatar>
 
-                      <Typography variant="subtitle2">
-                        {result.userName}
-                      </Typography>
-                      <IconButton
-                        size="medium"
-                        sx={{ alignSelf: "flex-end" }}
-                        onClick={() => {
-                          console.log(result._id);
-                          handleFollow(result._id);
-                        }}
-                      >
-                        +
-                      </IconButton>
-                    </ListItem>
-                  ))}
-                </List>
-              </Popover>
-            )}
-          </Search>
+                        <Typography variant="subtitle2">
+                          {result.name.firstName} {result.name.lastName}
+                        </Typography>
+                        {result.isFollowed ? (
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              handleFollow(result._id);
+                            }}
+                          >
+                            <PersonRemoveIcon />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              handleFollow(result._id);
+                            }}
+                          >
+                            <PersonAddIcon />
+                          </IconButton>
+                        )}
+                      </ListItem>
+                    ))}
+                  </List>
+                </Popover>
+              )}
+            </Search>
+          )}
+          {isLoggedIn && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifySelf: "flex-end",
+                [theme.breakpoints.up("sm")]: {
+                  marginLeft: "auto",
+                },
+              }}
+            >
+              {" "}
+              <FiberManualRecordIcon
+                sx={{ height: "10px", width: "10px", color: "#37B213" }}
+              />
+              <Typography
+                variant="subtitle2"
+                sx={{ fontFamily: "Montserrat", marginLeft: 1 }}
+              >
+                {userName}
+              </Typography>
+              <IconButton>
+                <LogoutIcon
+                  sx={{ color: "#B3B3B5", height: "20px", width: "15px" }}
+                />
+              </IconButton>
+            </Box>
+          )}
         </Toolbar>
       </AppBarStyled>
 

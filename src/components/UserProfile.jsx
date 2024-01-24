@@ -22,6 +22,11 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "../styles/styles.css";
 
 const UserProfile = ({ userData, workouts }) => {
+  const followers =
+    userData.followers?.length > 0 ? userData.followers?.length : 0;
+  const following =
+    userData.following?.length > 0 ? userData.following?.length : 0;
+
   return (
     <Container>
       <Box
@@ -47,14 +52,26 @@ const UserProfile = ({ userData, workouts }) => {
       </Box>
 
       <Box style={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="subtitle2" className="customFont">
+        <Typography
+          variant="subtitle2"
+          className="customFont"
+          sx={{ fontWeight: "bold" }}
+        >
           Workouts {workouts.length}
         </Typography>
-        <Typography variant="subtitle2" className="customFont">
-          Weight {userData.weight} kg
+        <Typography
+          variant="subtitle2"
+          className="customFont"
+          sx={{ fontWeight: "bold" }}
+        >
+          Following {following}
         </Typography>
-        <Typography variant="subtitle2" className="customFont">
-          Height {userData.height} cm
+        <Typography
+          variant="subtitle2"
+          className="customFont"
+          sx={{ fontWeight: "bold" }}
+        >
+          Followers {followers}
         </Typography>
       </Box>
     </Container>

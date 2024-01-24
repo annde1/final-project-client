@@ -20,6 +20,8 @@ import "../styles/styles.css";
 import validateRegistration from "../validation/userRegisterValidation";
 import normalizeUserData from "../service/nomralizeUserData";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
 const RegisterPage = () => {
   const [inputs, setInputs] = useState({
     firstName: "",
@@ -33,6 +35,7 @@ const RegisterPage = () => {
     isPremium: false,
     userType: "",
   });
+  const navigate = useNavigate();
   const handleInputsChange = (event) => {
     setInputs((current) => ({
       ...current,
@@ -64,6 +67,7 @@ const RegisterPage = () => {
       console.log(axios.defaults.baseURL);
       const response = await axios.post("/users", userData);
       console.log(response);
+      navigate(ROUTES.LOGIN);
     } catch (err) {
       console.log(err);
     }

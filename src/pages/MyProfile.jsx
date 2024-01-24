@@ -8,43 +8,34 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Box, Grid, Container, Button } from "@mui/material";
 import { calculateBMI } from "../service/user-profile";
 import BmiModal from "../components/BmiModal";
+import ProfileSkeleton from "../components/ProfileSkeleton";
 const MyProfilePage = () => {
-  //TODO MAKE SKELETON
   const [userData, setUserData] = useState({});
   const [workouts, setWorkouts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [bmiModal, setShowBmiModal] = useState(false);
   const [bmi, setBmi] = useState(null);
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        //Fetch user profile information
         const { data } = await axios.get(`/users/${userId}`);
         console.log(data);
         setUserData(data.userData);
+        //Fetch user's workouts
+        const { data: userWorkouts } = await axios.get("/workouts/my-workouts");
+        setWorkouts(userWorkouts.workouts);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     };
     fetchUserData();
   }, [userId]);
-
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      try {
-        const { data } = await axios.get("/workouts/my-workouts");
-        console.log(data);
-        setWorkouts(data.workouts);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchWorkouts();
-  }, []);
 
   const handleCalculateBmi = () => {
     const bmi = calculateBMI(userData.height, userData.weight);
@@ -72,6 +63,12 @@ const MyProfilePage = () => {
           }}
         >
           <Grid container spacing={2}>
+            {isLoading && (
+              <Grid item xs={12} sm={12}>
+                {" "}
+                <ProfileSkeleton />
+              </Grid>
+            )}
             <Grid item xs={12} sm={12}>
               <UserProfile userData={userData} workouts={workouts} />
             </Grid>

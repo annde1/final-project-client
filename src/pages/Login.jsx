@@ -1,5 +1,4 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -8,7 +7,6 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -19,7 +17,8 @@ import validateUserLogin from "../validation/user-login-validation";
 import { storeToken } from "../service/login-service";
 import useAutoLogin from "../hooks/useAutoLogin";
 import { useNavigate } from "react-router-dom";
-
+import { ROUTES } from "../routes/routes";
+import { successToast } from "../service/toastify-service";
 const defaultTheme = createTheme();
 const LoginPage = () => {
   const [inputs, setInputs] = useState({
@@ -28,6 +27,7 @@ const LoginPage = () => {
   });
   const [rememberMe, setRememberMe] = useState(true);
   const autoLogin = useAutoLogin();
+  const navigate = useNavigate();
   const handleInputsChange = (e) => {
     setInputs((current) => ({
       ...current,
@@ -45,7 +45,10 @@ const LoginPage = () => {
       const { data } = await axios.post("/users/login", inputs);
       //store token
       storeToken(data.token.token, rememberMe);
+      // successToast("You've been logged in successfully");
       autoLogin(true);
+
+      navigate(ROUTES.FEEDS);
     } catch (err) {
       console.log(err);
     }

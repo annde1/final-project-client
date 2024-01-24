@@ -10,6 +10,8 @@ import AboutPage from "../pages/About";
 import EditProfilePage from "../pages/EditProfile";
 import EditTemplatePage from "../pages/EditTemplate";
 import NewWorkout from "../pages/NewWorkout";
+import FeedsPage from "../pages/Feeds";
+import SocialPage from "../pages/SocialPage";
 
 export const Router = () => {
   return (
@@ -27,6 +29,8 @@ export const Router = () => {
         element={<EditTemplatePage />}
       />
       <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+      <Route path={ROUTES.SOCIAL} element={<SocialPage />} />
+      <Route path={ROUTES.FEEDS} element={<FeedsPage />} />
     </Routes>
   );
 };

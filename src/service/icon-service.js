@@ -7,9 +7,11 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
-import EditIcon from "@mui/icons-material/Edit";
+import FeedIcon from "@mui/icons-material/Feed";
+import GroupsIcon from "@mui/icons-material/Groups";
 import { ROUTES } from "../routes/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
+
 export const getIcon = (to) => {
   switch (to) {
     case ROUTES.MYPROFILE:
@@ -28,6 +30,10 @@ export const getIcon = (to) => {
       return <LoginIcon />;
     case ROUTES.REGISTER:
       return <HowToRegIcon />;
+    case ROUTES.SOCIAL:
+      return <GroupsIcon />;
+    case ROUTES.FEEDS:
+      return <FeedIcon />;
     default:
       return null;
   }
