@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,122 +20,25 @@ import { useSelector } from "react-redux";
 import { loggedInLinks, loggedOutLinks } from "../service/links";
 import SearchIcon from "@mui/icons-material/Search";
 import "../styles/styles.css";
-import InputBase from "@mui/material/InputBase";
 import axios from "axios";
 import Popover from "@mui/material/Popover";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import { alpha } from "@mui/material/styles";
 import { useRef } from "react";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import LogoutIcon from "@mui/icons-material/Logout";
-
-const drawerWidth = 240;
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
-const openedMixin = (theme) => ({
-  width: drawerWidth,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme) => ({
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
-const AppBarStyled = styled(AppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const DrawerStyled = styled(Drawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
-
+import LoginIcon from "@mui/icons-material/Login";
+import Search from "./Search";
+import SearchIconWrapper from "./SearchIconWrapper";
+import StyledInputBase from "./StyledInputBase";
+import { AppBarStyled } from "./AppBarStyled";
+import { DrawerHeader } from "./DrawerHeader";
+import { DrawerStyled } from "./DrawerStyled";
+import { useLogout } from "../hooks/useLogout";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
 const MiniDrawer = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
@@ -152,7 +53,8 @@ const MiniDrawer = () => {
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
-
+  const logout = useLogout();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserName = async () => {
       try {
@@ -164,12 +66,7 @@ const MiniDrawer = () => {
     };
     fetchUserName();
   }, [userId]);
-  useEffect(() => {
-    console.log(searchResults);
-  }, [searchResults]);
-  useEffect(() => {
-    console.log(userId);
-  }, [userId]);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -183,8 +80,6 @@ const MiniDrawer = () => {
 
     try {
       const { data } = await axios.get(`/users?query=${query}`);
-      console.log(query);
-      console.log(data);
       const updatedUsers = data.users.map((user) => ({
         ...user,
         isFollowed: user.followers.includes(userId),
@@ -214,6 +109,14 @@ const MiniDrawer = () => {
       console.log(err);
     }
   };
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const handleLogin = () => {
+    navigate(ROUTES.LOGIN);
+  };
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -235,11 +138,6 @@ const MiniDrawer = () => {
           >
             <MenuIcon />
           </IconButton>
-          {/* <img
-            src="/assets/images/logo-no-background.png"
-            alt="logo"
-            style={{ height: "3rem", width: "2.5rem" }}
-          ></img> */}
           <Typography
             variant="h6"
             noWrap
@@ -312,14 +210,17 @@ const MiniDrawer = () => {
                 >
                   <List
                     sx={{
-                      maxHeight: "200px", // Set your desired maxHeight
+                      maxHeight: "200px",
                       overflowY: "auto",
                     }}
                   >
                     {searchResults.map((result, index) => (
                       <ListItem key={index} alignItems="center">
                         <ListItemAvatar>
-                          <Avatar alt={result.userName} src={result.avatar} />
+                          <Avatar
+                            alt={result.userName}
+                            src={result.image?.url}
+                          />
                         </ListItemAvatar>
 
                         <Typography variant="subtitle2">
@@ -372,9 +273,41 @@ const MiniDrawer = () => {
               >
                 {userName}
               </Typography>
-              <IconButton>
+              <IconButton onClick={handleLogout}>
                 <LogoutIcon
                   sx={{ color: "#B3B3B5", height: "20px", width: "15px" }}
+                />
+              </IconButton>
+            </Box>
+          )}
+          {!isLoggedIn && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifySelf: "flex-end",
+                [theme.breakpoints.up("sm")]: {
+                  marginLeft: "auto",
+                },
+              }}
+            >
+              <FiberManualRecordIcon
+                sx={{ height: "10px", width: "10px", color: "#2392FF" }}
+              />
+              <Typography
+                variant="subtitle2"
+                sx={{ fontFamily: "Montserrat", marginLeft: 1 }}
+              >
+                Login
+              </Typography>
+              <IconButton onClick={handleLogin}>
+                <LoginIcon
+                  sx={{
+                    color: "#B3B3B5",
+                    height: "25px",
+                    width: "18px",
+                    marginLeft: 0.5,
+                  }}
                 />
               </IconButton>
             </Box>

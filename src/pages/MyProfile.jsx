@@ -11,6 +11,7 @@ import BmiModal from "../components/BmiModal";
 import ProfileSkeleton from "../components/ProfileSkeleton";
 const MyProfilePage = () => {
   const [userData, setUserData] = useState({});
+
   const [workouts, setWorkouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [bmiModal, setShowBmiModal] = useState(false);

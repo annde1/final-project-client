@@ -28,6 +28,8 @@ const RegisterPage = () => {
     lastName: "",
     userName: "",
     email: "",
+    url: "",
+    alt: "",
     password: "",
     age: "",
     height: "",
@@ -64,7 +66,6 @@ const RegisterPage = () => {
       if (errors) return;
       const userData = normalizeUserData(inputs);
       console.log(userData);
-      console.log(axios.defaults.baseURL);
       const response = await axios.post("/users", userData);
       console.log(response);
       navigate(ROUTES.LOGIN);
@@ -143,6 +144,30 @@ const RegisterPage = () => {
                   name="email"
                   autoComplete="email"
                   value={inputs.email}
+                  onChange={handleInputsChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="url"
+                  label="Profile Image Url"
+                  name="profile"
+                  autoComplete="profile"
+                  value={inputs.url}
+                  onChange={handleInputsChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="alt"
+                  label="Profile Image Alt"
+                  name="profile"
+                  autoComplete="profile"
+                  value={inputs.alt}
                   onChange={handleInputsChange}
                 />
               </Grid>

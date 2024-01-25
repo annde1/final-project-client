@@ -16,3 +16,12 @@ export const getToken = () => {
     return sessionStorage.getItem("token");
   }
 };
+
+export const clearToken = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    localStorage.removeItem("token");
+  } else {
+    sessionStorage.removeItem("token");
+  }
+};

@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import Follower from "../components/Follower";
 const SocialPage = () => {
   const [following, setFollowing] = useState([]);
@@ -13,6 +14,8 @@ const SocialPage = () => {
   const [numFollowers, setNumFollowers] = useState(3);
   const [showMessageFollowers, setShowMessageFollowers] = useState(false);
   const [showMessageFollowing, setShowMessageFollowing] = useState(false);
+  const [isLoadingFollowers, setIsLoadingFollowers] = useState(true);
+  const [isLoadingFollowing, setIsLoadingFollowing] = useState(true);
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
@@ -27,7 +30,7 @@ const SocialPage = () => {
           isFollowing: true,
         }));
         setFollowing(updatedData);
-
+        setIsLoadingFollowing(false);
         //Fetch followers
         const { data: followersData } = await axios.get(`/users/followers`);
         setFollowers(
@@ -36,6 +39,7 @@ const SocialPage = () => {
             isFollowing: user.followers.includes(userId),
           }))
         );
+        setIsLoadingFollowers(false);
       } catch (err) {
         console.log(err);
       }
@@ -105,6 +109,19 @@ const SocialPage = () => {
           Following
         </Typography>
         <Grid container spacing={2} justifyContent="center">
+          {isLoadingFollowing && (
+            <Grid item xs={12} md={8}>
+              <Typography
+                variant="body1"
+                style={{
+                  fontFamily: "Montserrat, sans-serif",
+                  marginBottom: "1rem",
+                }}
+              >
+                Fetching following...
+              </Typography>
+            </Grid>
+          )}
           {following.slice(0, numFollowing).map((user) => (
             <Grid item xs={12} md={8} key={user._id}>
               <Follower
@@ -144,7 +161,7 @@ const SocialPage = () => {
             No more following to show!
           </Typography>
         )}
-
+        <Divider light sx={{ mt: 2 }} />
         <Typography
           variant="h6"
           style={{
@@ -156,6 +173,19 @@ const SocialPage = () => {
           Followers
         </Typography>
         <Grid container spacing={2} justifyContent="center">
+          {isLoadingFollowers && (
+            <Grid item xs={12} md={8}>
+              <Typography
+                variant="body1"
+                style={{
+                  fontFamily: "Montserrat, sans-serif",
+                  marginBottom: "1rem",
+                }}
+              >
+                Fetching followers...
+              </Typography>
+            </Grid>
+          )}
           {followers.slice(0, numFollowers).map((user) => (
             <Grid item xs={12} md={8} key={user._id}>
               <Follower

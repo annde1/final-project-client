@@ -12,25 +12,88 @@ import EditTemplatePage from "../pages/EditTemplate";
 import NewWorkout from "../pages/NewWorkout";
 import FeedsPage from "../pages/Feeds";
 import SocialPage from "../pages/SocialPage";
-
+import AuthGuard from "../Guard/AuthGuard";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 export const Router = () => {
   return (
     <Routes>
       <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
-      <Route path={ROUTES.CREATETEMPLATE} element={<CreateTemplatePage />} />
-      <Route path={ROUTES.EDITPROFILE} element={<EditProfilePage />} />
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-      <Route path={ROUTES.MYPROFILE} element={<MyProfilePage />} />
-      <Route path={ROUTES.MYWORKOUTS} element={<MyWorkoutsPage />} />
-      <Route path={`${ROUTES.STARTWORKOUT}/:id`} element={<NewWorkout />} />
-      <Route path={ROUTES.MYTEMPLATES} element={<MyTemplatesPage />} />
+      <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+
+      <Route
+        path={ROUTES.CREATETEMPLATE}
+        element={
+          <AuthGuard>
+            <CreateTemplatePage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.EDITPROFILE}
+        element={
+          <AuthGuard>
+            <EditProfilePage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.MYPROFILE}
+        element={
+          <AuthGuard>
+            <MyProfilePage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.MYWORKOUTS}
+        element={
+          <AuthGuard>
+            <MyWorkoutsPage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={`${ROUTES.STARTWORKOUT}/:id`}
+        element={
+          <AuthGuard>
+            <NewWorkout />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.MYTEMPLATES}
+        element={
+          <AuthGuard>
+            <MyTemplatesPage />
+          </AuthGuard>
+        }
+      />
       <Route
         path={`${ROUTES.EDITTEMPLATE}/:id`}
-        element={<EditTemplatePage />}
+        element={
+          <AuthGuard>
+            <EditTemplatePage />
+          </AuthGuard>
+        }
       />
-      <Route path={ROUTES.ABOUT} element={<AboutPage />} />
-      <Route path={ROUTES.SOCIAL} element={<SocialPage />} />
-      <Route path={ROUTES.FEEDS} element={<FeedsPage />} />
+      <Route
+        path={ROUTES.SOCIAL}
+        element={
+          <AuthGuard>
+            <SocialPage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.FEEDS}
+        element={
+          <AuthGuard>
+            <FeedsPage />
+          </AuthGuard>
+        }
+      />
     </Routes>
   );
 };

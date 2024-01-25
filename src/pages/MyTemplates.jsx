@@ -5,8 +5,10 @@ import Template from "../components/Template";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ROUTES } from "../routes/routes";
+import CircularProgress from "@mui/material/CircularProgress";
 const MyTemplatesPage = () => {
   const [userTemplates, setUserTemplates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   //TODO: add button add template, check if user isPremium if not premium and already has 3 show him modal to upgrade to premium and if is premium then redirect him to create template page.Use redux for reading isPremium
 
@@ -15,6 +17,7 @@ const MyTemplatesPage = () => {
       try {
         const { data } = await axios.get("/templates/my-templates");
         setUserTemplates(data.templates);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -55,6 +58,17 @@ const MyTemplatesPage = () => {
                 flexDirection: "column",
               }}
             >
+              {isLoading && (
+                <Grid item xs={12} md={12}>
+                  <CircularProgress color="inherit" />
+                  <Typography
+                    variant="body2"
+                    style={{ fontFamily: "Montserrat, sans-serif" }}
+                  >
+                    Fetching Templates
+                  </Typography>
+                </Grid>
+              )}
               <Typography
                 style={{
                   fontFamily: "Montserrat, sans-serif",
@@ -63,6 +77,7 @@ const MyTemplatesPage = () => {
               >
                 My Templates ({userTemplates.length})
               </Typography>
+
               {userTemplates.map((template, index) => (
                 <Template
                   name={template.name}

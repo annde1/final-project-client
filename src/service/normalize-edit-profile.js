@@ -1,4 +1,4 @@
-const normalizeUserData = (data) => {
+const normalizeEditProfile = (data) => {
   return {
     name: {
       firstName: data.firstName,
@@ -10,12 +10,10 @@ const normalizeUserData = (data) => {
     age: Number(data.age),
     weight: Number(data.weight),
     height: Number(data.height),
-    isPremium: Boolean(data.isPremium),
-    userType: data.userType,
     image: {
       alt: data.alt,
       url: data.url,
     },
   };
 };
-export default normalizeUserData;
+export default normalizeEditProfile;

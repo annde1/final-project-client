@@ -44,7 +44,11 @@ const Workout = ({
           marginTop: 8,
         }}
       >
-        <UserDetails userName={userData.userName} createdAt={createdAt} />
+        <UserDetails
+          userName={userData.userName}
+          createdAt={createdAt}
+          image={userData.image}
+        />
         <Typography
           style={{
             fontFamily: "Montserrat, sans-serif",

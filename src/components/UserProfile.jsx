@@ -19,14 +19,24 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { FaCrown } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
 import "../styles/styles.css";
 
 const UserProfile = ({ userData, workouts }) => {
+  const navigate = useNavigate();
   const followers =
     userData.followers?.length > 0 ? userData.followers?.length : 0;
   const following =
     userData.following?.length > 0 ? userData.following?.length : 0;
 
+  const handleRedirectWorkouts = () => {
+    navigate(ROUTES.MYWORKOUTS);
+  };
+  const handleRedirectSocial = () => {
+    navigate(ROUTES.SOCIAL);
+  };
   return (
     <Container>
       <Box
@@ -40,8 +50,15 @@ const UserProfile = ({ userData, workouts }) => {
       >
         <Avatar
           style={{ width: "100px", height: "100px", marginBottom: "1rem" }}
+          src={userData.image?.url}
         ></Avatar>
-        <Typography className="customFont">{userData.userName}</Typography>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography className="customFont">{userData.userName}</Typography>
+          {userData.isPremium && (
+            <FaCrown style={{ color: "#D5C289", marginLeft: "0.5rem" }} />
+          )}
+        </Box>
+
         <Typography
           className="customFont"
           variant="subtitle2"
@@ -55,21 +72,27 @@ const UserProfile = ({ userData, workouts }) => {
         <Typography
           variant="subtitle2"
           className="customFont"
-          sx={{ fontWeight: "bold" }}
+          sx={{
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+          onClick={handleRedirectWorkouts}
         >
           Workouts {workouts.length}
         </Typography>
         <Typography
           variant="subtitle2"
           className="customFont"
-          sx={{ fontWeight: "bold" }}
+          sx={{ fontWeight: "bold", cursor: "pointer" }}
+          onClick={handleRedirectSocial}
         >
           Following {following}
         </Typography>
         <Typography
           variant="subtitle2"
           className="customFont"
-          sx={{ fontWeight: "bold" }}
+          sx={{ fontWeight: "bold", cursor: "pointer" }}
+          onClick={handleRedirectSocial}
         >
           Followers {followers}
         </Typography>

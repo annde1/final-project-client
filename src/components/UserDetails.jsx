@@ -2,13 +2,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 
+import { useSelector } from "react-redux";
 const UserDetails = ({ userName, createdAt, image }) => {
+  const isPremium = useSelector(
+    (store) => store.authenticationSlice.userData?.isPremium
+  );
   return (
     <>
       <Box sx={{ display: "flex" }}>
         <Avatar
           sx={{ width: "60px", height: "60px", marginRight: "2rem" }}
-          src="https://i.pravatar.cc/48?u"
+          src={image.url}
+          alt={image.alt}
         />
         <Box
           sx={{
@@ -17,12 +22,15 @@ const UserDetails = ({ userName, createdAt, image }) => {
             justifyContent: "center",
           }}
         >
-          <Typography
-            variant="subtitle1"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
-          >
-            {userName}
-          </Typography>
+          <Box>
+            <Typography
+              variant="subtitle1"
+              style={{ fontFamily: "Montserrat, sans-serif" }}
+            >
+              {userName}
+            </Typography>
+          </Box>
+
           <Typography
             variant="subtitle2"
             style={{ fontFamily: "Montserrat, sans-serif" }}

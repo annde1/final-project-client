@@ -26,6 +26,7 @@ const LoginPage = () => {
     password: "",
   });
   const [rememberMe, setRememberMe] = useState(true);
+  const [errors, setErrors] = useState([]);
   const autoLogin = useAutoLogin();
   const navigate = useNavigate();
   const handleInputsChange = (e) => {
@@ -41,14 +42,20 @@ const LoginPage = () => {
     try {
       e.preventDefault();
       const errors = validateUserLogin(inputs);
-      if (errors) return;
+      if (errors) {
+        console.log(errors);
+        return;
+      }
       const { data } = await axios.post("/users/login", inputs);
       //store token
       storeToken(data.token.token, rememberMe);
-      // successToast("You've been logged in successfully");
-      autoLogin(true);
 
+      autoLogin(true);
+      // successToast("You've been logged in successfully");
+      //??? Why it doesn't redirect
+      console.log("before navigate");
       navigate(ROUTES.FEEDS);
+      console.log("after navigate");
     } catch (err) {
       console.log(err);
     }

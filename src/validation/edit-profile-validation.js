@@ -1,7 +1,7 @@
 import Joi from "joi";
 import validation from "./schema-validation";
 
-const registerSchema = Joi.object({
+const editProfileSchema = Joi.object({
   firstName: Joi.string().min(2).max(20).required().messages({
     "string.empty": "First name is required",
     "string.min": "First name must be at least 2 characters long",
@@ -34,15 +34,11 @@ const registerSchema = Joi.object({
   height: Joi.number().min(1).optional().messages({
     "number.base": "Height must be a number",
   }),
-  isPremium: Joi.boolean().required(),
-  userType: Joi.string().required().messages({
-    "string.empty": "User type is required",
-  }),
   alt: Joi.string().min(5).max(100).required(),
   url: Joi.string().uri().min(5).max(255).required(),
 });
 
-const validateRegistration = (input) => {
-  return validation(registerSchema, input);
+const validateEditProfile = (input) => {
+  return validation(editProfileSchema, input);
 };
-export default validateRegistration;
+export default validateEditProfile;

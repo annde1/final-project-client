@@ -20,21 +20,73 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import validateEditProfile from "../validation/edit-profile-validation";
 import "../styles/styles.css";
+import normalizeEditProfile from "../service/normalize-edit-profile";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
 const EditProfilePage = () => {
-  //TODO: Split the area to update password and change user data
+  const [userData, setUserData] = useState({});
+  const [inputs, setInputs] = useState({
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    url: "",
+    alt: "",
+    password: "",
+    age: "",
+    height: "",
+    weight: "",
+  });
   const [showPassword, setShowPassword] = React.useState(false);
+  const userId = useSelector(
+    (store) => store.authenticationSlice.userData?._id
+  );
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-  const handleSubmit = (event) => {};
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { data } = await axios.get(`/users/${userId}`);
+        console.log(data);
+        setUserData(data.userData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUserData();
+  }, [userId]);
+
+  const handleInputsChange = (event) => {
+    setInputs((current) => ({
+      ...current,
+      [event.target.id]: event.target.value,
+    }));
+  };
+
+  const handleEditProfile = async (e) => {
+    try {
+      e.preventDefault();
+      const errors = validateEditProfile(inputs);
+      if (errors) {
+        return;
+      }
+      const normalized = normalizeEditProfile(inputs);
+      await axios.put(`/users/${userId}`, normalized);
+      navigate(ROUTES.FEEDS);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
@@ -51,120 +103,164 @@ const EditProfilePage = () => {
             alignItems: "center",
           }}
         >
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                  className="customFont"
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="userName"
-                  label="User Name"
-                  name="userName"
-                  autoComplete="user-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="password"
-                  label="Password"
-                  fullWidth
-                  type={showPassword ? "text" : "password"}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          edge="end"
-                          onClick={handleTogglePasswordVisibility}
-                          aria-label="toggle password visibility"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="Age"
-                  label="Age"
-                  type="number"
-                  id="age"
-                  autoComplete="new-age"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  fullWidth
-                  name="Height"
-                  label="Height"
-                  type="number"
-                  id="height"
-                  autoComplete="new-height"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="Weight"
-                  label="Weight"
-                  type="number"
-                  id="weight"
-                  autoComplete="new-weight"
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                className="customFont"
+                value={inputs.firstName}
+                helperText={userData.name?.firstName}
+                onChange={handleInputsChange}
+              />
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
-              className="customFont"
-            >
-              Edit Profile
-            </Button>
-          </Box>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="family-name"
+                value={inputs.lastName}
+                helperText={userData.name?.lastName}
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                required
+                fullWidth
+                id="userName"
+                value={inputs.userName}
+                label="User Name"
+                name="userName"
+                autoComplete="user-name"
+                helperText={userData.userName}
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={inputs.email}
+                helperText={userData.email}
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="url"
+                label="Profile Image Url"
+                name="profile"
+                value={inputs.url}
+                autoComplete="profile"
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="alt"
+                label="Profile Image Alt"
+                name="profile"
+                value={inputs.alt}
+                autoComplete="profile"
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="password"
+                label="Password"
+                fullWidth
+                value={inputs.password}
+                onChange={handleInputsChange}
+                type={showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={handleTogglePasswordVisibility}
+                        aria-label="toggle password visibility"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                name="Age"
+                label="Age"
+                type="number"
+                id="age"
+                value={inputs.age}
+                autoComplete="new-age"
+                inputProps={{ min: 0 }}
+                helperText={`${userData.age} years`}
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                fullWidth
+                name="Height"
+                label="Height"
+                type="number"
+                id="height"
+                value={inputs.height}
+                autoComplete="new-height"
+                inputProps={{ min: 0 }}
+                helperText={`${userData.height} cm`}
+                onChange={handleInputsChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="Weight"
+                label="Weight"
+                type="number"
+                id="weight"
+                value={inputs.weight}
+                autoComplete="new-weight"
+                inputProps={{ min: 0 }}
+                helperText={`${userData.weight} kg`}
+                onChange={handleInputsChange}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
+            className="customFont"
+            onClick={handleEditProfile}
+          >
+            Edit Profile
+          </Button>
         </Box>
       </Container>
     </>

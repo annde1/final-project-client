@@ -17,14 +17,29 @@ import exercises from "../service/exercises";
 import { normalizeTemplateData } from "../service/normalize-template-data";
 import { validateTemplate } from "../validation/template-validation";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
+import { useSelector } from "react-redux";
 const CreateTemplatePage = () => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [templateName, setTemplateName] = useState(null);
   const [exercises, setExercises] = useState([]);
-
+  const [numTemplates, setNumTemplates] = useState(0);
+  const navigate = useNavigate();
+  const isPremium = useSelector(
+    (store) => store.authenticationSlice.userData?.isPremium
+  );
   useEffect(() => {
-    console.log(exercises);
-  }, [exercises]);
+    const fetchUserTemplates = async () => {
+      try {
+        const { data } = await axios.get("/templates/my-templates");
+        setNumTemplates(data.templates.length);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchUserTemplates();
+  }, []);
   const handleExercise = (exerciseName) => {
     setSelectedExercise(exerciseName);
   };
@@ -124,8 +139,7 @@ const CreateTemplatePage = () => {
       }
       const { data } = await axios.post("/templates", templateData);
       console.log(data);
-
-      //TODO: redirect to my templates
+      navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
       console.log(err);
     }
@@ -138,7 +152,6 @@ const CreateTemplatePage = () => {
 
       <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
         <Grid container spacing={2}>
-          {/* Left Grid for Form */}
           <Grid item xs={12} md={12}>
             <Box
               sx={{
@@ -146,37 +159,50 @@ const CreateTemplatePage = () => {
                 flexDirection: "column",
               }}
             >
-              <TextField
-                autoComplete="template-title"
-                name="templateTitle"
-                required
-                fullWidth
-                id="templateTitle"
-                label="Template Title"
-                autoFocus
-                className="customFont"
-                value={templateName}
-                onChange={handleTemplateName}
-              />
-              <ExericseList
-                onExerciseChange={handleExercise}
-                selectedExercise={selectedExercise}
-                onAddExercise={handleAddExercise}
-              />
-              {exercises.map((exercise, index) => (
-                <TemplateItem
-                  key={index}
-                  selectedExercise={selectedExercise}
-                  name={exercise.name}
-                  onAddWeight={handleAddWeight}
-                  onAddReps={handleAddRep}
-                  onAddSet={handleAddSet}
-                  exerciseIndex={index}
-                  exercise={exercise}
-                />
-              ))}
+              {!isPremium && numTemplates >= 3 ? (
+                <Typography
+                  variant="body1"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                >
+                  You need to upgrade to Premium account to create more
+                  templates
+                </Typography>
+              ) : (
+                <>
+                  <TextField
+                    autoComplete="template-title"
+                    name="templateTitle"
+                    required
+                    fullWidth
+                    id="templateTitle"
+                    label="Template Title"
+                    autoFocus
+                    className="customFont"
+                    value={templateName}
+                    onChange={handleTemplateName}
+                  />
+                  <ExericseList
+                    onExerciseChange={handleExercise}
+                    selectedExercise={selectedExercise}
+                    onAddExercise={handleAddExercise}
+                  />
+                  {exercises.map((exercise, index) => (
+                    <TemplateItem
+                      key={index}
+                      selectedExercise={selectedExercise}
+                      name={exercise.name}
+                      onAddWeight={handleAddWeight}
+                      onAddReps={handleAddRep}
+                      onAddSet={handleAddSet}
+                      exerciseIndex={index}
+                      exercise={exercise}
+                    />
+                  ))}
+                  <Divider light sx={{ marginTop: 3, marginBottom: 3 }} />
+                </>
+              )}
             </Box>
-            <Divider light sx={{ marginTop: 3, marginBottom: 3 }} />
+
             {exercises.length > 0 && (
               <Button
                 variant="contained"
