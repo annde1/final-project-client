@@ -7,6 +7,15 @@ import { useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Follower from "../components/Follower";
+import * as React from "react";
+
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import TextField from "@mui/material/TextField";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import SocialTabs from "../components/SocialTabs";
 const SocialPage = () => {
   const [following, setFollowing] = useState([]);
   const [followers, setFollowers] = useState([]);
@@ -97,135 +106,147 @@ const SocialPage = () => {
     }
   };
   return (
+    // <>
+    //   <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+    //     Social
+    //   </Typography>
+    //   <Container component="main" maxWidth="md" sx={{ marginTop: 8 }}>
+    //     <Typography
+    //       variant="h6"
+    //       style={{ fontFamily: "Montserrat, sans-serif", marginBottom: "2rem" }}
+    //     >
+    //       Following
+    //     </Typography>
+    //     <Grid container spacing={2} justifyContent="center">
+    //       {isLoadingFollowing && (
+    //         <Grid item xs={12} md={8}>
+    //           <Typography
+    //             variant="body1"
+    //             style={{
+    //               fontFamily: "Montserrat, sans-serif",
+    //               marginBottom: "1rem",
+    //             }}
+    //           >
+    //             Fetching following...
+    //           </Typography>
+    //         </Grid>
+    //       )}
+    //       {following.slice(0, numFollowing).map((user) => (
+    //         <Grid item xs={12} md={8} key={user._id}>
+    //           <Follower
+    //             url={user.image.url}
+    //             alt={user.image.alt}
+    //             username={user.userName}
+    //             isFollowing={user.isFollowing}
+    //             onUnfollow={handleUnfollow}
+    //             userId={user._id}
+    //           />
+    //         </Grid>
+    //       ))}
+    //     </Grid>
+    //     {!showMessageFollowing ? (
+    //       <Button
+    //         variant="text"
+    //         style={{
+    //           fontFamily: "Montserrat, sans-serif",
+    //           marginTop: "2rem",
+    //           color: "#0B0D12",
+    //           fontWeight: "bold",
+    //         }}
+    //         onClick={handleSeeMoreFollowing}
+    //       >
+    //         {" "}
+    //         See more
+    //       </Button>
+    //     ) : (
+    //       <Typography
+    //         variant="body2"
+    //         style={{
+    //           fontFamily: "Montserrat, sans-serif",
+    //           fontWeight: "bold",
+    //           marginTop: "3rem",
+    //         }}
+    //       >
+    //         No more following to show!
+    //       </Typography>
+    //     )}
+    //     <Divider light sx={{ mt: 2 }} />
+    //     <Typography
+    //       variant="h6"
+    //       style={{
+    //         fontFamily: "Montserrat, sans-serif",
+    //         marginTop: "3rem",
+    //         marginBottom: "2rem",
+    //       }}
+    //     >
+    //       Followers
+    //     </Typography>
+    //     <Grid container spacing={2} justifyContent="center">
+    //       {isLoadingFollowers && (
+    //         <Grid item xs={12} md={8}>
+    //           <Typography
+    //             variant="body1"
+    //             style={{
+    //               fontFamily: "Montserrat, sans-serif",
+    //               marginBottom: "1rem",
+    //             }}
+    //           >
+    //             Fetching followers...
+    //           </Typography>
+    //         </Grid>
+    //       )}
+    //       {followers.slice(0, numFollowers).map((user) => (
+    //         <Grid item xs={12} md={8} key={user._id}>
+    //           <Follower
+    //             url={user.image.url}
+    //             alt={user.image.alt}
+    //             username={user.userName}
+    //             isFollowing={user.isFollowing}
+    //             onUnfollow={handleUnfollow}
+    //             onFollow={handleFollow}
+    //             userId={user._id}
+    //           />
+    //         </Grid>
+    //       ))}
+    //     </Grid>
+    //     {!showMessageFollowers ? (
+    //       <Button
+    //         variant="text"
+    //         style={{
+    //           fontFamily: "Montserrat, sans-serif",
+    //           marginTop: "2rem",
+    //           color: "#0B0D12",
+    //           fontWeight: "bold",
+    //         }}
+    //         onClick={handleSeeMoreFollowers}
+    //       >
+    //         {" "}
+    //         See more
+    //       </Button>
+    //     ) : (
+    //       <Typography
+    //         variant="body2"
+    //         style={{
+    //           fontFamily: "Montserrat, sans-serif",
+    //           fontWeight: "bold",
+    //           marginTop: "3rem",
+    //         }}
+    //       >
+    //         No more followers to show
+    //       </Typography>
+    //     )}
+    //   </Container>
+    // </>
     <>
-      <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+      <Typography variant="h4" sx={{ fontFamily: "Montserrat, sans-serif" }}>
         Social
       </Typography>
-      <Container component="main" maxWidth="md" sx={{ marginTop: 8 }}>
-        <Typography
-          variant="h6"
-          style={{ fontFamily: "Montserrat, sans-serif", marginBottom: "2rem" }}
-        >
-          Following
-        </Typography>
-        <Grid container spacing={2} justifyContent="center">
-          {isLoadingFollowing && (
-            <Grid item xs={12} md={8}>
-              <Typography
-                variant="body1"
-                style={{
-                  fontFamily: "Montserrat, sans-serif",
-                  marginBottom: "1rem",
-                }}
-              >
-                Fetching following...
-              </Typography>
-            </Grid>
-          )}
-          {following.slice(0, numFollowing).map((user) => (
-            <Grid item xs={12} md={8} key={user._id}>
-              <Follower
-                url={user.image.url}
-                alt={user.image.alt}
-                username={user.userName}
-                isFollowing={user.isFollowing}
-                onUnfollow={handleUnfollow}
-                userId={user._id}
-              />
-            </Grid>
-          ))}
+      <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12}>
+            <SocialTabs />
+          </Grid>
         </Grid>
-        {!showMessageFollowing ? (
-          <Button
-            variant="text"
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              marginTop: "2rem",
-              color: "#0B0D12",
-              fontWeight: "bold",
-            }}
-            onClick={handleSeeMoreFollowing}
-          >
-            {" "}
-            See more
-          </Button>
-        ) : (
-          <Typography
-            variant="body2"
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: "bold",
-              marginTop: "3rem",
-            }}
-          >
-            No more following to show!
-          </Typography>
-        )}
-        <Divider light sx={{ mt: 2 }} />
-        <Typography
-          variant="h6"
-          style={{
-            fontFamily: "Montserrat, sans-serif",
-            marginTop: "3rem",
-            marginBottom: "2rem",
-          }}
-        >
-          Followers
-        </Typography>
-        <Grid container spacing={2} justifyContent="center">
-          {isLoadingFollowers && (
-            <Grid item xs={12} md={8}>
-              <Typography
-                variant="body1"
-                style={{
-                  fontFamily: "Montserrat, sans-serif",
-                  marginBottom: "1rem",
-                }}
-              >
-                Fetching followers...
-              </Typography>
-            </Grid>
-          )}
-          {followers.slice(0, numFollowers).map((user) => (
-            <Grid item xs={12} md={8} key={user._id}>
-              <Follower
-                url={user.image.url}
-                alt={user.image.alt}
-                username={user.userName}
-                isFollowing={user.isFollowing}
-                onUnfollow={handleUnfollow}
-                onFollow={handleFollow}
-                userId={user._id}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        {!showMessageFollowers ? (
-          <Button
-            variant="text"
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              marginTop: "2rem",
-              color: "#0B0D12",
-              fontWeight: "bold",
-            }}
-            onClick={handleSeeMoreFollowers}
-          >
-            {" "}
-            See more
-          </Button>
-        ) : (
-          <Typography
-            variant="body2"
-            style={{
-              fontFamily: "Montserrat, sans-serif",
-              fontWeight: "bold",
-              marginTop: "3rem",
-            }}
-          >
-            No more followers to show
-          </Typography>
-        )}
       </Container>
     </>
   );

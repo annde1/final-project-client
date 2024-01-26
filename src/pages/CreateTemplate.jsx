@@ -126,6 +126,15 @@ const CreateTemplatePage = () => {
     setTemplateName(e.target.value);
   };
 
+  const handleDeleteExercise = (exerciseIndex) => {
+    setExercises((prevExercises) => {
+      //Copy
+      const updatedExercises = [...prevExercises];
+      //Remove 1 exercise at exerciseIndex
+      updatedExercises.splice(exerciseIndex, 1);
+      return updatedExercises;
+    });
+  };
   const handleCreateTemplate = async (e) => {
     try {
       e.preventDefault();
@@ -196,6 +205,7 @@ const CreateTemplatePage = () => {
                       onAddSet={handleAddSet}
                       exerciseIndex={index}
                       exercise={exercise}
+                      onDeleteExercise={handleDeleteExercise}
                     />
                   ))}
                   <Divider light sx={{ marginTop: 3, marginBottom: 3 }} />

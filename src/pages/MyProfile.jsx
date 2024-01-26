@@ -19,12 +19,17 @@ const MyProfilePage = () => {
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
-
+  useEffect(() => {
+    //Id is logged
+    console.log(userId);
+  }, [userId]);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         //Fetch user profile information
         const { data } = await axios.get(`/users/${userId}`);
+
+        // I get the data
         console.log(data);
         setUserData(data.userData);
         //Fetch user's workouts
@@ -71,7 +76,12 @@ const MyProfilePage = () => {
               </Grid>
             )}
             <Grid item xs={12} sm={12}>
-              <UserProfile userData={userData} workouts={workouts} />
+              <UserProfile
+                userData={userData}
+                workouts={workouts}
+                following={userData?.following?.length}
+                followers={userData?.followers?.length}
+              />
             </Grid>
             <Grid item xs={12} sm={12}>
               <Button

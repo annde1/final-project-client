@@ -7,21 +7,35 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import Set from "./Set";
 import Button from "@mui/material/Button";
+import { useState } from "react";
+import { Popover } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const TemplateItem = ({
-  selectedExercise,
   name,
   onAddWeight,
   onAddReps,
   exerciseIndex,
   exercise,
   onAddSet,
-  exercises,
+  onDeleteExercise,
 }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const handleShowModal = () => {};
   const handleAddSet = () => {
-    console.log("Adding set");
     onAddSet(exerciseIndex);
+  };
+  const handleShowList = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleCloseList = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteExercise = () => {
+    onDeleteExercise(exerciseIndex);
   };
   return (
     <Container>
@@ -39,9 +53,42 @@ const TemplateItem = ({
             <Typography variant="h5" className="customFont">
               {name}
             </Typography>
-            <IconButton>
+            <IconButton onClick={handleShowList}>
               <MoreVertIcon />
             </IconButton>
+            <Popover
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleCloseList}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right-32",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              {open && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <IconButton onClick={handleDeleteExercise}>
+                    <DeleteIcon />
+                  </IconButton>
+                  <Typography
+                    variant="body1"
+                    className="customFont"
+                    sx={{ mr: 2 }}
+                  >
+                    Delete
+                  </Typography>
+                </Box>
+              )}
+            </Popover>
           </Box>
           <Box
             style={{

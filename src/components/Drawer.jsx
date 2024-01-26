@@ -223,7 +223,10 @@ const MiniDrawer = () => {
                           />
                         </ListItemAvatar>
 
-                        <Typography variant="subtitle2">
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ fontFamily: "Montserrat" }}
+                        >
                           {result.name.firstName} {result.name.lastName}
                         </Typography>
                         {result.isFollowed ? (
@@ -319,9 +322,9 @@ const MiniDrawer = () => {
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
+              <ChevronRightIcon sx={{ color: "#EAEDF3" }} />
             ) : (
-              <ChevronLeftIcon />
+              <ChevronLeftIcon sx={{ color: "#EAEDF3" }} />
             )}
           </IconButton>
         </DrawerHeader>
@@ -334,12 +337,17 @@ const MiniDrawer = () => {
                 to={link.to}
                 style={{
                   textDecoration: "none",
-                  color: "inherit",
+                  color: "#EAEDF3",
+                  fontFamily: "Montserrat",
                 }}
               >
                 <ListItem
                   disablePadding
-                  sx={{ display: "block", marginTop: "1rem" }}
+                  sx={{
+                    display: "block",
+                    marginTop: "1rem",
+                    fontFamily: "Montserrat",
+                  }}
                 >
                   <ListItemButton
                     sx={{
@@ -357,8 +365,13 @@ const MiniDrawer = () => {
                     >
                       {getIcon(link.to)}
                     </ListItemIcon>
+
                     <ListItemText
                       primary={link.children}
+                      primaryTypographyProps={{
+                        fontFamily: "Montserrat",
+                        fontWeight: "bold",
+                      }}
                       sx={{ opacity: open ? 1 : 0 }}
                       className="customFont"
                     />
@@ -407,7 +420,7 @@ const MiniDrawer = () => {
             ))}
         </List>
       </DrawerStyled>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 0 }}>
         <DrawerHeader />
       </Box>
     </Box>

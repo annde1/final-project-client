@@ -16,9 +16,10 @@ import { useState } from "react";
 import validateUserLogin from "../validation/user-login-validation";
 import { storeToken } from "../service/login-service";
 import useAutoLogin from "../hooks/useAutoLogin";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import { successToast } from "../service/toastify-service";
+import { useNavigate } from "react-router-dom";
+
 const defaultTheme = createTheme();
 const LoginPage = () => {
   const [inputs, setInputs] = useState({
@@ -28,6 +29,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(true);
   const [errors, setErrors] = useState([]);
   const autoLogin = useAutoLogin();
+
   const navigate = useNavigate();
   const handleInputsChange = (e) => {
     setInputs((current) => ({
@@ -49,13 +51,10 @@ const LoginPage = () => {
       const { data } = await axios.post("/users/login", inputs);
       //store token
       storeToken(data.token.token, rememberMe);
-
-      autoLogin(true);
+      await autoLogin(true);
       // successToast("You've been logged in successfully");
-      //??? Why it doesn't redirect
-      console.log("before navigate");
-      navigate(ROUTES.FEEDS);
-      console.log("after navigate");
+
+      navigate(ROUTES.FEEDS, { replace: true });
     } catch (err) {
       console.log(err);
     }

@@ -24,12 +24,8 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import "../styles/styles.css";
 
-const UserProfile = ({ userData, workouts }) => {
+const UserProfile = ({ userData, workouts, followers, following }) => {
   const navigate = useNavigate();
-  const followers =
-    userData.followers?.length > 0 ? userData.followers?.length : 0;
-  const following =
-    userData.following?.length > 0 ? userData.following?.length : 0;
 
   const handleRedirectWorkouts = () => {
     navigate(ROUTES.MYWORKOUTS);

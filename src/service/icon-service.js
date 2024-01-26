@@ -15,25 +15,25 @@ import SettingsIcon from "@mui/icons-material/Settings";
 export const getIcon = (to) => {
   switch (to) {
     case ROUTES.MYPROFILE:
-      return <PersonIcon />;
+      return <PersonIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.EDITPROFILE:
-      return <SettingsIcon />;
+      return <SettingsIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.MYTEMPLATES:
-      return <WysiwygIcon />;
+      return <WysiwygIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.CREATETEMPLATE:
-      return <AddBoxIcon />;
+      return <AddBoxIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.MYWORKOUTS:
-      return <FitnessCenterIcon />;
+      return <FitnessCenterIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.ABOUT:
-      return <InfoIcon />;
+      return <InfoIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.LOGIN:
-      return <LoginIcon />;
+      return <LoginIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.REGISTER:
-      return <HowToRegIcon />;
+      return <HowToRegIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.SOCIAL:
-      return <GroupsIcon />;
+      return <GroupsIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.FEEDS:
-      return <FeedIcon />;
+      return <FeedIcon sx={{ color: "#EAEDF3" }} />;
     default:
       return null;
   }

@@ -11,15 +11,24 @@ const Follower = ({
   alt,
   username,
   isFollowing,
-  onUnfollow,
-  onFollow,
   userId,
+  isFollowersTab,
+  onUnfollowFollower,
+  onUnfollowFollowing,
+  onFollow,
 }) => {
   const handleFollow = (_id) => {
+    console.log(_id);
     onFollow(_id);
   };
   const handleUnfollow = (_id) => {
-    onUnfollow(_id);
+    if (isFollowersTab) {
+      console.log(_id);
+      onUnfollowFollower(_id);
+    } else {
+      console.log(_id);
+      onUnfollowFollowing(_id);
+    }
   };
   return (
     <>
@@ -28,6 +37,7 @@ const Follower = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          mb: 1.5,
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
