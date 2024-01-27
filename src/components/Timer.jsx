@@ -1,20 +1,29 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import { Box, Grid, Container } from "@mui/material";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import ExericseList from "../components/ExerciseList";
-import { useState } from "react";
-import TemplateContent from "../components/templateContent";
-import Button from "@mui/material/Button";
-import TemplateItem from "../components/templateContent";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import { useEffect } from "react";
+import { Box } from "@mui/material";
 import "../styles/styles.css";
+import { useEffect, useState } from "react";
+const WorkoutTimer = () => {
+  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [hours, setHours] = useState(0);
 
-const WorkoutTimer = ({ hours, minutes, seconds }) => {
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSeconds((previous) => previous + 1);
+      if (seconds === 59) {
+        setSeconds(0);
+        setMinutes((previous) => previous + 1);
+
+        if (minutes === 59) {
+          setMinutes(0);
+          setHours((previous) => previous + 1);
+        }
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [minutes, seconds, hours]);
+
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column" }}>

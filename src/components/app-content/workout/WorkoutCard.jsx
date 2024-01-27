@@ -1,15 +1,15 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import UserDetails from "./UserDetails";
+import WorkoutUserDetails from "./WorkoutUserDetails";
 import WorkoutDetails from "./WorkoutDetails";
 import Divider from "@mui/material/Divider";
 import { useState } from "react";
-import WorkoutExercise from "./WorkoutExercise";
+import WorkoutCardExercise from "./WorkoutCardExercise";
 import Button from "@mui/material/Button";
 import WorkoutReaction from "./WorkoutReaction";
-import { calculateTimePassed } from "../service/workout-service";
-import { convertMsToHoursAndMinutes } from "../service/workout-service";
-const Workout = ({
+import { calculateTimePassed } from "../../../service/workout-service";
+import { convertMsToHoursAndMinutes } from "../../../service/workout-service";
+const WorkoutCard = ({
   userData,
   workout,
   onDeleteWorkout,
@@ -44,7 +44,7 @@ const Workout = ({
           marginTop: 8,
         }}
       >
-        <UserDetails
+        <WorkoutUserDetails
           userName={userData.userName}
           createdAt={createdAt}
           image={userData.image}
@@ -67,7 +67,7 @@ const Workout = ({
           Workout
         </Typography>
         {exercises.slice(0, visibleExercises).map((exercise) => (
-          <WorkoutExercise
+          <WorkoutCardExercise
             key={exercise._id}
             name={exercise.name}
             sets={exercise.sets.length + 1}
@@ -129,4 +129,4 @@ const Workout = ({
     </>
   );
 };
-export default Workout;
+export default WorkoutCard;

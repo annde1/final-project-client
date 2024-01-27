@@ -4,8 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import Workout from "../components/Workout";
 import { useSelector } from "react-redux";
+import WorkoutCard from "../components/app-content/workout/WorkoutCard";
 const FeedsPage = () => {
   const [feeds, setFeeds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +72,7 @@ const FeedsPage = () => {
         <Grid container spacing={2} justifyContent="center">
           {feeds.map((feed) => (
             <Grid item xs={8} md={8} key={feed._id}>
-              <Workout
+              <WorkoutCard
                 workout={feed}
                 userData={feed.userData}
                 isLiked={feed.isLiked}

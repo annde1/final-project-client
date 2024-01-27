@@ -1,11 +1,11 @@
 import Typography from "@mui/material/Typography";
 import { Grid, Container } from "@mui/material";
-import Workout from "../components/Workout";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
+import WorkoutCard from "../components/app-content/workout/WorkoutCard";
 
 const MyWorkoutsPage = () => {
   const [userData, setUserData] = useState({});
@@ -79,7 +79,7 @@ const MyWorkoutsPage = () => {
           )}
           {workoutsData.map((workout) => (
             <Grid item xs={8} md={8} key={workout._id}>
-              <Workout
+              <WorkoutCard
                 workout={workout}
                 userData={userData}
                 onDeleteWorkout={handleDeleteWorkout}

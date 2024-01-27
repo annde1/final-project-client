@@ -1,4 +1,4 @@
-import { openedMixin, closedMixin } from "./MuiMixin";
+import { openedMixin, closedMixin } from "../../MuiMixin";
 import { styled } from "@mui/material/styles";
 import Drawer from "@mui/material/Drawer";
 

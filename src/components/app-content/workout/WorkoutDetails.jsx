@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import "../styles/styles.css";
+import "../../../styles/styles.css";
 const WorkoutDetails = ({ duration, volume }) => {
   return (
     <>

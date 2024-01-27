@@ -4,17 +4,8 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import TextField from "@mui/material/TextField";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Grid, Container } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import Visibility from "@mui/icons-material/Visibility";
-import InputAdornment from "@mui/material/InputAdornment";
-import ProfileSettingsTab from "./ProfileSetting";
-import IconButton from "@mui/material/IconButton";
-import ChangePasswordTab from "./ChangePasswordTab";
-import FollowersTab from "./FollowersTab";
-import FollowingTab from "./FollowingTab";
+import FollowersTab from "./app-content/social/FollowersTab";
+import FollowingTab from "./app-content/social/FollowingTab";
 const SocialTabs = () => {
   const [value, setValue] = React.useState("1");
 

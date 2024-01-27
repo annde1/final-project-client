@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 
-const WorkoutExercise = ({ name, sets }) => {
+const WorkoutCardExercise = ({ name, sets }) => {
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", marginBottom: "1rem" }}>
@@ -18,4 +18,4 @@ const WorkoutExercise = ({ name, sets }) => {
     </>
   );
 };
-export default WorkoutExercise;
+export default WorkoutCardExercise;

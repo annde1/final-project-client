@@ -1,12 +1,10 @@
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 const WorkoutReaction = ({
   onDeleteWorkout,
   workoutId,
@@ -18,8 +16,8 @@ const WorkoutReaction = ({
     (store) => store.authenticationSlice.userData?._id
   );
   const [like, setLike] = useState(isLiked);
-
   const isOwner = userData === userId;
+
   const handleLikeWorkout = async () => {
     try {
       await onLikeWorkout(workoutId);

@@ -2,11 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 
-import { useSelector } from "react-redux";
-const UserDetails = ({ userName, createdAt, image }) => {
-  const isPremium = useSelector(
-    (store) => store.authenticationSlice.userData?.isPremium
-  );
+const WorkoutUserDetails = ({ userName, createdAt, image }) => {
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -42,4 +38,4 @@ const UserDetails = ({ userName, createdAt, image }) => {
     </>
   );
 };
-export default UserDetails;
+export default WorkoutUserDetails;

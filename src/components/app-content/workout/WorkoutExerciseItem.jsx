@@ -1,14 +1,13 @@
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import "../styles/styles.css";
+import "../../../styles/styles.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
 
-const WorkoutItem = ({
+const WorkoutExerciseItem = ({
   exercise,
   onAddWeight,
   onAddReps,
@@ -139,4 +138,4 @@ const WorkoutItem = ({
     </Container>
   );
 };
-export default WorkoutItem;
+export default WorkoutExerciseItem;

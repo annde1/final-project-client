@@ -2,7 +2,7 @@ import { Typography, Button } from "@mui/material";
 import Follower from "./Follower";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+
 const FollowingTab = () => {
   const [following, setFollowing] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
@@ -23,6 +23,9 @@ const FollowingTab = () => {
     fetchFollowing();
   }, []);
 
+  useEffect(() => {
+    console.log(following);
+  }, [following]);
   const handleUnfollow = async (_id) => {
     try {
       const { data } = await axios.patch(`/users/follow/${_id}`);

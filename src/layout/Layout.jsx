@@ -1,9 +1,9 @@
 //Theme provider -> css baseline ->header component ->main -> footer
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/top-navigation/NavBar";
 import Main from "../components/Main";
-import Footer from "../components/Footer";
+import Footer from "../components/bottom-navigation/Footer";
 const Layout = ({ children }) => {
   const theme = createTheme();
   return (
