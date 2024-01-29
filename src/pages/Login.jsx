@@ -19,6 +19,7 @@ import useAutoLogin from "../hooks/useAutoLogin";
 import { ROUTES } from "../routes/routes";
 import { successToast } from "../service/toastify-service";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 const defaultTheme = createTheme();
 const LoginPage = () => {
@@ -27,9 +28,8 @@ const LoginPage = () => {
     password: "",
   });
   const [rememberMe, setRememberMe] = useState(true);
-  const [errors, setErrors] = useState([]);
+  const [error, setError] = useState("");
   const autoLogin = useAutoLogin();
-
   const navigate = useNavigate();
   const handleInputsChange = (e) => {
     setInputs((current) => ({
@@ -56,6 +56,9 @@ const LoginPage = () => {
 
       navigate(ROUTES.FEEDS, { replace: true });
     } catch (err) {
+      if (err.response.status === 401) {
+        setError(err.response.data.message);
+      }
       console.log(err);
     }
   };
@@ -99,6 +102,7 @@ const LoginPage = () => {
               onChange={handleInputsChange}
               autoComplete="current-password"
             />
+            {error && <Alert severity="error">{error}</Alert>}
             <FormControlLabel
               control={<Checkbox value={rememberMe} color="primary" />}
               label="Remember me"

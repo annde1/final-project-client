@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import WorkoutReaction from "./WorkoutReaction";
 import { calculateTimePassed } from "../../../service/workout-service";
 import { convertMsToHoursAndMinutes } from "../../../service/workout-service";
+import "../../../styles/styles.css";
 const WorkoutCard = ({
   userData,
   workout,

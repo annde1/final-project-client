@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import WorkoutCard from "../components/app-content/workout/WorkoutCard";
+import WorkoutCard from "../components/appContent/workout/WorkoutCard";
 
 const MyWorkoutsPage = () => {
   const [userData, setUserData] = useState({});
@@ -60,7 +60,10 @@ const MyWorkoutsPage = () => {
   };
   return (
     <>
-      <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
+      <Typography
+        variant="h4"
+        style={{ fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
+      >
         My Workouts
       </Typography>
       <Container component="main" maxWidth="md" sx={{ marginTop: "3rem" }}>
@@ -74,6 +77,16 @@ const MyWorkoutsPage = () => {
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 Fetching workouts
+              </Typography>
+            </Grid>
+          )}
+          {!isLoading && workoutsData.length <= 0 && (
+            <Grid item xs={8} md={8}>
+              <Typography
+                variant="h6"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
+                You don't have any workouts yet.
               </Typography>
             </Grid>
           )}

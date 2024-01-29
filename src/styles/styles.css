@@ -5,3 +5,15 @@ body {
 .customFont {
   font-family: "Montserrat", sans-serif !important;
 }
+/* styles.css */
+/* FeedsPage.css */
+
+.workout-card {
+  transition: opacity 0.5s ease-in-out; /* You can customize the transition properties */
+  opacity: 0;
+}
+
+.workout-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -25,21 +25,12 @@ const registerSchema = Joi.object({
     "string.empty": "Password is required",
     "string.min": "Password must be at least 5 characters long",
   }),
-  age: Joi.number().min(1).max(120).optional().messages({
-    "number.base": "Age must be a number",
-  }),
-  weight: Joi.number().min(1).optional().messages({
-    "number.base": "Weight must be a number",
-  }),
-  height: Joi.number().min(1).optional().messages({
-    "number.base": "Height must be a number",
-  }),
+  age: Joi.number().min(1).max(120).optional().allow(""),
+  weight: Joi.number().min(1).optional().allow(""),
+  height: Joi.number().min(1).optional().allow(""),
   isPremium: Joi.boolean().required(),
-  userType: Joi.string().required().messages({
-    "string.empty": "User type is required",
-  }),
-  alt: Joi.string().min(5).max(100).required(),
-  url: Joi.string().uri().min(5).max(255).required(),
+  alt: Joi.string().min(5).max(100).optional(),
+  url: Joi.string().uri().min(5).max(255).optional(),
 });
 
 const validateRegistration = (input) => {

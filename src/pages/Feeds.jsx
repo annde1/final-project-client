@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import WorkoutCard from "../components/app-content/workout/WorkoutCard";
+import WorkoutCard from "../components/appContent/workout/WorkoutCard";
+
 const FeedsPage = () => {
   const [feeds, setFeeds] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

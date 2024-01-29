@@ -14,9 +14,15 @@ const templateSchema = Joi.object({
         sets: Joi.array()
           .items(
             Joi.object({
-              reps: Joi.number().integer().min(1).required(),
-              weight: Joi.number().min(0).required(),
-            })
+              reps: Joi.number().min(1).required().messages({
+                "number.min": "Reps are empty",
+                "any.required": "Reps is required",
+              }),
+              weight: Joi.number().min(1).required().messages({
+                "number.min": "Weight is empty ",
+                "any.required": "Weight is required",
+              }),
+            }).empty(null)
           )
           .min(1)
           .required(),

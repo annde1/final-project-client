@@ -4,8 +4,9 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import FollowersTab from "./app-content/social/FollowersTab";
-import FollowingTab from "./app-content/social/FollowingTab";
+import FollowersTab from "./FollowersTab";
+import FollowingTab from "./FollowingTab";
+import SocialTab from "./SocialTab";
 const SocialTabs = () => {
   const [value, setValue] = React.useState("1");
 
@@ -40,10 +41,10 @@ const SocialTabs = () => {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ fontFamily: "Montserrat, sans-serif" }}>
-          <FollowersTab />
+          <SocialTab isFollowersTab={true} />
         </TabPanel>
         <TabPanel value="2">
-          <FollowingTab />
+          <SocialTab isFollowersTab={false} />
         </TabPanel>
       </TabContext>
     </Box>

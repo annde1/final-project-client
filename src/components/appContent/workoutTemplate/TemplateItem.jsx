@@ -2,10 +2,10 @@ import Container from "@mui/material/Container";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import "../styles/styles.css";
+import "../../../styles/styles.css";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
-import Set from "./Set";
+import ExerciseSet from "./ExerciseSet";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 import { Popover } from "@mui/material";
@@ -19,6 +19,7 @@ const TemplateItem = ({
   exercise,
   onAddSet,
   onDeleteExercise,
+  errors,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -62,7 +63,7 @@ const TemplateItem = ({
               onClose={handleCloseList}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "right-32",
+                horizontal: "right",
               }}
               transformOrigin={{
                 vertical: "top",
@@ -103,13 +104,14 @@ const TemplateItem = ({
             <Typography className="customFont">REPS</Typography>
           </Box>
           {exercise.sets.map((_, index) => (
-            <Set
+            <ExerciseSet
               key={`${exerciseIndex}-${index}`}
               onAddReps={onAddReps}
               onAddWeight={onAddWeight}
               exerciseIndex={exerciseIndex}
               setIndex={index}
               exercise={exercise}
+              errors={errors}
             />
           ))}
           <Box

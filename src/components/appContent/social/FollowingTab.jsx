@@ -7,6 +7,7 @@ const FollowingTab = () => {
   const [following, setFollowing] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
   const [numFollowing, setNumFollowing] = useState(3);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchFollowing = async () => {
       try {
@@ -77,4 +78,3 @@ const FollowingTab = () => {
     </>
   );
 };
-export default FollowingTab;

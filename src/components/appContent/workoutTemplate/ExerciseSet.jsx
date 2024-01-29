@@ -1,13 +1,21 @@
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import "../styles/styles.css";
+import "../../../styles/styles.css";
+import Alert from "@mui/material/Alert";
+
 import { useEffect } from "react";
-const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex, exercise }) => {
+const ExerciseSet = ({
+  onAddReps,
+  onAddWeight,
+  exerciseIndex,
+  setIndex,
+  exercise,
+  errors,
+}) => {
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
   const handleAddReps = (e) => {
     const reps = e.target.value;
     onAddReps(exerciseIndex, setIndex, reps);
@@ -17,12 +25,7 @@ const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex, exercise }) => {
     const weight = e.target.value;
     onAddWeight(exerciseIndex, setIndex, weight);
   };
-  useEffect(() => {
-    console.log("SET");
-    console.log(exercise);
-    console.log(exercise.sets);
-    console.log(exercise.sets[setIndex]);
-  }, [exercise, setIndex]);
+
   return (
     <Box
       style={{
@@ -46,6 +49,9 @@ const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex, exercise }) => {
           onChange={handleAddWeight}
           value={exercise.sets[setIndex].weight}
         />
+        {errors && errors.weight && (
+          <Alert severity="error">{errors.weight}</Alert>
+        )}
       </Box>
       <Box>
         <TextField
@@ -56,8 +62,9 @@ const Set = ({ onAddReps, onAddWeight, exerciseIndex, setIndex, exercise }) => {
           onChange={handleAddReps}
           value={exercise.sets[setIndex].reps}
         />
+        {errors && errors.reps && <Alert severity="error">{errors.reps}</Alert>}
       </Box>
     </Box>
   );
 };
-export default Set;
+export default ExerciseSet;

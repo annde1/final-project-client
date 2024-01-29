@@ -4,9 +4,9 @@ import { Box, Grid, Container } from "@mui/material";
 import { useState } from "react";
 import "../styles/styles.css";
 import WorkoutTimer from "../components/Timer";
-import WorkoutCardData from "../components/app-content/workout/WorkoutCardData";
+import WorkoutCardData from "../components/appContent/workout/WorkoutCardData";
 import ModalComponent from "../components/Modal";
-import WorkoutExercisesList from "../components/app-content/workout/WorkoutExercisesList";
+import WorkoutExercisesList from "../components/appContent/workout/WorkoutExercisesList";
 
 const NewWorkout = () => {
   const [templateName, setTemplateName] = useState("");

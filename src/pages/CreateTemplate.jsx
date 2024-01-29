@@ -1,31 +1,16 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import ExericseList from "../components/ExerciseList";
 import { useState } from "react";
-import TemplateContent from "../components/templateContent";
-import Button from "@mui/material/Button";
-import TemplateItem from "../components/templateContent";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import { useEffect } from "react";
 import "../styles/styles.css";
-import exercises from "../service/exercises";
-import { normalizeTemplateData } from "../service/normalize-template-data";
-import { validateTemplate } from "../validation/template-validation";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "../routes/routes";
 import { useSelector } from "react-redux";
+import TemplateMessage from "../components/appContent/workoutTemplate/TemplateMessage";
+import TemplateItemsList from "../components/appContent/workoutTemplate/TemplateItemsList";
+
 const CreateTemplatePage = () => {
-  const [selectedExercise, setSelectedExercise] = useState(null);
-  const [templateName, setTemplateName] = useState(null);
-  const [exercises, setExercises] = useState([]);
   const [numTemplates, setNumTemplates] = useState(0);
-  const navigate = useNavigate();
   const isPremium = useSelector(
     (store) => store.authenticationSlice.userData?.isPremium
   );
@@ -40,119 +25,7 @@ const CreateTemplatePage = () => {
     };
     fetchUserTemplates();
   }, []);
-  const handleExercise = (exerciseName) => {
-    setSelectedExercise(exerciseName);
-  };
 
-  const createDefaultSet = () => {
-    return { weight: "", reps: "" };
-  };
-
-  const handleAddSet = (exerIndex) => {
-    setExercises((prev) => {
-      //Copy of exercises array
-      const currentExercises = [...prev];
-      const currentExercise = currentExercises[exerIndex];
-      //Copy of sets array
-      const currentSets = [...currentExercise.sets, createDefaultSet()];
-      //update sets in exercises array
-      currentExercises[exerIndex] = {
-        ...currentExercise,
-        sets: currentSets,
-      };
-
-      return currentExercises;
-    });
-  };
-
-  const handleAddExercise = (exercise) => {
-    setExercises((prev) => [
-      ...prev,
-      {
-        name: exercise,
-        sets: [createDefaultSet()],
-      },
-    ]);
-  };
-  //add exerise name
-  const handleAddWeight = (exerIndex, setIndex, weight) => {
-    setExercises((prev) => {
-      //Copy of exercises array
-      const currentExercises = [...prev];
-      const currentExercise = currentExercises[exerIndex];
-      //Copy of sets array
-      const currentSets = currentExercise.sets;
-      //Update weight in sets array
-      //make reps copy
-      const currentSet = currentSets[setIndex];
-      currentSets[setIndex] = {
-        ...currentSet,
-        weight: weight,
-      };
-
-      //update sets in exercises array
-      currentExercises[exerIndex] = {
-        ...currentExercise,
-        sets: currentSets,
-      };
-
-      return currentExercises;
-    });
-  };
-  //Handler for updating reps:
-  const handleAddRep = (exerIndex, setIndex, reps) => {
-    setExercises((previous) => {
-      //copy of exercises array
-      const currentExercises = [...previous];
-      //copy of sets array
-      const currentSets = [...currentExercises[exerIndex].sets];
-
-      //update sets:
-      currentSets[setIndex] = {
-        ...currentSets[setIndex],
-        reps: reps,
-      };
-
-      //update exercises  array with updated sets
-      currentExercises[exerIndex] = {
-        ...currentExercises[exerIndex],
-        sets: currentSets,
-      };
-      return currentExercises;
-    });
-  };
-
-  const handleTemplateName = (e) => {
-    setTemplateName(e.target.value);
-  };
-
-  const handleDeleteExercise = (exerciseIndex) => {
-    setExercises((prevExercises) => {
-      //Copy
-      const updatedExercises = [...prevExercises];
-      //Remove 1 exercise at exerciseIndex
-      updatedExercises.splice(exerciseIndex, 1);
-      return updatedExercises;
-    });
-  };
-  const handleCreateTemplate = async (e) => {
-    try {
-      e.preventDefault();
-      const templateData = normalizeTemplateData({
-        name: templateName,
-        exercises: exercises,
-      });
-      const errors = validateTemplate(templateData);
-      if (errors) {
-        return;
-      }
-      const { data } = await axios.post("/templates", templateData);
-      console.log(data);
-      navigate(ROUTES.MYTEMPLATES);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
     <>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
@@ -169,60 +42,13 @@ const CreateTemplatePage = () => {
               }}
             >
               {!isPremium && numTemplates >= 3 ? (
-                <Typography
-                  variant="body1"
-                  style={{ fontFamily: "Montserrat, sans-serif" }}
-                >
-                  You need to upgrade to Premium account to create more
-                  templates
-                </Typography>
+                <TemplateMessage />
               ) : (
                 <>
-                  <TextField
-                    autoComplete="template-title"
-                    name="templateTitle"
-                    required
-                    fullWidth
-                    id="templateTitle"
-                    label="Template Title"
-                    autoFocus
-                    className="customFont"
-                    value={templateName}
-                    onChange={handleTemplateName}
-                  />
-                  <ExericseList
-                    onExerciseChange={handleExercise}
-                    selectedExercise={selectedExercise}
-                    onAddExercise={handleAddExercise}
-                  />
-                  {exercises.map((exercise, index) => (
-                    <TemplateItem
-                      key={index}
-                      selectedExercise={selectedExercise}
-                      name={exercise.name}
-                      onAddWeight={handleAddWeight}
-                      onAddReps={handleAddRep}
-                      onAddSet={handleAddSet}
-                      exerciseIndex={index}
-                      exercise={exercise}
-                      onDeleteExercise={handleDeleteExercise}
-                    />
-                  ))}
-                  <Divider light sx={{ marginTop: 3, marginBottom: 3 }} />
+                  <TemplateItemsList />
                 </>
               )}
             </Box>
-
-            {exercises.length > 0 && (
-              <Button
-                variant="contained"
-                className="customFont"
-                style={{ backgroundColor: "#0B0D12" }}
-                onClick={handleCreateTemplate}
-              >
-                Save Template
-              </Button>
-            )}
           </Grid>
         </Grid>
       </Container>

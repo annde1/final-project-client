@@ -1,4 +1,5 @@
 import { Typography, Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import Follower from "./Follower";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -7,6 +8,7 @@ const FollowersTab = () => {
   const [followers, setFollowers] = useState([]);
   const [numFollowers, setNumFollowers] = useState(3);
   const [showMessage, setShowMessage] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
@@ -20,6 +22,7 @@ const FollowersTab = () => {
             isFollowing: user.followers.includes(userId),
           }))
         );
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -64,23 +67,45 @@ const FollowersTab = () => {
   };
   return (
     <>
-      {followers.slice(0, numFollowers).map((follower) => (
-        <Follower
-          userId={follower._id}
-          url={follower.image.url}
-          alt={follower.image.alt}
-          username={follower.userName}
-          isFollowing={follower.isFollowing}
-          isFollowersTab={true}
-          onUnfollowFollower={handleUnfollow}
-          onFollow={handleFollow}
-        />
-      ))}
-      {!showMessage ? (
-        <Button variant="outlined" onClick={handleSeeMore}>
-          See More
-        </Button>
-      ) : (
+      {isLoading && (
+        <>
+          <CircularProgress color="inherit" />
+          <Typography variant="body1">Fetching followers</Typography>
+        </>
+      )}
+      {!isLoading && followers.length > 0 && (
+        <>
+          {followers.slice(0, numFollowers).map((follower) => (
+            <Follower
+              userId={follower._id}
+              url={follower.image.url}
+              alt={follower.image.alt}
+              username={follower.userName}
+              isFollowing={follower.isFollowing}
+              isFollowersTab={true}
+              onUnfollowFollower={handleUnfollow}
+              onFollow={handleFollow}
+            />
+          ))}
+          {!showMessage ? (
+            <Button variant="outlined" onClick={handleSeeMore}>
+              See More
+            </Button>
+          ) : (
+            <Typography
+              variant="body2"
+              style={{
+                fontFamily: "Montserrat, sans-serif",
+                fontWeight: "bold",
+                marginTop: "3rem",
+              }}
+            >
+              No more followers to show
+            </Typography>
+          )}
+        </>
+      )}
+      {!isLoading && followers.length === 0 && (
         <Typography
           variant="body2"
           style={{
@@ -88,11 +113,8 @@ const FollowersTab = () => {
             fontWeight: "bold",
             marginTop: "3rem",
           }}
-        >
-          No more followers to show
-        </Typography>
+        ></Typography>
       )}
     </>
   );
 };
-export default FollowersTab;

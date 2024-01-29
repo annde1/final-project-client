@@ -12,9 +12,7 @@ const Follower = ({
   username,
   isFollowing,
   userId,
-  isFollowersTab,
-  onUnfollowFollower,
-  onUnfollowFollowing,
+  onUnfollow,
   onFollow,
 }) => {
   const handleFollow = (_id) => {
@@ -22,13 +20,7 @@ const Follower = ({
     onFollow(_id);
   };
   const handleUnfollow = (_id) => {
-    if (isFollowersTab) {
-      console.log(_id);
-      onUnfollowFollower(_id);
-    } else {
-      console.log(_id);
-      onUnfollowFollowing(_id);
-    }
+    onUnfollow(_id);
   };
   return (
     <>

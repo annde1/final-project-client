@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import { Grid, Container } from "@mui/material";
-import SocialTabs from "../components/SocialTabs";
+import SocialTabs from "../components/appContent/social/SocialTabs";
 const SocialPage = () => {
   return (
     <>

@@ -1,21 +1,8 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Select from "@mui/material/Select";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import { Button, TextField, Link, Grid } from "@mui/material";
+import { Box, Checkbox, Alert } from "@mui/material";
+import { Typography, Container, FormControlLabel } from "@mui/material";
 import { useState } from "react";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import "../styles/styles.css";
 import validateRegistration from "../validation/userRegisterValidation";
 import normalizeUserData from "../service/nomralizeUserData";
@@ -35,9 +22,14 @@ const RegisterPage = () => {
     height: "",
     weight: "",
     isPremium: false,
-    userType: "",
   });
+
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    console.log(errors);
+  }, [errors]);
   const handleInputsChange = (event) => {
     setInputs((current) => ({
       ...current,
@@ -50,24 +42,18 @@ const RegisterPage = () => {
       isPremium: e.target.checked,
     }));
   };
-  const handleSelectChange = (e) => {
-    setInputs((current) => ({
-      ...current,
-      userType: e.target.value,
-    }));
-  };
+
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
       //Validate user data
       const errors = validateRegistration(inputs);
-      console.log(errors);
-      //if error return early
-      if (errors) return;
+      if (errors) {
+        setErrors(errors);
+        return;
+      }
       const userData = normalizeUserData(inputs);
-      console.log(userData);
-      const response = await axios.post("/users", userData);
-      console.log(response);
+      await axios.post("/users", userData);
       navigate(ROUTES.LOGIN);
     } catch (err) {
       console.log(err);
@@ -81,7 +67,6 @@ const RegisterPage = () => {
       </Typography>
 
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 2,
@@ -110,6 +95,9 @@ const RegisterPage = () => {
                   value={inputs.firstName}
                   onChange={handleInputsChange}
                 />
+                {errors && errors.firstName && (
+                  <Alert severity="error">{errors.firstName}</Alert>
+                )}
               </Grid>
               <Grid item xs={12} sm={12}>
                 <TextField
@@ -122,6 +110,9 @@ const RegisterPage = () => {
                   value={inputs.lastName}
                   onChange={handleInputsChange}
                 />
+                {errors && errors.lastName && (
+                  <Alert severity="error">{errors.lastName}</Alert>
+                )}
               </Grid>
               <Grid item xs={12} sm={12}>
                 <TextField
@@ -134,6 +125,9 @@ const RegisterPage = () => {
                   value={inputs.userName}
                   onChange={handleInputsChange}
                 />
+                {errors && errors.userName && (
+                  <Alert severity="error">{errors.userName}</Alert>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -146,6 +140,9 @@ const RegisterPage = () => {
                   value={inputs.email}
                   onChange={handleInputsChange}
                 />
+                {errors && errors.email && (
+                  <Alert severity="error">{errors.email}</Alert>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -183,10 +180,12 @@ const RegisterPage = () => {
                   value={inputs.password}
                   onChange={handleInputsChange}
                 />
+                {errors && errors.password && (
+                  <Alert severity="error">{errors.password}</Alert>
+                )}
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  required
                   fullWidth
                   name="Age"
                   label="Age"
@@ -199,7 +198,6 @@ const RegisterPage = () => {
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  required
                   fullWidth
                   name="Height"
                   label="Height"
@@ -212,7 +210,6 @@ const RegisterPage = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   name="Weight"
                   label="Weight"
@@ -222,20 +219,6 @@ const RegisterPage = () => {
                   value={inputs.weight}
                   onChange={handleInputsChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <Select
-                  labelId="account-type-label"
-                  id="userType"
-                  fullWidth
-                  name="Account Type"
-                  label="Account Type"
-                  value={inputs.userType}
-                  onChange={handleSelectChange}
-                >
-                  <MenuItem value="trainee">Trainee</MenuItem>
-                  <MenuItem value="trainer">Trainer</MenuItem>
-                </Select>
               </Grid>
 
               <Grid item xs={6}>

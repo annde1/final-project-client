@@ -16,7 +16,6 @@ import AuthGuard from "../Guard/AuthGuard";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import NotFound from "../pages/NotFound";
-import Test from "../pages/Test";
 export const Router = () => {
   return (
     <Routes>

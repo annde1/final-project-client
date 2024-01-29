@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
 import { useEffect, useState } from "react";
-import Template from "../components/Template";
+import Template from "../components/appContent/workoutTemplate/Template";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ROUTES } from "../routes/routes";
@@ -10,7 +10,6 @@ const MyTemplatesPage = () => {
   const [userTemplates, setUserTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  //TODO: add button add template, check if user isPremium if not premium and already has 3 show him modal to upgrade to premium and if is premium then redirect him to create template page.Use redux for reading isPremium
 
   useEffect(() => {
     const getUserTemplates = async () => {

@@ -8,7 +8,7 @@ import { ROUTES } from "../routes/routes";
 import { useLogout } from "../hooks/useLogout";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useTheme } from "@mui/material/styles";
+
 const UserStatus = () => {
   const [userName, setUserName] = useState("");
   const isLoggedIn = useSelector(
@@ -17,7 +17,6 @@ const UserStatus = () => {
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
-  const theme = useTheme();
   const navigate = useNavigate();
   const logout = useLogout();
 

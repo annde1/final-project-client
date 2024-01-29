@@ -4,15 +4,29 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import exercises from "../service/exercises";
 import Button from "@mui/material/Button";
 import "../styles/styles.css";
+import { useEffect } from "react";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 const ExericseList = ({
   onExerciseChange,
   selectedExercise,
   onAddExercise,
 }) => {
+  const [exercises, setExercises] = React.useState([]);
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const { data } = await axios.get("/exercises");
+        setExercises(data.exercises);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchExercises();
+  }, []);
   const handleExerciseChange = (e) => {
     const selected = e.target.value;
     onExerciseChange(selected);
@@ -28,11 +42,12 @@ const ExericseList = ({
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
+          value={!selectedExercise ? "" : selectedExercise}
           label="Select Exercise"
           onChange={handleExerciseChange}
         >
           {exercises.map((exercise) => (
-            <MenuItem key={exercise.name} value={exercise.name}>
+            <MenuItem key={uuidv4()} value={exercise.name}>
               {exercise.name}
             </MenuItem>
           ))}

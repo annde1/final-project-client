@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { useEffect } from "react";
 const style = {
   position: "absolute",
   top: "50%",
@@ -23,11 +24,23 @@ const BmiModal = ({ bmi, open, range, onCloseModal }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Your BMI is {bmi}
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ textAlign: "center" }}
+          >
+            {isNaN(bmi)
+              ? "You haven't specify weight and height"
+              : `Your BMI is ${bmi}`}
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Which puts you in {range} range
+          <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2, textAlign: "center" }}
+          >
+            {isNaN(bmi)
+              ? "Add weight and height to your profile details to calculate your bmi"
+              : `Which puts you in ${range} range`}
           </Typography>
         </Box>
       </Modal>
