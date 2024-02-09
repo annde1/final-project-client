@@ -25,8 +25,7 @@ const MyTemplatesPage = () => {
   }, []);
   const handleDeleteTemplate = async (_id) => {
     try {
-      const { data } = await axios.delete(`/templates/${_id}`);
-      console.log(data);
+      await axios.delete(`/templates/${_id}`);
       setUserTemplates((current) =>
         current.filter((template) => template._id !== _id)
       );
@@ -43,12 +42,16 @@ const MyTemplatesPage = () => {
   const handleStartWorkout = (_id) => {
     navigate(`${ROUTES.STARTWORKOUT}/${_id}`);
   };
+
+  const handlePreviewTemplate = (_id) => {
+    navigate(`${ROUTES.TEMPLATEPREVIEW}/${_id}`);
+  };
   return (
-    <>
+    <Box sx={{ height: "100vh" }}>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
         My Templates
       </Typography>
-      <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
+      <Container maxWidth="md" sx={{ marginTop: 5 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
             <Box
@@ -85,13 +88,14 @@ const MyTemplatesPage = () => {
                   onDelete={handleDeleteTemplate}
                   onEdit={handleEditTemplate}
                   onStartWorkout={handleStartWorkout}
+                  onPreviewTemplate={handlePreviewTemplate}
                 />
               ))}
             </Box>
           </Grid>
         </Grid>
       </Container>
-    </>
+    </Box>
   );
 };
 export default MyTemplatesPage;

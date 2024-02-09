@@ -16,6 +16,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import IconButton from "@mui/material/IconButton";
+import { useEffect } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { NavLink } from "react-router-dom";
+
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -29,19 +33,23 @@ const SearchBar = () => {
   const searchInputRef = useRef(null);
   const theme = useTheme();
 
-  const handleInputChange = async (e) => {
-    setQuery(e.target.value);
-    try {
-      const { data } = await axios.get(`/users?query=${query}`);
-      const updatedUsers = data.users.map((user) => ({
-        ...user,
-        isFollowed: user.followers.includes(userId),
-      }));
-      setSearchResults(updatedUsers || []);
-      setShowDropdown(true);
-    } catch (err) {
-      console.log(err);
-    }
+  const handleInputChange = (e) => {
+    const searchboxValue = e.target.value;
+    setQuery(searchboxValue);
+
+    axios
+      .get(`/users?query=${searchboxValue}`)
+      .then(({ data }) => {
+        const updatedUsers = data.users.map((user) => ({
+          ...user,
+          isFollowed: user.followers.includes(userId),
+        }));
+        setSearchResults(updatedUsers || []);
+        setShowDropdown(true);
+      })
+      .catch((err) => {
+        console.log(err); // TODO: Toaster that says "failed, come again later"
+      });
   };
 
   const toggleDropdown = () => {
@@ -74,7 +82,9 @@ const SearchBar = () => {
             inputProps={{ "aria-label": "search" }}
             ref={searchInputRef}
             value={query}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              handleInputChange(e);
+            }}
           />
           {searchResults.length > 0 && (
             <Popover
@@ -93,11 +103,6 @@ const SearchBar = () => {
               disableRestoreFocus
               disableAutoFocus={true}
               sx={{
-                // "& .MuiPaper-root": {
-                //   width: "25rem", // Set your desired width
-                //   // maxWidth: "100%", // Ensure it doesn't exceed the search bar width
-                // },
-                // marginLeft: "auto",
                 [theme.breakpoints.up("md")]: {
                   marginRight: 38,
                 },
@@ -120,13 +125,17 @@ const SearchBar = () => {
                     <ListItemAvatar>
                       <Avatar alt={result.userName} src={result.image?.url} />
                     </ListItemAvatar>
-
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ fontFamily: "Montserrat" }}
+                    <NavLink
+                      to={`/user/${result._id}`}
+                      style={{ textDecoration: "none" }}
                     >
-                      {result.name.firstName} {result.name.lastName}
-                    </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ fontFamily: "Montserrat" }}
+                      >
+                        {result.name.firstName} {result.name.lastName}
+                      </Typography>
+                    </NavLink>
                     {result.isFollowed ? (
                       <IconButton
                         size="small"

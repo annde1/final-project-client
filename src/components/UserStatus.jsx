@@ -23,6 +23,7 @@ const UserStatus = () => {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
+        console.log("Trying to get information about: ", userId);
         const { data } = await axios.get(`/users/${userId}`);
         setUserName(data.userData.userName);
       } catch (err) {

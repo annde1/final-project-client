@@ -1,108 +1,42 @@
 import Typography from "@mui/material/Typography";
-import { Grid, Container } from "@mui/material";
-import { useEffect } from "react";
+import { Grid, Container, Box } from "@mui/material";
+import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 import axios from "axios";
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import CircularProgress from "@mui/material/CircularProgress";
-import WorkoutCard from "../components/appContent/workout/WorkoutCard";
-
 const MyWorkoutsPage = () => {
-  const [userData, setUserData] = useState({});
-  const [workoutsData, setWorkoutsData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
 
-  useEffect(() => {
-    const fetchUserWorkoutsAndData = async () => {
-      try {
-        const { data } = await axios.get("/workouts/my-workouts");
-        const { data: userData } = await axios.get(`/users/${userId}`);
-        const updatedWorkouts = data.workouts.map((workout) => ({
-          ...workout,
-          isLiked: workout.likes.includes(userId),
-        }));
-        setWorkoutsData(updatedWorkouts);
-        setUserData(userData.userData);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUserWorkoutsAndData();
-  }, [userId]);
-
-  const handleDeleteWorkout = async (_id) => {
-    try {
-      await axios.delete(`/workouts/${_id}`);
-      setWorkoutsData((prevWorkouts) =>
-        prevWorkouts.filter((workout) => workout._id !== _id)
-      );
-    } catch (err) {
-      console.log(err);
-    }
+  const fetchMyWorkoutsData = async (userId) => {
+    const { data } = await axios.get("/workouts/my-workouts");
+    const { data: userData } = await axios.get(`/users/${userId}`);
+    const updatedWorkouts = data.workouts.map((workout) => ({
+      ...workout,
+      isLiked: workout.likes.includes(userId),
+      userData: userData.userData,
+    }));
+    return updatedWorkouts;
   };
 
-  const handleLikeWorkout = async (_id) => {
-    try {
-      const { data } = await axios.patch(`/workouts/${_id}`);
-      console.log(data);
-      setWorkoutsData((prevWorkouts) =>
-        prevWorkouts.map((workout) =>
-          workout._id === _id ? { ...workout, ...data.workoutDetails } : workout
-        )
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
     <>
-      <Typography
-        variant="h4"
-        style={{ fontFamily: "Montserrat, sans-serif", fontWeight: "bold" }}
-      >
-        My Workouts
-      </Typography>
-      <Container component="main" maxWidth="md" sx={{ marginTop: "3rem" }}>
-        <Grid container spacing={2} justifyContent="center">
-          {isLoading && (
-            <Grid item xs={8} md={8}>
-              {" "}
-              <CircularProgress color="inherit" />
-              <Typography
-                variant="body2"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
-              >
-                Fetching workouts
-              </Typography>
-            </Grid>
-          )}
-          {!isLoading && workoutsData.length <= 0 && (
-            <Grid item xs={8} md={8}>
-              <Typography
-                variant="h6"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
-              >
-                You don't have any workouts yet.
-              </Typography>
-            </Grid>
-          )}
-          {workoutsData.map((workout) => (
-            <Grid item xs={8} md={8} key={workout._id}>
-              <WorkoutCard
-                workout={workout}
-                userData={userData}
-                onDeleteWorkout={handleDeleteWorkout}
-                onLikeWorkout={handleLikeWorkout}
-                isLiked={workout.isLiked}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
+      <Box sx={{ pb: 5 }}>
+        <Typography
+          variant="h4"
+          style={{ fontFamily: "Montserrat, sans-serif" }}
+        >
+          My Workouts
+        </Typography>
+        <Container component="main" maxWidth="md" sx={{ marginTop: "3rem" }}>
+          <Grid container spacing={2} justifyContent="center">
+            <WorkoutsList
+              dataSourceSupplier={fetchMyWorkoutsData}
+              message="workouts"
+            />
+          </Grid>
+        </Container>
+      </Box>
     </>
   );
 };

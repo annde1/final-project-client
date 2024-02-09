@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import "../../../styles/styles.css";
-const WorkoutDetails = ({ duration, volume }) => {
+const WorkoutDetails = ({ duration, volume, records }) => {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "row", marginTop: "1.5rem" }}>
@@ -34,7 +34,24 @@ const WorkoutDetails = ({ duration, volume }) => {
           <Typography className="customFont" variant="subtitle2">
             Records
           </Typography>
-          <EmojiEventsIcon sx={{ color: "#F8BA00" }} />
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            {" "}
+            <Typography
+              className="customFont"
+              variant="subtitle2"
+              sx={{ fontWeight: "bold" }}
+            >
+              {records}
+            </Typography>
+            <EmojiEventsIcon
+              sx={{
+                color: "#F8BA00",
+                height: "18px",
+                width: "18px",
+                alignSelf: "center",
+              }}
+            />
+          </Box>
         </Box>
       </Box>
     </>

@@ -1,21 +1,12 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
+
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Select from "@mui/material/Select";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Visibility from "@mui/icons-material/Visibility";
 import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
@@ -28,6 +19,7 @@ import "../styles/styles.css";
 import normalizeEditProfile from "../service/normalize-edit-profile";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
+import ProfileTabs from "../components/ProfileTabs";
 const EditProfilePage = () => {
   const [userData, setUserData] = useState({});
   const [inputs, setInputs] = useState({
@@ -104,6 +96,9 @@ const EditProfilePage = () => {
           }}
         >
           <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              <ProfileTabs />
+            </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
                 autoComplete="given-name"

@@ -10,6 +10,7 @@ import { ROUTES } from "../../../routes/routes";
 import { normalizeWorkout } from "../../../service/normalize-workout";
 import { normalizeTemplateData } from "../../../service/normalize-template-data";
 import validateWorkout from "../../../validation/workout-validation";
+import { useCallback } from "react";
 const WorkoutExercisesList = ({
   onUpdateTemplateName,
   onFinishLoading,
@@ -24,35 +25,40 @@ const WorkoutExercisesList = ({
   const { id: _id } = useParams();
   const navigate = useNavigate();
   const startedAt = useRef(null);
-
   useEffect(() => {
     startedAt.current = new Date();
   }, []);
 
   useEffect(() => {
-    const fetchTemplateData = async (_id) => {
-      try {
-        const { data } = await axios.get(`/templates/${_id}`);
-        const exercises = data.templateDetails.exercises.map(
-          ({ sets, name }) => ({
-            sets: sets.map(({ _id, ...rest }) => rest),
-            name,
-          })
-        );
-        console.log(data);
-        setExercises(exercises);
-        onUpdateTemplateName(data.templateDetails?.name);
-        onFinishLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchTemplateData(_id);
-  }, [_id, onUpdateTemplateName, onFinishLoading]);
-
-  useEffect(() => {
+    console.log("EXERCISES STATUS CHANGED");
     console.log(exercises);
   }, [exercises]);
+
+  const fetchTemplateData = useCallback(async (_id) => {
+    try {
+      const { data } = await axios.get(`/templates/${_id}`);
+      const exercises = data.templateDetails.exercises.map(
+        ({ sets, name }) => ({
+          sets: sets.map(({ _id, ...rest }) => ({
+            ...rest,
+            done: false, // Add the done property to every set
+          })),
+          name,
+        })
+      );
+      console.log(data);
+      setExercises(exercises);
+      onUpdateTemplateName(data.templateDetails?.name);
+      onFinishLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTemplateData(_id);
+  }, [_id, fetchTemplateData]);
+
   const handleAddWeight = (exerIndex, setIndex, weight) => {
     setExercises((prev) => {
       //Copy of exercises array
@@ -99,12 +105,32 @@ const WorkoutExercisesList = ({
       return currentExercises;
     });
   };
+
+  const handleDoneSet = (isDone, exerciseIndex, setIndex) => {
+    setExercises((prev) => {
+      const updatedExercises = [...prev];
+      const updatedSets = [...updatedExercises[exerciseIndex].sets];
+
+      updatedSets[setIndex] = {
+        ...updatedSets[setIndex],
+        done: isDone,
+      };
+
+      updatedExercises[exerciseIndex] = {
+        ...updatedExercises[exerciseIndex],
+        sets: updatedSets,
+      };
+
+      return updatedExercises;
+    });
+  };
   const handleSubmitWorkout = async () => {
     try {
       if (workoutDetails.volume === 0) {
         onShowModal();
         return;
       }
+
       const normalizedData = normalizeWorkout({
         title: templateName,
         startedAt: startedAt.current,
@@ -118,6 +144,7 @@ const WorkoutExercisesList = ({
 
       const errors = validateWorkout(normalizedData);
       if (errors) {
+        console.log(errors);
         return;
       }
       //Post new workout
@@ -129,7 +156,11 @@ const WorkoutExercisesList = ({
       });
 
       //Update template
-      await axios.put(`/templates/${_id}`, template);
+      const { data: templateWorkout } = await axios.put(
+        `/templates/${_id}`,
+        template
+      );
+      console.log(templateWorkout);
       navigate(ROUTES.MYWORKOUTS);
     } catch (err) {
       console.log(err);
@@ -158,6 +189,7 @@ const WorkoutExercisesList = ({
                 onAddReps={handleAddRep}
                 onAddVolume={onAddVolume}
                 onRemoveVolume={onRemoveVolume}
+                onDone={handleDoneSet}
               />
             ))}
         </Box>

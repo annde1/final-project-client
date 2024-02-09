@@ -28,30 +28,35 @@ const CreateTemplatePage = () => {
 
   return (
     <>
-      <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
-        Create Template
-      </Typography>
+      <Box sx={{ height: "100%" }}>
+        <Typography
+          variant="h4"
+          style={{ fontFamily: "Montserrat, sans-serif" }}
+        >
+          Create Template
+        </Typography>
 
-      <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              {!isPremium && numTemplates >= 3 ? (
-                <TemplateMessage />
-              ) : (
-                <>
-                  <TemplateItemsList />
-                </>
-              )}
-            </Box>
+        <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                {!isPremium && numTemplates >= 3 ? (
+                  <TemplateMessage />
+                ) : (
+                  <>
+                    <TemplateItemsList />
+                  </>
+                )}
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Box>
     </>
   );
 };

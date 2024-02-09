@@ -26,6 +26,9 @@ const WorkoutReaction = ({
       console.log(err);
     }
   };
+  const handleDeleteWorkout = async (_id) => {
+    onDeleteWorkout(_id);
+  };
   return (
     <>
       <Box
@@ -45,7 +48,7 @@ const WorkoutReaction = ({
         {isOwner && (
           <IconButton
             onClick={() => {
-              onDeleteWorkout(workoutId);
+              handleDeleteWorkout(workoutId);
             }}
           >
             <DeleteOutlineIcon />

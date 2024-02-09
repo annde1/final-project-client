@@ -9,9 +9,9 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
+  height: 180,
+  bgcolor: "#EAEDF3",
+  boxShadow: 20,
   p: 4,
 };
 const BmiModal = ({ bmi, open, range, onCloseModal }) => {
@@ -28,7 +28,7 @@ const BmiModal = ({ bmi, open, range, onCloseModal }) => {
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", fontFamily: "Montserrat, sans-serif" }}
           >
             {isNaN(bmi)
               ? "You haven't specify weight and height"
@@ -36,7 +36,11 @@ const BmiModal = ({ bmi, open, range, onCloseModal }) => {
           </Typography>
           <Typography
             id="modal-modal-description"
-            sx={{ mt: 2, textAlign: "center" }}
+            sx={{
+              mt: 2,
+              textAlign: "center",
+              fontFamily: "Montserrat, sans-serif",
+            }}
           >
             {isNaN(bmi)
               ? "Add weight and height to your profile details to calculate your bmi"

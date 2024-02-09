@@ -6,6 +6,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
+import { useEffect, useState } from "react";
 
 const WorkoutExerciseItem = ({
   exercise,
@@ -14,6 +15,7 @@ const WorkoutExerciseItem = ({
   exerciseIndex,
   onAddVolume,
   onRemoveVolume,
+  onDone,
 }) => {
   const handleAddReps = (e, setIndex) => {
     const reps = e.target.value;
@@ -40,6 +42,19 @@ const WorkoutExerciseItem = ({
       onAddVolume(total);
     } else {
       onRemoveVolume(total);
+    }
+  };
+
+  const handleDoneSet = (checked, exerciseIndex, setIndex) => {
+    const total = exercise.sets.reduce((acc, set, index) => {
+      if (index === setIndex) {
+        return acc + Number(set.weight) * Number(set.reps);
+      }
+      return acc;
+    }, 0);
+    if (checked) {
+      onDone(checked, exerciseIndex, setIndex);
+      onAddVolume(total);
     }
   };
   return (
@@ -107,6 +122,7 @@ const WorkoutExerciseItem = ({
                   onChange={(e) => {
                     handleAddWeight(e, index);
                   }}
+                  placeholder={exercise.sets[index].weight}
                   value={exercise.sets[index].weight}
                   size="small"
                 />
@@ -120,6 +136,7 @@ const WorkoutExerciseItem = ({
                   onChange={(e) => {
                     handleAddReps(e, index);
                   }}
+                  placeholder={exercise.sets[index].reps}
                   value={exercise.sets[index].reps}
                   size="small"
                 />
@@ -128,7 +145,7 @@ const WorkoutExerciseItem = ({
                 color="success"
                 sx={{ alignSelf: "center" }}
                 onChange={(e) => {
-                  handleAddDetails(index, e.target.checked);
+                  handleDoneSet(e.target.checked, exerciseIndex, index);
                 }}
               />
             </Box>

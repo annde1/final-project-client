@@ -19,12 +19,6 @@ const TemplateItemsList = ({ isEdit }) => {
   const { id: _id } = useParams();
 
   useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-  useEffect(() => {
-    console.log(exercises);
-  }, [exercises]);
-  useEffect(() => {
     const fetchTemplateData = async () => {
       try {
         if (isEdit) {
@@ -227,7 +221,7 @@ const TemplateItemsList = ({ isEdit }) => {
           <Button
             variant="contained"
             className="customFont"
-            style={{ backgroundColor: "#0B0D12" }}
+            style={{ backgroundColor: "#0B0D12", marginBottom: "3rem" }}
             onClick={handleCreateTemplate}
           >
             Save Template
@@ -237,7 +231,7 @@ const TemplateItemsList = ({ isEdit }) => {
           <Button
             variant="contained"
             className="customFont"
-            style={{ backgroundColor: "#0B0D12" }}
+            style={{ backgroundColor: "#0B0D12", marginBottom: "3rem" }}
             onClick={handleEditTemplate}
           >
             Edit Template

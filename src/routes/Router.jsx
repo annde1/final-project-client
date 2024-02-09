@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { ROUTES } from "./routes";
-import RegisterPage from "../pages/RegisterPage"; // Adjust the path if needed
+import RegisterPage from "../pages/RegisterPage";
 import CreateTemplatePage from "../pages/CreateTemplate";
 import LoginPage from "../pages/Login";
 import MyProfilePage from "../pages/MyProfile";
@@ -13,15 +13,17 @@ import NewWorkout from "../pages/NewWorkout";
 import FeedsPage from "../pages/Feeds";
 import SocialPage from "../pages/SocialPage";
 import AuthGuard from "../Guard/AuthGuard";
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import NotFound from "../pages/NotFound";
+import HomePage from "../pages/HomePage";
+import TemplatePreview from "../pages/TemplatePreview";
+import UserProfilePage from "../pages/UserProfilePage";
 export const Router = () => {
   return (
     <Routes>
       <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
       <Route path={ROUTES.ABOUT} element={<AboutPage />} />
+      <Route path={ROUTES.HOME} element={<HomePage />} />
 
       <Route
         path={ROUTES.CREATETEMPLATE}
@@ -44,6 +46,14 @@ export const Router = () => {
         element={
           <AuthGuard>
             <MyProfilePage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={`${ROUTES.USER}/:id`}
+        element={
+          <AuthGuard>
+            <UserProfilePage />
           </AuthGuard>
         }
       />
@@ -76,6 +86,14 @@ export const Router = () => {
         element={
           <AuthGuard>
             <EditTemplatePage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={`${ROUTES.TEMPLATEPREVIEW}/:id`}
+        element={
+          <AuthGuard>
+            <TemplatePreview />
           </AuthGuard>
         }
       />

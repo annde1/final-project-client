@@ -23,14 +23,16 @@ import { FaCrown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import "../styles/styles.css";
-
-const UserProfile = ({ userData, workouts, followers, following }) => {
+import Test from "./Test";
+const UserProfile = ({ userData, workouts, followers, following, isUser }) => {
   const navigate = useNavigate();
 
   const handleRedirectWorkouts = () => {
+    if (!isUser) return;
     navigate(ROUTES.MYWORKOUTS);
   };
   const handleRedirectSocial = () => {
+    if (!isUser) return;
     navigate(ROUTES.SOCIAL);
   };
   return (
@@ -45,11 +47,13 @@ const UserProfile = ({ userData, workouts, followers, following }) => {
         }}
       >
         <Avatar
-          style={{ width: "100px", height: "100px", marginBottom: "1rem" }}
+          style={{ width: "120px", height: "120px", marginBottom: "1rem" }}
           src={userData.image?.url}
         ></Avatar>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography className="customFont">{userData.userName}</Typography>
+          <Typography className="customFont" variant="h6">
+            {userData.userName}
+          </Typography>
           {userData.isPremium && (
             <FaCrown style={{ color: "#D5C289", marginLeft: "0.5rem" }} />
           )}
@@ -69,7 +73,6 @@ const UserProfile = ({ userData, workouts, followers, following }) => {
           variant="subtitle2"
           className="customFont"
           sx={{
-            fontWeight: "bold",
             cursor: "pointer",
           }}
           onClick={handleRedirectWorkouts}
@@ -79,7 +82,7 @@ const UserProfile = ({ userData, workouts, followers, following }) => {
         <Typography
           variant="subtitle2"
           className="customFont"
-          sx={{ fontWeight: "bold", cursor: "pointer" }}
+          sx={{ cursor: "pointer" }}
           onClick={handleRedirectSocial}
         >
           Following {following}
@@ -87,7 +90,7 @@ const UserProfile = ({ userData, workouts, followers, following }) => {
         <Typography
           variant="subtitle2"
           className="customFont"
-          sx={{ fontWeight: "bold", cursor: "pointer" }}
+          sx={{ cursor: "pointer" }}
           onClick={handleRedirectSocial}
         >
           Followers {followers}

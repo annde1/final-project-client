@@ -10,6 +10,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 import "../styles/styles.css";
 import axios from "axios";
 import { useState } from "react";
@@ -29,8 +33,13 @@ const LoginPage = () => {
   });
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
   const autoLogin = useAutoLogin();
   const navigate = useNavigate();
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const handleInputsChange = (e) => {
     setInputs((current) => ({
       ...current,
@@ -63,88 +72,103 @@ const LoginPage = () => {
     }
   };
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5" className="customFont">
-            Sign in
-          </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={inputs.email}
-              onChange={handleInputsChange}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              value={inputs.password}
-              onChange={handleInputsChange}
-              autoComplete="current-password"
-            />
-            {error && <Alert severity="error">{error}</Alert>}
-            <FormControlLabel
-              control={<Checkbox value={rememberMe} color="primary" />}
-              label="Remember me"
-              style={{ fontFamily: "Montserrat" }}
-              onChange={handleRememberMe}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
-              className="customFont"
-              onClick={handleUserLogin}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link
-                  href="#"
-                  variant="body2"
-                  className="customFont"
-                  style={{ color: "#0B0D12" }}
-                >
-                  Forgot password?
-                </Link>
+    <>
+      <Box sx={{ height: "100vh" }}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography component="h1" variant="h5" className="customFont">
+              Sign in
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={inputs.email}
+                onChange={handleInputsChange}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={inputs.password}
+                onChange={handleInputsChange}
+                autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={handleTogglePasswordVisibility}
+                        aria-label="toggle password visibility"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {error && <Alert severity="error">{error}</Alert>}
+              <FormControlLabel
+                control={<Checkbox value={rememberMe} color="primary" />}
+                label="Remember me"
+                style={{ fontFamily: "Montserrat" }}
+                onChange={handleRememberMe}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
+                className="customFont"
+                onClick={handleUserLogin}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link
+                    href="#"
+                    variant="body2"
+                    className="customFont"
+                    style={{ color: "#0B0D12" }}
+                  >
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link
+                    href="#"
+                    variant="body2"
+                    className="customFont"
+                    style={{ color: "#0B0D12" }}
+                  >
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Link
-                  href="#"
-                  variant="body2"
-                  className="customFont"
-                  style={{ color: "#0B0D12" }}
-                >
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </Box>
+    </>
   );
 };
 export default LoginPage;

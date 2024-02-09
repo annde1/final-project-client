@@ -2,10 +2,15 @@ import * as React from "react";
 import { Button, TextField, Link, Grid } from "@mui/material";
 import { Box, Checkbox, Alert } from "@mui/material";
 import { Typography, Container, FormControlLabel } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
 import { useState } from "react";
 import "../styles/styles.css";
 import validateRegistration from "../validation/userRegisterValidation";
 import normalizeUserData from "../service/nomralizeUserData";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+
+import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
@@ -23,13 +28,13 @@ const RegisterPage = () => {
     weight: "",
     isPremium: false,
   });
-
+  const [showPassword, setShowPassword] = React.useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   const handleInputsChange = (event) => {
     setInputs((current) => ({
       ...current,
@@ -174,11 +179,24 @@ const RegisterPage = () => {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="new-password"
                   value={inputs.password}
                   onChange={handleInputsChange}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          edge="end"
+                          onClick={handleTogglePasswordVisibility}
+                          aria-label="toggle password visibility"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 {errors && errors.password && (
                   <Alert severity="error">{errors.password}</Alert>

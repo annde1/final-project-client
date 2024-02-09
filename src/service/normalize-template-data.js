@@ -5,7 +5,6 @@ export const normalizeTemplateData = (data) => {
       return {
         ...exercise,
         sets: exercise.sets.map((set) => ({
-          ...set,
           reps: Number(set.reps),
           weight: Number(set.weight),
         })),

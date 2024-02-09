@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Box, Grid, Container, Button } from "@mui/material";
 import { calculateBMI } from "../service/user-profile";
@@ -11,7 +11,6 @@ import BmiModal from "../components/BmiModal";
 import ProfileSkeleton from "../components/ProfileSkeleton";
 const MyProfilePage = () => {
   const [userData, setUserData] = useState({});
-
   const [workouts, setWorkouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [bmiModal, setShowBmiModal] = useState(false);
@@ -20,17 +19,10 @@ const MyProfilePage = () => {
     (store) => store.authenticationSlice.userData?._id
   );
   useEffect(() => {
-    //Id is logged
-    console.log(userId);
-  }, [userId]);
-  useEffect(() => {
     const fetchUserData = async () => {
       try {
         //Fetch user profile information
         const { data } = await axios.get(`/users/${userId}`);
-
-        // I get the data
-        console.log(data);
         setUserData(data.userData);
         //Fetch user's workouts
         const { data: userWorkouts } = await axios.get("/workouts/my-workouts");
@@ -53,13 +45,12 @@ const MyProfilePage = () => {
     setShowBmiModal(false);
   };
   return (
-    <>
+    <Box sx={{ height: "100vh" }}>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
         My Profile
       </Typography>
 
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 2,
@@ -110,7 +101,7 @@ const MyProfilePage = () => {
           </Grid>
         </Box>
       </Container>
-    </>
+    </Box>
   );
 };
 export default MyProfilePage;

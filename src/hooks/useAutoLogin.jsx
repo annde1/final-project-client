@@ -14,7 +14,7 @@ const useAutoLogin = () => {
       }
       const userData = jwtDecode(token);
       const id = userData._id;
-      if (skipTokenTest) await axios.get(`/users/${id}`);
+      // if (skipTokenTest) await axios.get(`/users/${id}`);
       dispatch(authActions.login(userData));
       //userData = payload
     } catch (err) {

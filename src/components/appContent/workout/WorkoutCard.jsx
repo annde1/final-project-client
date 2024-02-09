@@ -10,6 +10,10 @@ import WorkoutReaction from "./WorkoutReaction";
 import { calculateTimePassed } from "../../../service/workout-service";
 import { convertMsToHoursAndMinutes } from "../../../service/workout-service";
 import "../../../styles/styles.css";
+import { useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
 const WorkoutCard = ({
   userData,
   workout,
@@ -19,12 +23,28 @@ const WorkoutCard = ({
 }) => {
   const [visibleExercises, setVisibleExercises] = useState(3);
   const [showMessage, setShowMessage] = useState(false);
+  const ref = useRef(null);
+  const controls = useAnimation();
+  const [element, inView] = useInView({
+    triggerOnce: true,
+    rootMargin: "-50px 0px",
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        opacity: 1,
+        transition: { duration: 0.3, ease: "easeOut" },
+      });
+    }
+  }, [controls, inView]);
+
   const exercises = workout.template.exercises;
   const createdAt = calculateTimePassed(workout.createdAt);
   const duration = convertMsToHoursAndMinutes(workout.duration);
   const workoutVolume = workout.volume;
   const numOfLikes = workout.likes.length;
-
+  const records = workout.records;
   const handleShowMoreExercises = () => {
     if (visibleExercises < exercises.length) {
       setVisibleExercises((previous) =>
@@ -33,10 +53,18 @@ const WorkoutCard = ({
     } else {
       setShowMessage(true);
     }
-    console.log("showMessage:", showMessage);
   };
+
   return (
-    <>
+    <motion.div
+      ref={(el) => {
+        ref.current = el;
+        element(el);
+      }}
+      initial={{ opacity: 0 }}
+      animate={controls}
+      exit={{ opacity: 0 }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -59,7 +87,11 @@ const WorkoutCard = ({
         >
           {workout.title}
         </Typography>
-        <WorkoutDetails duration={duration} volume={workoutVolume} />
+        <WorkoutDetails
+          duration={duration}
+          volume={workoutVolume}
+          records={records}
+        />
         <Divider light sx={{ marginTop: 3, marginBottom: 3, width: "100%" }} />
         <Typography
           sx={{ fontFamily: "Montserrat, sans-serif", marginBottom: "2rem" }}
@@ -127,7 +159,7 @@ const WorkoutCard = ({
         />
         <Divider light sx={{ marginTop: 1, marginBottom: 3, width: "100%" }} />
       </Box>
-    </>
+    </motion.div>
   );
 };
 export default WorkoutCard;

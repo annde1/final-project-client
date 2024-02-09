@@ -1,9 +1,9 @@
 import Typography from "@mui/material/Typography";
-import { Grid, Container } from "@mui/material";
+import { Grid, Container, Box } from "@mui/material";
 import SocialTabs from "../components/appContent/social/SocialTabs";
 const SocialPage = () => {
   return (
-    <>
+    <Box sx={{ height: "100vh" }}>
       <Typography variant="h4" sx={{ fontFamily: "Montserrat, sans-serif" }}>
         Social
       </Typography>
@@ -14,7 +14,7 @@ const SocialPage = () => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </Box>
   );
 };
 export default SocialPage;

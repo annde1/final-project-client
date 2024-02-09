@@ -51,6 +51,7 @@ const Template = (props) => {
             >
               {open && (
                 <ActionsList
+                  onPreview={props.onPreviewTemplate}
                   onDelete={props.onDelete}
                   onEdit={props.onEdit}
                   onStartWorkout={props.onStartWorkout}
