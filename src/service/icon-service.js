@@ -11,6 +11,7 @@ import FeedIcon from "@mui/icons-material/Feed";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { ROUTES } from "../routes/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 export const getIcon = (to) => {
   switch (to) {
@@ -34,6 +35,8 @@ export const getIcon = (to) => {
       return <GroupsIcon sx={{ color: "#EAEDF3" }} />;
     case ROUTES.FEEDS:
       return <FeedIcon sx={{ color: "#EAEDF3" }} />;
+    case ROUTES.MODERATOR:
+      return <AdminPanelSettingsIcon sx={{ color: "#EAEDF3" }} />;
     default:
       return null;
   }

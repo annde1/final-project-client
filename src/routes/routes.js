@@ -15,4 +15,5 @@ export const ROUTES = {
   SOCIAL: "/social",
   FEEDS: "/feeds",
   HOME: "/",
+  MODERATOR: "/moderator",
 };

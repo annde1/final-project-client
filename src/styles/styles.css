@@ -5,3 +5,6 @@ body {
 .customFont {
   font-family: "Montserrat", sans-serif !important;
 }
+.centered-cell {
+  text-align: center;
+}

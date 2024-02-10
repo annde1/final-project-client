@@ -3,13 +3,19 @@ import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 const MyWorkoutsPage = () => {
   const userId = useSelector(
-    (store) => store.authenticationSlice.userData?._id
+    (store) => store.authenticationSlice.userData?.userName
   );
+  useEffect(() => {
+    console.log("My workouts user Id", userId);
+  }, [userId]);
+  const fetchMyWorkoutsData = async (userId, filter) => {
+    const orderBy = filter?.filterBy;
+    const { data } = await axios.get(`/workouts/${userId}?filter=${orderBy}`);
 
-  const fetchMyWorkoutsData = async (userId) => {
-    const { data } = await axios.get("/workouts/my-workouts");
+    // Enrichment
     const { data: userData } = await axios.get(`/users/${userId}`);
     const updatedWorkouts = data.workouts.map((workout) => ({
       ...workout,

@@ -16,3 +16,15 @@ export const calculateBMI = (heightInCm, weightInKg) => {
     range: valueRange,
   };
 };
+
+export const getDataAndUsers = (userData, data) => {
+  const templatesWithUserData = data.map((data, index) => {
+    const user = userData.find((user) => user._id === data.userId);
+    return {
+      ...data,
+      id: index + 1,
+      user: user || {},
+    };
+  });
+  return templatesWithUserData;
+};

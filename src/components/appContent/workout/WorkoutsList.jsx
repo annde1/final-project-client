@@ -8,9 +8,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import WorkoutCard from "./WorkoutCard";
 import Pagination from "@mui/material/Pagination";
 import ContentFilter from "../ContentFilter";
-const WorkoutsList = ({ isFeeds, dataSourceSupplier, message }) => {
+const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
   // const [userData, setUserData] = useState({});
   const [workoutsData, setWorkoutsData] = useState([]);
+  const [filter, setFilter] = useState({ search: "", filterBy: "" });
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
@@ -21,17 +22,17 @@ const WorkoutsList = ({ isFeeds, dataSourceSupplier, message }) => {
   const indexOfFirstWorkout = indexOfLastWorkout - workoutsPerPage;
 
   useEffect(() => {
-    const run = async () => {
+    const fetchWorkoutData = async () => {
       try {
-        const workouts = await dataSourceSupplier(userId);
+        const workouts = await dataSourceSupplier(userId, filter);
         setWorkoutsData(workouts);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     };
-    run();
-  }, [dataSourceSupplier, userId]);
+    fetchWorkoutData();
+  }, [dataSourceSupplier, userId, filter]);
 
   const handleDeleteWorkout = async (_id) => {
     try {
@@ -66,6 +67,11 @@ const WorkoutsList = ({ isFeeds, dataSourceSupplier, message }) => {
     setWorkoutsData(newWorkouts);
     // setUserData(userData);
   };
+
+  const updateFilter = (filter) => {
+    setFilter(filter);
+  };
+
   return (
     <>
       {isLoading && (
@@ -91,7 +97,11 @@ const WorkoutsList = ({ isFeeds, dataSourceSupplier, message }) => {
         </Grid>
       )}
       {!isLoading && workoutsData.length > 0 && (
-        <ContentFilter isFeeds={isFeeds} onUpdateWorkouts={updateWorkouts} />
+        <ContentFilter
+          onUpdateWorkouts={updateWorkouts}
+          onUpdateFilter={updateFilter}
+          showSearch={showSearch}
+        />
       )}
       {workoutsData
         .slice(indexOfFirstWorkout, indexOfLastWorkout)

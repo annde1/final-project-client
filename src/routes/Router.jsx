@@ -17,6 +17,8 @@ import NotFound from "../pages/NotFound";
 import HomePage from "../pages/HomePage";
 import TemplatePreview from "../pages/TemplatePreview";
 import UserProfilePage from "../pages/UserProfilePage";
+import ModeratorPage from "../pages/ModeratorPage";
+import { ModeratorGuard } from "../Guard/ModeratorGuard";
 export const Router = () => {
   return (
     <Routes>
@@ -110,6 +112,16 @@ export const Router = () => {
         element={
           <AuthGuard>
             <FeedsPage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.MODERATOR}
+        element={
+          <AuthGuard>
+            <ModeratorGuard>
+              <ModeratorPage />
+            </ModeratorGuard>
           </AuthGuard>
         }
       />

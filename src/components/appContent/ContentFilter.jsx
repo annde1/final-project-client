@@ -8,61 +8,33 @@ import Search from "../top-navigation/Search";
 import SearchIconWrapper from "../SearchIconWrapper";
 import StyledInputBase from "../StyledInputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { Box, Grid, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import axios from "axios";
-const ContentFilter = ({ isFeeds, onUpdateWorkouts }) => {
-  const [selectedFilter, setSelectedFilter] = React.useState("");
-  const [userName, setUserName] = React.useState("");
 
-  const userId = useSelector(
-    (store) => store.authenticationSlice.userData?._id
-  );
+const ContentFilter = ({ showSearch, onUpdateFilter }) => {
+  // isFeed -> showSearch
+  const [selectedFilter, setSelectedFilter] = React.useState("");
+  const [userNameSearch, setUserNameSearch] = React.useState(""); // This belongs to the search input of feeds
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
   };
 
-  const handleUserNameChange = (event) => {
-    setUserName(event.target.value);
+  const handleuserNameSearchChange = (event) => {
+    setUserNameSearch(event.target.value);
   };
+
   const handleSelectFilterChange = async (e) => {
-    try {
-      e.preventDefault();
-      const query = selectedFilter.replace(/\s/g, "");
-      //FETCHING
-      const { data } = await axios.get(
-        `/workouts/feeds?userName=${userName}&filter=${query}`
-      );
-
-      let userDataEndpoint = isFeeds ? "/users/following" : `/users/${userId}`;
-      const { data: userData } = await axios.get(userDataEndpoint);
-
-      const feedsAndUser = data.feeds.map((feed) => {
-        const feedUserData = isFeeds
-          ? userData.following.find((user) => user._id === feed.userId)
-          : userData.userData;
-
-        return {
-          ...feed,
-          isLiked: feed.likes.includes(feedUserData._id),
-          userData: feedUserData,
-        };
-      });
-      onUpdateWorkouts(feedsAndUser);
-    } catch (err) {
-      console.log(err);
-    }
+    e.preventDefault();
+    const query = selectedFilter.replace(/\s/g, "");
+    const filterData = { search: userNameSearch, filterBy: query };
+    onUpdateFilter(filterData);
   };
-  useEffect(() => {
-    console.log(userName);
-  }, [userName]);
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "80%" }}>
       {" "}
-      {isFeeds && (
+      {showSearch && (
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
@@ -70,8 +42,8 @@ const ContentFilter = ({ isFeeds, onUpdateWorkouts }) => {
           <StyledInputBase
             placeholder="Username…"
             inputProps={{ "aria-label": "search" }}
-            onChange={handleUserNameChange}
-            value={userName}
+            onChange={handleuserNameSearchChange}
+            value={userNameSearch}
           />
         </Search>
       )}

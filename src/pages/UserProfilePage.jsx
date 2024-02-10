@@ -21,8 +21,11 @@ const UserProfilePage = () => {
     (store) => store.authenticationSlice.userData?._id
   );
 
-  const fetchWorkoutsData = async (userId) => {
-    const { data } = await axios.get("/workouts/my-workouts"); // TODO: Fetch fields
+  const fetchWorkoutsData = async (userId, filter) => {
+    const orderBy = filter?.filterBy;
+
+    const { data } = await axios.get(`/workouts/${_id}?filter=${orderBy}`);
+
     const { data: userData } = await axios.get(`/users/${_id}`);
     const updatedWorkouts = data.workouts.map((workout) => ({
       ...workout,
@@ -54,7 +57,7 @@ const UserProfilePage = () => {
   }, [_id, userId]);
   return (
     <>
-      <Box sx={{ height: "100%" }}>
+      <Box sx={{ height: isFollowing ? "100%" : "100vh" }}>
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
@@ -81,15 +84,34 @@ const UserProfilePage = () => {
                       isUser={false}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <WorkoutsList
-                      dataSourceSupplier={fetchWorkoutsData}
-                      message="workouts"
-                    />
-                  </Grid>
+                  <Grid item xs={12} sm={12}></Grid>
                 </>
               )}
             </Grid>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              {isFollowing ? (
+                <WorkoutsList
+                  dataSourceSupplier={fetchWorkoutsData}
+                  message="workouts"
+                />
+              ) : (
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontFamily: "Montserrat" }}
+                >
+                  Follow the user to see theit workouts
+                </Typography>
+              )}
+            </Box>
           </Box>
         </Container>
       </Box>

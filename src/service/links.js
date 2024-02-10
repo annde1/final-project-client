@@ -26,3 +26,5 @@ export const loggedOutLinks = [
   { to: ROUTES.LOGIN, children: "Login" },
   { to: ROUTES.ABOUT, children: "About" },
 ];
+
+export const moderatorLinks = [{ to: ROUTES.MODERATOR, children: "Moderator" }];

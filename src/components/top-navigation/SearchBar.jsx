@@ -78,7 +78,7 @@ const SearchBar = () => {
             <SearchIcon />
           </SearchIconWrapper>
           <StyledInputBase
-            placeholder="Search…"
+            placeholder="Search User…"
             inputProps={{ "aria-label": "search" }}
             ref={searchInputRef}
             value={query}

@@ -1,20 +1,21 @@
 import Typography from "@mui/material/Typography";
 import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
-import ContentFilter from "../components/appContent/ContentFilter";
+
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 
 const FeedsPage = () => {
-  const userId = useSelector(
-    (store) => store.authenticationSlice.userData?._id
-  );
-  const [feedsAndUsers, setFeedsAndUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const fetchFeedWorkoutsData = async (userId, filter) => {
+    const orderBy = filter?.filterBy;
+    const userName = filter?.search ? filter?.search : "";
 
-  const fetchFeedWorkoutsData = async (userId) => {
-    const { data } = await axios.get("/workouts/feeds");
+    console.log(filter);
+    // This is an input data
+    const { data } = await axios.get(
+      `/workouts/feeds?filter=${orderBy}&userName=${userName}`
+    );
+
+    // This is enrichment data
     const { data: users } = await axios.get("/users/following");
     const dataSource = data.feeds.map((feed) => ({
       ...feed,
@@ -24,18 +25,9 @@ const FeedsPage = () => {
     return dataSource;
   };
 
-  // useEffect(() => {
-
-  //     setIsLoading(false);
-  //     setFeedsAndUsers(dataSource);
-  //   };
-
-  //   fetchFeedWorkoutsData();
-  // }, [userId]);
-
   return (
     <>
-      <Box sx={{ pb: 5 }}>
+      <Box sx={{ pb: 5, height: "100vh" }}>
         <Typography
           variant="h4"
           style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -47,6 +39,7 @@ const FeedsPage = () => {
             <WorkoutsList
               message="feeds"
               dataSourceSupplier={fetchFeedWorkoutsData}
+              showSearch={true}
             />
           </Grid>
         </Container>
