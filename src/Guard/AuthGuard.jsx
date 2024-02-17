@@ -6,7 +6,6 @@ const AuthGuard = ({ children }) => {
   const isLoggedIn = useSelector(
     (store) => store.authenticationSlice.isLoggedIn
   );
-  console.log("auth guard is logged in: ", isLoggedIn);
   if (isLoggedIn) {
     return children;
   } else {

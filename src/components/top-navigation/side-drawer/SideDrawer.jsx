@@ -16,11 +16,13 @@ import { DrawerStyled } from "./DrawerStyled";
 import UserStatus from "../../UserStatus";
 import SearchBar from "../SearchBar";
 import DrawerLinksList from "../DrawerLinkList";
-
+import { useSelector } from "react-redux";
 const SideDrawer = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-
+  const isLoggedIn = useSelector(
+    (store) => store.authenticationSlice.isLoggedIn
+  );
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -56,7 +58,12 @@ const SideDrawer = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography noWrap style={{ fontFamily: "Montserrat" }}>
+          <Typography
+            style={{
+              fontFamily: "Montserrat",
+              ...(isLoggedIn ? {} : { marginLeft: "-40rem" }),
+            }}
+          >
             Zen Fit
           </Typography>
           <SearchBar />

@@ -1,33 +1,31 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import RestoreIcon from "@mui/icons-material/Restore";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import "../../styles/styles.css";
 const Footer = () => {
-  const [value, setValue] = React.useState(0);
-
   return (
     <Box>
       <BottomNavigation
         showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        sx={{ backgroundColor: "#0B0D12", height: "6rem" }}
+        sx={{ backgroundColor: "#0B0D12", height: "8rem" }}
       >
-        <BottomNavigationAction
-          icon={<RestoreIcon sx={{ color: "#EAEDF3" }} />}
-        />
-        <BottomNavigationAction
-          icon={<FavoriteIcon sx={{ color: "#EAEDF3" }} />}
-        />
-        <BottomNavigationAction
-          icon={<LocationOnIcon sx={{ color: "#EAEDF3" }} />}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Avatar
+            alt="app-logo"
+            src="assets/images/logo-color.png"
+            sx={{ height: "70px", width: "70px" }}
+          />
+          <Typography sx={{ color: "#EAEDF3" }} className="customFont">
+            © 2024 ZenFit. All rights reserved.
+          </Typography>
+        </Box>
       </BottomNavigation>
     </Box>
   );

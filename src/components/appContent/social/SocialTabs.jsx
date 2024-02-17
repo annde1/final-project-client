@@ -22,19 +22,27 @@ const SocialTabs = () => {
             sx={{
               borderColor: "text.primary",
               "& .MuiTabs-indicator": {
-                backgroundColor: "#545558",
+                backgroundColor: "#EAEDF3",
               },
             }}
           >
             <Tab
               label="Followers"
               value="1"
-              sx={{ fontFamily: "Montserrat, sans-serif", color: "#0B0D12" }}
+              sx={{
+                fontFamily: "Montserrat, sans-serif",
+                color: "#0B0D12",
+                textTransform: "none",
+              }}
             />
             <Tab
               label="Following"
               value="2"
-              sx={{ fontFamily: "Montserrat, sans-serif", color: "#0B0D12" }}
+              sx={{
+                fontFamily: "Montserrat, sans-serif",
+                color: "#0B0D12",
+                textTransform: "none",
+              }}
             />
           </TabList>
         </Box>

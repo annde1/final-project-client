@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ExericseList from "../../ExerciseList";
 import TemplateItem from "./TemplateItem";
 import { Divider, Button, TextField, CircularProgress } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import { Box, Alert } from "@mui/material";
 import { normalizeTemplateData } from "../../../service/normalize-template-data";
 import { validateTemplate } from "../../../validation/template-validation";
@@ -9,7 +10,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes/routes";
 import { useParams } from "react-router-dom";
-const TemplateItemsList = ({ isEdit }) => {
+import { successToast, errorToast } from "../../../service/toastify-service";
+const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [templateName, setTemplateName] = useState("");
   const [exercises, setExercises] = useState([]);
@@ -31,14 +33,16 @@ const TemplateItemsList = ({ isEdit }) => {
             })
           );
           setExercises(exercises);
+          onTemplateLengthChange(exercises.length);
           setIsLoading(false);
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch the template data.");
       }
     };
     fetchTemplateData();
-  }, [_id, isEdit]);
+  }, [_id, isEdit, onTemplateLengthChange]);
 
   const createDefaultSet = () => {
     return { weight: "", reps: "" };
@@ -58,6 +62,9 @@ const TemplateItemsList = ({ isEdit }) => {
         sets: [createDefaultSet()],
       },
     ]);
+
+    // Update parent state with the new length of the exercises array
+    onTemplateLengthChange(exercises.length);
   };
   const handleAddSet = (exerIndex) => {
     setExercises((prev) => {
@@ -144,11 +151,12 @@ const TemplateItemsList = ({ isEdit }) => {
         setErrors(errors);
         return;
       }
-      const { data } = await axios.post("/templates", templateData);
-      console.log(data);
+      await axios.post("/templates", templateData);
+      successToast("Template created successfully");
       navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not create template.");
     }
   };
 
@@ -163,10 +171,12 @@ const TemplateItemsList = ({ isEdit }) => {
       const errors = validateTemplate(templateData);
       if (errors) return;
 
-      const { data } = await axios.put(`/templates/${_id}`, templateData);
-      console.log(data);
+      await axios.put(`/templates/${_id}`, templateData);
+      successToast("Template Updated Successfully!");
+      navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not edit the template.");
     }
   };
   return (
@@ -182,17 +192,25 @@ const TemplateItemsList = ({ isEdit }) => {
             <TextField
               autoComplete="template-title"
               name="templateTitle"
-              required
               fullWidth
               id="templateTitle"
-              label={templateName}
+              label={
+                <Typography style={{ fontFamily: "Montserrat" }}>
+                  {templateName ? templateName : "Template Name *"}
+                </Typography>
+              }
               autoFocus
               value={templateName}
               onChange={handleAddTemplateName}
               className="customFont"
             />
             {errors && errors.name && (
-              <Alert severity="error">{errors.name}.</Alert>
+              <Alert
+                severity="error"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
+                {errors.name}
+              </Alert>
             )}
             <ExericseList
               onExerciseChange={handleExercise}

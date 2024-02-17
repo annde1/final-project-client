@@ -19,6 +19,7 @@ import TemplatePreview from "../pages/TemplatePreview";
 import UserProfilePage from "../pages/UserProfilePage";
 import ModeratorPage from "../pages/ModeratorPage";
 import { ModeratorGuard } from "../Guard/ModeratorGuard";
+import FavoriteWorkoutsPage from "../pages/FavoriteWorkoutsPage";
 export const Router = () => {
   return (
     <Routes>
@@ -112,6 +113,14 @@ export const Router = () => {
         element={
           <AuthGuard>
             <FeedsPage />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path={ROUTES.FAVORITEWORKOUTS}
+        element={
+          <AuthGuard>
+            <FavoriteWorkoutsPage />
           </AuthGuard>
         }
       />

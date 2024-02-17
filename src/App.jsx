@@ -6,6 +6,8 @@ import { Router } from "./routes/Router";
 import { useState } from "react";
 import useAutoLogin from "./hooks/useAutoLogin";
 import { useEffect } from "react";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const [doneAuth, setDoneAuth] = useState(false);
   const autoLogin = useAutoLogin();
@@ -14,12 +16,13 @@ function App() {
       try {
         await autoLogin();
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       } finally {
         setDoneAuth(true);
       }
     })();
   }, [autoLogin]);
+
   return (
     <div className="App">
       <Layout>

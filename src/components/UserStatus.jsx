@@ -19,10 +19,11 @@ const UserStatus = () => {
   );
   const navigate = useNavigate();
   const logout = useLogout();
-
+  //TODO: to chekc why do I get 500 error http://localhost:7500/api/v1/users/undefined
   useEffect(() => {
     const fetchUserName = async () => {
       try {
+        if (!userId) return;
         console.log("Trying to get information about: ", userId);
         const { data } = await axios.get(`/users/${userId}`);
         setUserName(data.userData.userName);

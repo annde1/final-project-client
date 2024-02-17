@@ -1,5 +1,3 @@
-import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import PersonIcon from "@mui/icons-material/Person";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -12,31 +10,39 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { ROUTES } from "../routes/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-
-export const getIcon = (to) => {
+import FavoriteIcon from "@mui/icons-material/Favorite";
+export const getIcon = (to, isActive) => {
   switch (to) {
     case ROUTES.MYPROFILE:
-      return <PersonIcon sx={{ color: "#EAEDF3" }} />;
+      return <PersonIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.EDITPROFILE:
-      return <SettingsIcon sx={{ color: "#EAEDF3" }} />;
+      return <SettingsIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.MYTEMPLATES:
-      return <WysiwygIcon sx={{ color: "#EAEDF3" }} />;
+      return <WysiwygIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.CREATETEMPLATE:
-      return <AddBoxIcon sx={{ color: "#EAEDF3" }} />;
+      return <AddBoxIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.MYWORKOUTS:
-      return <FitnessCenterIcon sx={{ color: "#EAEDF3" }} />;
+      return (
+        <FitnessCenterIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />
+      );
     case ROUTES.ABOUT:
-      return <InfoIcon sx={{ color: "#EAEDF3" }} />;
+      return <InfoIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.LOGIN:
-      return <LoginIcon sx={{ color: "#EAEDF3" }} />;
+      return <LoginIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.REGISTER:
-      return <HowToRegIcon sx={{ color: "#EAEDF3" }} />;
+      return <HowToRegIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.SOCIAL:
-      return <GroupsIcon sx={{ color: "#EAEDF3" }} />;
+      return <GroupsIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.FEEDS:
-      return <FeedIcon sx={{ color: "#EAEDF3" }} />;
+      return <FeedIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.MODERATOR:
-      return <AdminPanelSettingsIcon sx={{ color: "#EAEDF3" }} />;
+      return (
+        <AdminPanelSettingsIcon
+          sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }}
+        />
+      );
+    case ROUTES.FAVORITEWORKOUTS:
+      return <FavoriteIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     default:
       return null;
   }

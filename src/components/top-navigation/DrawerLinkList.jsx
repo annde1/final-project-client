@@ -6,6 +6,7 @@ import {
 } from "../../service/links";
 import DrawerLink from "./DrawerLink";
 import { List } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const DrawerLinksList = ({ open, isSideDrawer }) => {
   const isLoggedIn = useSelector(
@@ -14,6 +15,8 @@ const DrawerLinksList = ({ open, isSideDrawer }) => {
   const isModerator = useSelector(
     (store) => store.authenticationSlice.userData?.isModerator
   );
+  const location = useLocation();
+
   return (
     <List
       sx={{
@@ -27,16 +30,19 @@ const DrawerLinksList = ({ open, isSideDrawer }) => {
       {isLoggedIn &&
         loggedInLinks.map((link) => (
           <DrawerLink
+            key={link.to}
             to={link.to}
             children={link.children}
             open={open}
             isSideDrawer={isSideDrawer}
+            isActive={location.pathname === link.to}
           />
         ))}
       {isLoggedIn &&
         isModerator &&
         moderatorLinks.map((link) => (
           <DrawerLink
+            key={link.to}
             to={link.to}
             children={link.children}
             open={open}
@@ -46,6 +52,7 @@ const DrawerLinksList = ({ open, isSideDrawer }) => {
       {!isLoggedIn &&
         loggedOutLinks.map((link) => (
           <DrawerLink
+            key={link.to}
             to={link.to}
             children={link.children}
             open={open}

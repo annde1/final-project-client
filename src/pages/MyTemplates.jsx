@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ROUTES } from "../routes/routes";
 import CircularProgress from "@mui/material/CircularProgress";
+import { errorToast } from "../service/toastify-service";
+
 const MyTemplatesPage = () => {
   const [userTemplates, setUserTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,20 +20,22 @@ const MyTemplatesPage = () => {
         setUserTemplates(data.templates);
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch the templates.");
       }
     };
     getUserTemplates();
   }, []);
+
   const handleDeleteTemplate = async (_id) => {
     try {
       await axios.delete(`/templates/${_id}`);
       setUserTemplates((current) =>
         current.filter((template) => template._id !== _id)
       );
-      console.log("TEMPLATE DELETED");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not delete the template.");
     }
   };
 

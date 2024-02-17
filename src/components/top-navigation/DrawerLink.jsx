@@ -5,7 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { NavLink } from "react-router-dom";
 import { getIcon } from "../../service/icon-service";
 
-const DrawerLink = ({ to, children, open, isSideDrawer }) => {
+const DrawerLink = ({ to, children, open, isSideDrawer, isActive }) => {
   return (
     <>
       <NavLink
@@ -13,7 +13,7 @@ const DrawerLink = ({ to, children, open, isSideDrawer }) => {
         to={to}
         style={{
           textDecoration: "none",
-          color: "#EAEDF3",
+          color: isActive ? "#ADE32B" : "#EAEDF3",
           fontFamily: "Montserrat",
         }}
       >
@@ -40,14 +40,13 @@ const DrawerLink = ({ to, children, open, isSideDrawer }) => {
                 justifyContent: "center",
               }}
             >
-              {getIcon(to)}
+              {getIcon(to, isActive)}
             </ListItemIcon>
 
             <ListItemText
               primary={children}
               primaryTypographyProps={{
                 fontFamily: "Montserrat",
-                fontWeight: "bold",
               }}
               sx={{ opacity: isSideDrawer ? (open ? 1 : 0) : 1 }}
               className="customFont"

@@ -2,11 +2,10 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import "../../../styles/styles.css";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
-import { useEffect, useState } from "react";
+import { useMediaQuery } from "@mui/material";
+import { styled } from "@mui/system";
 
 const WorkoutExerciseItem = ({
   exercise,
@@ -14,9 +13,16 @@ const WorkoutExerciseItem = ({
   onAddReps,
   exerciseIndex,
   onAddVolume,
-  onRemoveVolume,
   onDone,
 }) => {
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+
+  const CustomTextField = styled(TextField)({
+    [isSmallScreen && "& input"]: {
+      width: 80,
+    },
+  });
+
   const handleAddReps = (e, setIndex) => {
     const reps = e.target.value;
     onAddReps(exerciseIndex, setIndex, reps);
@@ -25,24 +31,6 @@ const WorkoutExerciseItem = ({
   const handleAddWeight = (e, setIndex) => {
     const weight = e.target.value;
     onAddWeight(exerciseIndex, setIndex, weight);
-  };
-
-  const handleAddDetails = (setIndex, checked) => {
-    const total = exercise.sets.reduce((acc, set, index) => {
-      if (index === setIndex) {
-        console.log("Weight", set.weight);
-        console.log("Reps", set.reps);
-
-        return acc + Number(set.weight) * Number(set.reps);
-      }
-      return acc;
-    }, 0);
-    if (checked) {
-      //TODO: if checked then update the state of reps and weight
-      onAddVolume(total);
-    } else {
-      onRemoveVolume(total);
-    }
   };
 
   const handleDoneSet = (checked, exerciseIndex, setIndex) => {
@@ -75,9 +63,6 @@ const WorkoutExerciseItem = ({
           >
             {exercise.name}
           </Typography>
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
         </Box>
         <Box
           style={{
@@ -89,14 +74,13 @@ const WorkoutExerciseItem = ({
           }}
         >
           <Typography className="customFont">SET</Typography>
-          <Typography className="customFont">KG</Typography>
-          <Typography className="customFont">REPS</Typography>
-          <Typography
-            className="customFont"
-            sx={{ paddingRight: 2, fontSize: "1.3rem" }}
-          >
-            &#x2713;
+          <Typography className="customFont" sx={{ ml: 5 }}>
+            KG
           </Typography>
+          <Typography className="customFont" sx={{ ml: 10 }}>
+            REPS
+          </Typography>
+          <Typography className="customFont">&#x2713;</Typography>
         </Box>
         {exercise.sets.map((_, index) => (
           <Box key={index}>
@@ -114,7 +98,7 @@ const WorkoutExerciseItem = ({
                 </Typography>
               </Box>
               <Box>
-                <TextField
+                <CustomTextField
                   required
                   id={`weight-${index}`}
                   name="kg"
@@ -128,7 +112,7 @@ const WorkoutExerciseItem = ({
                 />
               </Box>
               <Box>
-                <TextField
+                <CustomTextField
                   required
                   id={`reps-${index}`}
                   name="reps"

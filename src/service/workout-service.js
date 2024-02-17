@@ -29,3 +29,12 @@ export const convertMsToHoursAndMinutes = (ms) => {
 
   return { hours, minutes };
 };
+
+export const filterWorkouts = (workouts, users, userId) => {
+  const usersAndWorkouts = workouts.map((workout) => ({
+    ...workout,
+    isLiked: workout.likes.includes(userId),
+    userData: users.find((user) => user._id === workout.userId),
+  }));
+  return usersAndWorkouts;
+};

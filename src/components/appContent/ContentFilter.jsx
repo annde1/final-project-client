@@ -12,9 +12,8 @@ import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 
 const ContentFilter = ({ showSearch, onUpdateFilter }) => {
-  // isFeed -> showSearch
   const [selectedFilter, setSelectedFilter] = React.useState("");
-  const [userNameSearch, setUserNameSearch] = React.useState(""); // This belongs to the search input of feeds
+  const [userNameSearch, setUserNameSearch] = React.useState("");
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);

@@ -1,4 +1,4 @@
-const normalizeEditProfile = (data) => {
+const normalizeEditProfile = (data, alt, url) => {
   return {
     name: {
       firstName: data.firstName,
@@ -11,8 +11,8 @@ const normalizeEditProfile = (data) => {
     weight: Number(data.weight),
     height: Number(data.height),
     image: {
-      alt: data.alt,
-      url: data.url,
+      alt: alt,
+      url: url,
     },
   };
 };

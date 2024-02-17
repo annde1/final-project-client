@@ -125,6 +125,7 @@ const TemplateItem = ({
               variant="contained"
               style={{ backgroundColor: "#0B0D12" }}
               onClick={handleAddSet}
+              className="customFont"
             >
               Add Set
             </Button>

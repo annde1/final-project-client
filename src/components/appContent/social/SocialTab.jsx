@@ -3,17 +3,18 @@ import Follower from "./Follower";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { errorToast, infoToast } from "../../../service/toastify-service";
 
 const SocialTab = ({ isFollowersTab }) => {
   const [socialData, setSocialData] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
   const [numItems, setNumItems] = useState(3);
   const [isLoading, setIsLoading] = useState(true);
-
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
 
+  //Fetching social data when the component mounts
   useEffect(() => {
     const fetchSocialData = async () => {
       try {
@@ -34,7 +35,8 @@ const SocialTab = ({ isFollowersTab }) => {
         );
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch the social data.");
       }
     };
     fetchSocialData();
@@ -42,28 +44,27 @@ const SocialTab = ({ isFollowersTab }) => {
 
   const handleFollow = async (_id) => {
     try {
-      const { data } = await axios.patch(`/users/follow/${_id}`);
-      console.log(data);
-
+      await axios.patch(`/users/follow/${_id}`);
       setSocialData((prevData) =>
         prevData.map((item) =>
           item._id === _id ? { ...item, isFollowing: true } : item
         )
       );
+      infoToast("User followed");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Sonething went wrong. Could not follow.");
     }
   };
 
   const handleUnfollow = async (_id) => {
     try {
-      console.log("UNFOLLOWING");
-      const { data } = await axios.patch(`/users/follow/${_id}`);
-      console.log(data);
-
+      await axios.patch(`/users/follow/${_id}`);
       setSocialData((prevData) => prevData.filter((user) => user._id !== _id));
+      infoToast("User unfollowed");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not unfollow.");
     }
   };
 
@@ -97,7 +98,17 @@ const SocialTab = ({ isFollowersTab }) => {
             />
           ))}
           {!showMessage ? (
-            <Button variant="outlined" onClick={handleSeeMore}>
+            <Button
+              variant="contained"
+              onClick={handleSeeMore}
+              sx={{
+                bgcolor: "#0B0D12",
+                fontFamily: "Montserrat, sans-serif",
+                "&:hover": {
+                  bgcolor: "#393A3E",
+                },
+              }}
+            >
               See More
             </Button>
           ) : (

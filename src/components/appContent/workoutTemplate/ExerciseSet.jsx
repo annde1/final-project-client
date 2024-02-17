@@ -3,8 +3,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import "../../../styles/styles.css";
 import Alert from "@mui/material/Alert";
-
-import { useEffect } from "react";
+import { useMediaQuery } from "@mui/material";
+import { styled } from "@mui/system";
 const ExerciseSet = ({
   onAddReps,
   onAddWeight,
@@ -13,9 +13,12 @@ const ExerciseSet = ({
   exercise,
   errors,
 }) => {
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const CustomTextField = styled(TextField)({
+    [isSmallScreen && "& input"]: {
+      width: 80,
+    },
+  });
   const handleAddReps = (e) => {
     const reps = e.target.value;
     onAddReps(exerciseIndex, setIndex, reps);
@@ -41,28 +44,42 @@ const ExerciseSet = ({
         </Typography>
       </Box>
       <Box>
-        <TextField
+        <CustomTextField
           required
           id={`weight-${setIndex}`}
           name="kg"
           autoComplete="kg"
           onChange={handleAddWeight}
           value={exercise.sets[setIndex].weight}
+          size="small"
         />
         {errors && errors.weight && (
-          <Alert severity="error">{errors.weight}</Alert>
+          <Alert
+            severity="error"
+            style={{ fontFamily: "Montserrat, sans-serif" }}
+          >
+            {errors.weight}
+          </Alert>
         )}
       </Box>
       <Box>
-        <TextField
+        <CustomTextField
           required
           id={`reps-${setIndex}`}
           name="reps"
           autoComplete="reps"
           onChange={handleAddReps}
           value={exercise.sets[setIndex].reps}
+          size="small"
         />
-        {errors && errors.reps && <Alert severity="error">{errors.reps}</Alert>}
+        {errors && errors.reps && (
+          <Alert
+            severity="error"
+            style={{ fontFamily: "Montserrat, sans-serif" }}
+          >
+            {errors.reps}
+          </Alert>
+        )}
       </Box>
     </Box>
   );

@@ -8,8 +8,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import WorkoutCard from "./WorkoutCard";
 import Pagination from "@mui/material/Pagination";
 import ContentFilter from "../ContentFilter";
-const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
-  // const [userData, setUserData] = useState({});
+import { errorToast, successToast } from "../../../service/toastify-service";
+
+const WorkoutsList = ({
+  showSearch,
+  dataSourceSupplier,
+  message,
+  showLiked,
+  onFeedsChange,
+}) => {
   const [workoutsData, setWorkoutsData] = useState([]);
   const [filter, setFilter] = useState({ search: "", filterBy: "" });
   const userId = useSelector(
@@ -17,6 +24,7 @@ const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+
   const workoutsPerPage = 6;
   const indexOfLastWorkout = currentPage * workoutsPerPage;
   const indexOfFirstWorkout = indexOfLastWorkout - workoutsPerPage;
@@ -26,13 +34,15 @@ const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
       try {
         const workouts = await dataSourceSupplier(userId, filter);
         setWorkoutsData(workouts);
+        onFeedsChange(workouts.length);
         setIsLoading(false);
       } catch (err) {
         console.log(err);
+        errorToast("Something went wrong. Could not fetch the workouts.");
       }
     };
     fetchWorkoutData();
-  }, [dataSourceSupplier, userId, filter]);
+  }, [dataSourceSupplier, userId, filter, onFeedsChange]);
 
   const handleDeleteWorkout = async (_id) => {
     try {
@@ -40,22 +50,32 @@ const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
       setWorkoutsData((prevWorkouts) =>
         prevWorkouts.filter((workout) => workout._id !== _id)
       );
+      successToast("Workout deleted successfully!");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not delete workout.");
     }
   };
 
   const handleLikeWorkout = async (_id) => {
     try {
       const { data } = await axios.patch(`/workouts/${_id}`);
-      console.log(data);
-      setWorkoutsData((prevWorkouts) =>
-        prevWorkouts.map((workout) =>
-          workout._id === _id ? { ...workout, ...data.workoutDetails } : workout
-        )
-      );
+      if (showLiked) {
+        setWorkoutsData((prev) =>
+          prev.filter((workout) => workout._id !== _id)
+        );
+      } else {
+        setWorkoutsData((prevWorkouts) =>
+          prevWorkouts.map((workout) =>
+            workout._id === _id
+              ? { ...workout, ...data.workoutDetails }
+              : workout
+          )
+        );
+      }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not like the workout.");
     }
   };
 
@@ -65,7 +85,6 @@ const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
 
   const updateWorkouts = (newWorkouts, userData) => {
     setWorkoutsData(newWorkouts);
-    // setUserData(userData);
   };
 
   const updateFilter = (filter) => {
@@ -89,8 +108,11 @@ const WorkoutsList = ({ showSearch, dataSourceSupplier, message }) => {
       {!isLoading && workoutsData.length <= 0 && (
         <Grid item xs={8} md={8}>
           <Typography
-            variant="h6"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
+            variant="body1"
+            style={{
+              fontFamily: "Montserrat, sans-serif",
+              textAlign: "center",
+            }}
           >
             You don't have any {message}
           </Typography>

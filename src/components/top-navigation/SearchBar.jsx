@@ -9,21 +9,20 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import axios from "axios";
 import ListItem from "@mui/material/ListItem";
 import Popover from "@mui/material/Popover";
-import { Typography, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import IconButton from "@mui/material/IconButton";
-import { useEffect } from "react";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import Alert from "@mui/material/Alert";
 import { NavLink } from "react-router-dom";
-
+import { errorToast, infoToast } from "../../service/toastify-service";
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [error, setError] = useState("");
   const isLoggedIn = useSelector(
     (store) => store.authenticationSlice.isLoggedIn
   );
@@ -40,15 +39,22 @@ const SearchBar = () => {
     axios
       .get(`/users?query=${searchboxValue}`)
       .then(({ data }) => {
+        console.log(data);
         const updatedUsers = data.users.map((user) => ({
           ...user,
           isFollowed: user.followers.includes(userId),
         }));
         setSearchResults(updatedUsers || []);
         setShowDropdown(true);
+        setError("");
       })
+
       .catch((err) => {
-        console.log(err); // TODO: Toaster that says "failed, come again later"
+        if (err.request.status === 404) {
+          setError("No users found");
+        }
+
+        // errorToast("Something went wrong. Could not fetch the data.");
       });
   };
 
@@ -58,16 +64,23 @@ const SearchBar = () => {
 
   const handleFollow = async (_id) => {
     try {
-      const { data } = await axios.patch(`/users/follow/${_id}`);
-      console.log(data);
-
+      await axios.patch(`/users/follow/${_id}`);
       setSearchResults((previous) => {
         return previous.map((user) =>
           user._id === _id ? { ...user, isFollowed: !user.isFollowed } : user
         );
       });
+      const action = !searchResults.find((user) => user._id === _id).isFollowed
+        ? "followed"
+        : "unfollowed";
+      infoToast(
+        `You have ${action} ${
+          searchResults.find((user) => user._id === _id).name.firstName
+        }`
+      );
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not perform the action.");
     }
   };
   return (
@@ -113,6 +126,13 @@ const SearchBar = () => {
                   marginLeft: 52,
                 },
               }}
+              PaperProps={{
+                sx: {
+                  width: searchInputRef.current
+                    ? searchInputRef.current.clientWidth
+                    : "auto",
+                },
+              }}
             >
               <List
                 sx={{
@@ -127,7 +147,7 @@ const SearchBar = () => {
                     </ListItemAvatar>
                     <NavLink
                       to={`/user/${result._id}`}
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: "none", color: "black" }}
                     >
                       <Typography
                         variant="subtitle2"
@@ -158,6 +178,11 @@ const SearchBar = () => {
                   </ListItem>
                 ))}
               </List>
+              {error && (
+                <Alert severity="info">
+                  {error} "{query}"
+                </Alert>
+              )}
             </Popover>
           )}
         </Search>

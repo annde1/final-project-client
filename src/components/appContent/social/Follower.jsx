@@ -4,7 +4,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 const Follower = ({
   url,
@@ -16,12 +16,12 @@ const Follower = ({
   onFollow,
 }) => {
   const handleFollow = (_id) => {
-    console.log(_id);
     onFollow(_id);
   };
   const handleUnfollow = (_id) => {
     onUnfollow(_id);
   };
+
   return (
     <>
       <Box
@@ -34,13 +34,19 @@ const Follower = ({
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar alt={alt} src={url} sx={{ marginRight: 3 }} />
-          <Typography
-            variant="body1"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
+          <NavLink
+            to={`/user/${userId}`}
+            style={{ textDecoration: "none", color: "black" }}
           >
-            {username}
-          </Typography>
+            <Typography
+              variant="body1"
+              style={{ fontFamily: "Montserrat, sans-serif" }}
+            >
+              {username}
+            </Typography>
+          </NavLink>
         </Box>
+
         {isFollowing ? (
           <Button
             variant="text"
@@ -53,9 +59,7 @@ const Follower = ({
             onClick={() => {
               handleUnfollow(userId);
             }}
-          >
-            Unfollow
-          </Button>
+          ></Button>
         ) : (
           <Button
             variant="text"
@@ -68,9 +72,7 @@ const Follower = ({
             onClick={() => {
               handleFollow(userId);
             }}
-          >
-            Follow
-          </Button>
+          ></Button>
         )}
       </Box>
     </>

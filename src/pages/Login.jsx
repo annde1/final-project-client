@@ -9,7 +9,6 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -25,7 +24,6 @@ import { successToast } from "../service/toastify-service";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
-const defaultTheme = createTheme();
 const LoginPage = () => {
   const [inputs, setInputs] = useState({
     email: "",
@@ -33,6 +31,7 @@ const LoginPage = () => {
   });
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = React.useState(false);
   const autoLogin = useAutoLogin();
   const navigate = useNavigate();
@@ -54,21 +53,20 @@ const LoginPage = () => {
       e.preventDefault();
       const errors = validateUserLogin(inputs);
       if (errors) {
-        console.log(errors);
+        setErrors(errors);
         return;
       }
       const { data } = await axios.post("/users/login", inputs);
       //store token
       storeToken(data.token.token, rememberMe);
       await autoLogin(true);
-      // successToast("You've been logged in successfully");
+      successToast("You've been logged in successfully");
 
       navigate(ROUTES.FEEDS, { replace: true });
     } catch (err) {
       if (err.response.status === 401) {
         setError(err.response.data.message);
       }
-      console.log(err);
     }
   };
   return (
@@ -90,22 +88,37 @@ const LoginPage = () => {
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={
+                  <Typography
+                    style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
+                  >
+                    Email Address *
+                  </Typography>
+                }
                 name="email"
                 autoComplete="email"
                 autoFocus
                 value={inputs.email}
                 onChange={handleInputsChange}
               />
+              {errors && errors.email && (
+                <Alert severity="error" className="customFont">
+                  {errors.email}
+                </Alert>
+              )}
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 name="password"
-                label="Password"
+                label={
+                  <Typography
+                    style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
+                  >
+                    Password *
+                  </Typography>
+                }
                 type={showPassword ? "text" : "password"}
                 id="password"
                 value={inputs.password}
@@ -125,10 +138,25 @@ const LoginPage = () => {
                   ),
                 }}
               />
-              {error && <Alert severity="error">{error}</Alert>}
+              {error && (
+                <Alert severity="error" className="customFont">
+                  {error}
+                </Alert>
+              )}
+              {errors && errors.password && (
+                <Alert severity="error" className="customFont">
+                  {errors.password}
+                </Alert>
+              )}
               <FormControlLabel
                 control={<Checkbox value={rememberMe} color="primary" />}
-                label="Remember me"
+                label={
+                  <Typography
+                    style={{ fontFamily: "Montserrat", fontSize: "0.9rem" }}
+                  >
+                    Remember Me
+                  </Typography>
+                }
                 style={{ fontFamily: "Montserrat" }}
                 onChange={handleRememberMe}
               />
@@ -143,16 +171,6 @@ const LoginPage = () => {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link
-                    href="#"
-                    variant="body2"
-                    className="customFont"
-                    style={{ color: "#0B0D12" }}
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
                   <Link
                     href="#"

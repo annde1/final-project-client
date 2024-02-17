@@ -11,6 +11,7 @@ import { normalizeWorkout } from "../../../service/normalize-workout";
 import { normalizeTemplateData } from "../../../service/normalize-template-data";
 import validateWorkout from "../../../validation/workout-validation";
 import { useCallback } from "react";
+import { successToast, errorToast } from "../../../service/toastify-service";
 const WorkoutExercisesList = ({
   onUpdateTemplateName,
   onFinishLoading,
@@ -25,35 +26,35 @@ const WorkoutExercisesList = ({
   const { id: _id } = useParams();
   const navigate = useNavigate();
   const startedAt = useRef(null);
+
+  //Add current property to ref when the component mounts
   useEffect(() => {
     startedAt.current = new Date();
   }, []);
 
-  useEffect(() => {
-    console.log("EXERCISES STATUS CHANGED");
-    console.log(exercises);
-  }, [exercises]);
-
-  const fetchTemplateData = useCallback(async (_id) => {
-    try {
-      const { data } = await axios.get(`/templates/${_id}`);
-      const exercises = data.templateDetails.exercises.map(
-        ({ sets, name }) => ({
-          sets: sets.map(({ _id, ...rest }) => ({
-            ...rest,
-            done: false, // Add the done property to every set
-          })),
-          name,
-        })
-      );
-      console.log(data);
-      setExercises(exercises);
-      onUpdateTemplateName(data.templateDetails?.name);
-      onFinishLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  const fetchTemplateData = useCallback(
+    async (_id) => {
+      try {
+        const { data } = await axios.get(`/templates/${_id}`);
+        const exercises = data.templateDetails.exercises.map(
+          ({ sets, name }) => ({
+            sets: sets.map(({ _id, ...rest }) => ({
+              ...rest,
+              done: false, // Add the done property to every set
+            })),
+            name,
+          })
+        );
+        setExercises(exercises);
+        onUpdateTemplateName(data.templateDetails?.name);
+        onFinishLoading(false);
+      } catch (err) {
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch template data.");
+      }
+    },
+    [onFinishLoading, onUpdateTemplateName]
+  );
 
   useEffect(() => {
     fetchTemplateData(_id);
@@ -140,30 +141,26 @@ const WorkoutExercisesList = ({
         },
         volume: workoutDetails.volume,
       });
-      console.log("NORMALIZED", normalizedData);
 
       const errors = validateWorkout(normalizedData);
       if (errors) {
-        console.log(errors);
         return;
       }
       //Post new workout
-      const { data } = await axios.post("/workouts", normalizedData);
-      console.log(data);
+      await axios.post("/workouts", normalizedData);
+
       const template = normalizeTemplateData({
         name: templateName,
         exercises: exercises,
       });
 
       //Update template
-      const { data: templateWorkout } = await axios.put(
-        `/templates/${_id}`,
-        template
-      );
-      console.log(templateWorkout);
+      await axios.put(`/templates/${_id}`, template);
+      successToast("Workout created");
       navigate(ROUTES.MYWORKOUTS);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Could not create the workout.");
     }
   };
 

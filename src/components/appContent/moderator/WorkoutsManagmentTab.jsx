@@ -8,6 +8,10 @@ import { getDataAndUsers } from "../../../service/user-profile";
 import "../../../styles/styles.css";
 import moment from "moment";
 import { convertMsToHoursAndMinutes } from "../../../service/workout-service";
+import { errorToast, infoToast } from "../../../service/toastify-service";
+import ModeratorModal from "./ModeratorModal";
+import LinearProgress from "@mui/material/LinearProgress";
+
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
 
@@ -23,7 +27,7 @@ const columns = [
     headerName: "Exercises",
     type: "number",
     width: 90,
-    valueGetter: (params) => `${params.row.template.exercises.length}`, //?? not sure if length will work here
+    valueGetter: (params) => `${params.row.template.exercises.length}`,
   },
   {
     field: "user.userName",
@@ -59,24 +63,23 @@ const columns = [
 const WorkoutsManagmentTab = () => {
   const [workouts, setWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
         const { data } = await axios.get("/workouts");
-
         const { data: userData } = await axios.get("/users");
         const workoutsData = getDataAndUsers(userData.users, data.workouts);
         setWorkouts(workoutsData);
+        setIsLoading(false);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch the data.");
       }
     };
     fetchWorkouts();
   }, []);
-  useEffect(() => {
-    console.log(workouts);
-  }, [workouts]);
 
   const handleRowClick = (params) => {
     console.log(params.row._id);
@@ -86,41 +89,69 @@ const WorkoutsManagmentTab = () => {
   };
   const handleDeleteWorkout = async () => {
     try {
-      const { data } = await axios.delete(`/workouts/${selectedWorkout}`);
-      console.log(data);
-      console.log("WORKOUT DELETED!");
+      await axios.delete(`/workouts/${selectedWorkout}`);
       setWorkouts((prev) =>
         prev.filter((workout) => workout._id !== selectedWorkout)
       );
       setSelectedWorkout(null);
+      infoToast("Workout deleted");
+      setShowModal(false);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      if (err.response && err.response.status === 404) {
+        errorToast(
+          "Workout not found. The workout was probably deleted by the user"
+        );
+      } else {
+        errorToast("Something went wrong. Could not delete the workout.");
+      }
     }
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
   return (
     <div style={{ height: 500, width: "100%" }}>
-      <DataGrid
-        rows={workouts}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        selectedWorkout={selectedWorkout}
-        onRowClick={handleRowClick}
-        pageSizeOptions={[5, 10, 20]}
-        sx={{ fontFamily: "Montserrat, sans-serif" }}
-      />
-      {selectedWorkout && (
-        <Button
-          variant="contained"
-          color="error"
-          sx={{ mt: 4, mb: 5 }}
-          onClick={handleDeleteWorkout}
-        >
-          Delete Workout
-        </Button>
+      {isLoading ? (
+        <LinearProgress sx={{ mt: 3 }} />
+      ) : (
+        <>
+          <DataGrid
+            rows={workouts}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            selectedWorkout={selectedWorkout}
+            onRowClick={handleRowClick}
+            pageSizeOptions={[5, 10, 20]}
+            sx={{ fontFamily: "Montserrat, sans-serif" }}
+          />
+          {selectedWorkout && (
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ mt: 4, mb: 5 }}
+              onClick={handleOpenModal}
+            >
+              Delete Workout
+            </Button>
+          )}
+        </>
+      )}
+      {showModal && (
+        <ModeratorModal
+          dataSourceSupplier={handleDeleteWorkout}
+          action="workout"
+          open={showModal}
+          onCloseModal={handleCloseModal}
+        />
       )}
     </div>
   );

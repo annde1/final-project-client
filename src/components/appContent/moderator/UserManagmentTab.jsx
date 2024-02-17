@@ -5,6 +5,9 @@ import axios from "axios";
 import { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import { errorToast, infoToast } from "../../../service/toastify-service";
+import ModeratorModal from "./ModeratorModal";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
@@ -47,60 +50,87 @@ const columns = [
 const UserManagmentTab = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-
-  const handleRowClick = (params) => {
-    console.log(params.row._id);
-    setSelectedUser(params.row._id === selectedUser ? null : params.row._id);
-  };
-
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchUsers = async () => {
       const { data } = await axios.get("/users");
-      console.log(data);
       const usersWithIds = data.users.map((user, index) => ({
         ...user,
         id: index + 1,
       }));
       setUsers(usersWithIds);
+      setIsLoading(false);
     };
     fetchUsers();
   }, []);
 
+  const handleRowClick = (params) => {
+    setSelectedUser(params.row._id === selectedUser ? null : params.row._id);
+  };
+
+  const handleOpenModal = () => {
+    setShowConfirmationModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowConfirmationModal(false);
+  };
+
   const handleDeleteUser = async () => {
     try {
-      const { data } = await axios.delete(`/users/${selectedUser}`);
-      console.log(data);
-      console.log("USER DELETED");
+      await axios.delete(`/users/${selectedUser}`);
       setUsers((prev) => prev.filter((user) => user._id !== selectedUser));
       setSelectedUser(null);
+      infoToast(`User deleted.`);
+      setShowConfirmationModal(false);
     } catch (err) {
-      console.log(err);
+      //   console.log(err);
+      if (err.response && err.response.status === 404) {
+        errorToast("User not found. The account probably deleted by the user.");
+      } else {
+        errorToast("Something went wrong. Could not delete user");
+      }
     }
   };
   return (
     <div style={{ height: 500, width: "100%" }}>
-      <DataGrid
-        rows={users}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10, 20]}
-        selectedUser={selectedUser}
-        onRowClick={handleRowClick}
-        sx={{ fontFamily: "Montserrat, sans-serif" }}
-      />
-      {selectedUser && (
-        <Button
-          variant="contained"
-          color="error"
-          sx={{ mt: 4, mb: 5 }}
-          onClick={handleDeleteUser}
-        >
-          Delete User
-        </Button>
+      {showConfirmationModal && (
+        <ModeratorModal
+          open={showConfirmationModal}
+          onCloseModal={handleCloseModal}
+          selectedUser={selectedUser}
+          dataSourceSupplier={handleDeleteUser}
+          action="user"
+        />
+      )}
+      {isLoading ? (
+        <LinearProgress sx={{ mt: 3 }} />
+      ) : (
+        <>
+          <DataGrid
+            rows={users}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 20]}
+            selectedUser={selectedUser}
+            onRowClick={handleRowClick}
+            sx={{ fontFamily: "Montserrat, sans-serif" }}
+          />
+          {selectedUser && (
+            <Button
+              variant="contained"
+              color="error"
+              sx={{ mt: 4, mb: 5, fontFamily: "Montserrat, sans-serif" }}
+              onClick={handleOpenModal}
+            >
+              Delete User
+            </Button>
+          )}
+        </>
       )}
     </div>
   );

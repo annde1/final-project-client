@@ -3,19 +3,19 @@ import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 
 import axios from "axios";
+import { useState } from "react";
 
 const FeedsPage = () => {
+  const [feedsLength, setFeedsLength] = useState(0);
   const fetchFeedWorkoutsData = async (userId, filter) => {
     const orderBy = filter?.filterBy;
     const userName = filter?.search ? filter?.search : "";
-
-    console.log(filter);
-    // This is an input data
+    // This is an input data (feeds data)
     const { data } = await axios.get(
       `/workouts/feeds?filter=${orderBy}&userName=${userName}`
     );
 
-    // This is enrichment data
+    // This is enrichment data (user data)
     const { data: users } = await axios.get("/users/following");
     const dataSource = data.feeds.map((feed) => ({
       ...feed,
@@ -25,12 +25,15 @@ const FeedsPage = () => {
     return dataSource;
   };
 
+  const handleFeedsLength = (value) => {
+    setFeedsLength(value);
+  };
   return (
     <>
-      <Box sx={{ pb: 5, height: "100vh" }}>
+      <Box sx={{ pb: 5, height: feedsLength > 0 ? "auto" : "100vh" }}>
         <Typography
           variant="h4"
-          style={{ fontFamily: "Montserrat, sans-serif" }}
+          style={{ fontFamily: "Montserrat, sans-serif", marginBottom: "5rem" }}
         >
           Feeds
         </Typography>
@@ -40,6 +43,7 @@ const FeedsPage = () => {
               message="feeds"
               dataSourceSupplier={fetchFeedWorkoutsData}
               showSearch={true}
+              onFeedsChange={handleFeedsLength}
             />
           </Grid>
         </Container>

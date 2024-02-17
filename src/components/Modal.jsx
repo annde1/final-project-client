@@ -3,7 +3,6 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const style = {
@@ -37,10 +36,22 @@ const ModalComponent = ({ open, onCloseModal, templateName }) => {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ fontFamily: "Montserrat, sans-serif", textAlign: "center" }}
+            >
               {templateName}
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+            <Typography
+              id="transition-modal-description"
+              sx={{
+                mt: 2,
+                fontFamily: "Montserrat, sans-serif",
+                textAlign: "center",
+              }}
+            >
               Your workout has no set values
             </Typography>
           </Box>

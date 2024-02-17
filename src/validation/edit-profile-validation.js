@@ -2,13 +2,15 @@ import Joi from "joi";
 import validation from "./schema-validation";
 
 const editProfileSchema = Joi.object({
-  firstName: Joi.string().min(2).max(20).required().messages({
-    "string.empty": "First name is required",
-    "string.min": "First name must be at least 2 characters long",
-  }),
-  lastName: Joi.string().min(2).max(20).required().messages({
-    "string.empty": "Last name is required",
-    "string.min": "Last name must be at least 2 characters long",
+  name: Joi.object({
+    firstName: Joi.string().min(2).max(20).required().messages({
+      "string.empty": "First name is required",
+      "string.min": "First name must be at least 2 characters long",
+    }),
+    lastName: Joi.string().min(2).max(20).required().messages({
+      "string.empty": "Last name is required",
+      "string.min": "Last name must be at least 2 characters long",
+    }),
   }),
   userName: Joi.string().min(2).max(20).required().messages({
     "string.empty": "Username is required",
@@ -25,17 +27,22 @@ const editProfileSchema = Joi.object({
     "string.empty": "Password is required",
     "string.min": "Password must be at least 5 characters long",
   }),
-  age: Joi.number().min(1).max(120).optional().messages({
+  age: Joi.number().required().messages({
+    "any.required": "Age is required",
     "number.base": "Age must be a number",
   }),
-  weight: Joi.number().min(1).optional().messages({
+  weight: Joi.number().required().messages({
+    "any.required": "Weight is required",
     "number.base": "Weight must be a number",
   }),
-  height: Joi.number().min(1).optional().messages({
+  height: Joi.number().required().messages({
+    "any.required": "Weight is required",
     "number.base": "Height must be a number",
   }),
-  alt: Joi.string().min(5).max(100).required(),
-  url: Joi.string().uri().min(5).max(255).required(),
+  image: Joi.object({
+    alt: Joi.string().optional().allow(""),
+    url: Joi.string().uri().optional().allow(""),
+  }).optional(),
 });
 
 const validateEditProfile = (input) => {

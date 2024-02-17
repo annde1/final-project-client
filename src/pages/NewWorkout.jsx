@@ -46,7 +46,7 @@ const NewWorkout = () => {
     setIsLoading(isFinished);
   };
   return (
-    <>
+    <Box sx={{ height: "100%" }}>
       <Typography sx={{ fontFamily: "Montserrat, sans-serif" }} variant="h4">
         New Workout
       </Typography>
@@ -102,7 +102,7 @@ const NewWorkout = () => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </Box>
   );
 };
 export default NewWorkout;

@@ -2,20 +2,13 @@ import Typography from "@mui/material/Typography";
 import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useState } from "react";
 const MyWorkoutsPage = () => {
-  const userId = useSelector(
-    (store) => store.authenticationSlice.userData?.userName
-  );
-  useEffect(() => {
-    console.log("My workouts user Id", userId);
-  }, [userId]);
+  const [feedsLength, setFeedsLength] = useState(0);
   const fetchMyWorkoutsData = async (userId, filter) => {
     const orderBy = filter?.filterBy;
     const { data } = await axios.get(`/workouts/${userId}?filter=${orderBy}`);
-
-    // Enrichment
+    // Enrichment with userData
     const { data: userData } = await axios.get(`/users/${userId}`);
     const updatedWorkouts = data.workouts.map((workout) => ({
       ...workout,
@@ -24,10 +17,12 @@ const MyWorkoutsPage = () => {
     }));
     return updatedWorkouts;
   };
-
+  const handleFeedsLength = (value) => {
+    setFeedsLength(value);
+  };
   return (
     <>
-      <Box sx={{ pb: 5 }}>
+      <Box sx={{ pb: 5, height: feedsLength > 0 ? "auto" : "100vh" }}>
         <Typography
           variant="h4"
           style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -39,6 +34,7 @@ const MyWorkoutsPage = () => {
             <WorkoutsList
               dataSourceSupplier={fetchMyWorkoutsData}
               message="workouts"
+              onFeedsChange={handleFeedsLength}
             />
           </Grid>
         </Container>

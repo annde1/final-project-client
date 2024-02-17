@@ -4,20 +4,28 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import CssBaseline from "@mui/material/CssBaseline";
-import { Box, Grid, Container, Button } from "@mui/material";
+import { Box, Grid, Container } from "@mui/material";
 import { calculateBMI } from "../service/user-profile";
 import BmiModal from "../components/BmiModal";
 import ProfileSkeleton from "../components/ProfileSkeleton";
+import { errorToast } from "../service/toastify-service";
+import UserProfileModal from "../components/UserProfileModal";
+import { useLogout } from "../hooks/useLogout";
+import { infoToast } from "../service/toastify-service";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../routes/routes";
 const MyProfilePage = () => {
   const [userData, setUserData] = useState({});
   const [workouts, setWorkouts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [bmiModal, setShowBmiModal] = useState(false);
   const [bmi, setBmi] = useState(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
+  const logout = useLogout();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -29,13 +37,20 @@ const MyProfilePage = () => {
         setWorkouts(userWorkouts.workouts);
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch profile data.");
       }
     };
     fetchUserData();
   }, [userId]);
 
-  const handleCalculateBmi = () => {
+  const handleShowProfileModal = () => {
+    setShowProfileModal(true);
+  };
+  const handleCloseProfileModal = () => {
+    setShowProfileModal(false);
+  };
+  const handleCalculateBmi = (height, weight) => {
     const bmi = calculateBMI(userData.height, userData.weight);
     setBmi(bmi);
     setShowBmiModal(true);
@@ -44,8 +59,21 @@ const MyProfilePage = () => {
   const handleCloseModal = () => {
     setShowBmiModal(false);
   };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const { data } = await axios.delete(`/users/${userId}`);
+      console.log(data);
+      logout();
+      navigate(ROUTES.REGISTER);
+      infoToast("Account deleted");
+    } catch (err) {
+      // console.log(err);
+      errorToast("Something went wrong. Could not delete the account.");
+    }
+  };
   return (
-    <Box sx={{ height: "100vh" }}>
+    <Box sx={{ height: "100%" }}>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
         My Profile
       </Typography>
@@ -66,29 +94,24 @@ const MyProfilePage = () => {
                 <ProfileSkeleton />
               </Grid>
             )}
+            {showProfileModal && (
+              <UserProfileModal
+                open={showProfileModal}
+                onClose={handleCloseProfileModal}
+                onDeleteProfile={handleDeleteAccount}
+              />
+            )}
             <Grid item xs={12} sm={12}>
               <UserProfile
                 userData={userData}
                 workouts={workouts}
                 following={userData?.following?.length}
                 followers={userData?.followers?.length}
+                onCalculateBmi={handleCalculateBmi}
+                onShowModal={handleShowProfileModal}
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Button
-                size="small"
-                variant="contained"
-                sx={{
-                  marginTop: 3,
-                  fontFamily: "Montserrat, sans-serif",
-                  // color: "#0B0D12",
-                  fontWeight: "bold",
-                  backgroundColor: "#0B0D12",
-                }}
-                onClick={handleCalculateBmi}
-              >
-                Calculate BMI
-              </Button>
               {bmiModal && (
                 <BmiModal
                   bmi={bmi.bmiValue}

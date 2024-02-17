@@ -9,24 +9,27 @@ import "../styles/styles.css";
 import { useEffect } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-
+import { errorToast } from "../service/toastify-service";
 const ExericseList = ({
   onExerciseChange,
   selectedExercise,
   onAddExercise,
 }) => {
   const [exercises, setExercises] = React.useState([]);
+
   useEffect(() => {
     const fetchExercises = async () => {
       try {
         const { data } = await axios.get("/exercises");
         setExercises(data.exercises);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went worng. Could not fetch the exercises.");
       }
     };
     fetchExercises();
   }, []);
+
   const handleExerciseChange = (e) => {
     const selected = e.target.value;
     onExerciseChange(selected);
@@ -38,16 +41,32 @@ const ExericseList = ({
   return (
     <Box sx={{ minWidth: 120, marginTop: 3 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Select Exercise</InputLabel>
+        <InputLabel
+          id="demo-simple-select-label"
+          sx={{ fontFamily: "Montserrat" }}
+        >
+          Select Exercise
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={!selectedExercise ? "" : selectedExercise}
-          label="Select Exercise"
+          style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
           onChange={handleExerciseChange}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 300,
+              },
+            },
+          }}
         >
           {exercises.map((exercise) => (
-            <MenuItem key={uuidv4()} value={exercise.name}>
+            <MenuItem
+              key={uuidv4()}
+              value={exercise.name}
+              sx={{ fontFamily: "Montserrat, sans-serif" }}
+            >
               {exercise.name}
             </MenuItem>
           ))}
