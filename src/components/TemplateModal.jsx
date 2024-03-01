@@ -16,13 +16,17 @@ const style = {
   p: 4,
 };
 
-const ModeratorModal = ({ open, onCloseModal, action, dataSourceSupplier }) => {
+const TemplateModal = ({
+  open,
+  onCloseModal,
+  onDeleteTemplate,
+  selectedTemplate,
+}) => {
   const handleDiscard = () => {
     onCloseModal();
   };
-
-  const handleAction = () => {
-    dataSourceSupplier();
+  const handleDeleteTemplate = () => {
+    onDeleteTemplate(selectedTemplate);
   };
   return (
     <div>
@@ -41,11 +45,7 @@ const ModeratorModal = ({ open, onCloseModal, action, dataSourceSupplier }) => {
             component="h2"
             sx={{ fontFamily: "Montserrat, sans-serif", textAlign: "center" }}
           >
-            {action === "user" && "Are you sure you want to delete this user?"}
-            {action === "template" &&
-              "Are you sure you want to delete this template?"}
-            {action === "workout" &&
-              "Are you sure you want to delete this workout?"}
+            Are you sure you want to delete this template?
           </Typography>
           <Typography
             id="modal-modal-description"
@@ -55,18 +55,14 @@ const ModeratorModal = ({ open, onCloseModal, action, dataSourceSupplier }) => {
               textAlign: "center",
             }}
           >
-            {action === "user" &&
-              "Deleting this user will permanently remove their account and all associated data. This action cannot be undone."}
-            {action === "template" &&
-              "Deleting this template will permanently remove the template from the database and all associated data. This action cannot be undone."}
-            {action === "workout" &&
-              "Deleting this workout will permanently remove the workout from the database and all associated data. This action cannot be undone."}
+            Deleting this template will permanently remove the template from the
+            database and all associated data. This action cannot be undone.
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
             <Button
               variant="contained"
               color="error"
-              onClick={handleAction}
+              onClick={handleDeleteTemplate}
               sx={{ mt: 4, mb: 5, fontFamily: "Montserrat, sans-serif" }}
             >
               Yes
@@ -85,4 +81,4 @@ const ModeratorModal = ({ open, onCloseModal, action, dataSourceSupplier }) => {
     </div>
   );
 };
-export default ModeratorModal;
+export default TemplateModal;

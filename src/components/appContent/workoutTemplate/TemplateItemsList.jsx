@@ -33,11 +33,11 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
             })
           );
           setExercises(exercises);
-          onTemplateLengthChange(exercises.length);
+          // onTemplateLengthChange(exercises.length);
           setIsLoading(false);
         }
       } catch (err) {
-        // console.log(err);
+        console.log(err);
         errorToast("Something went wrong. Could not fetch the template data.");
       }
     };
@@ -151,11 +151,12 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
         setErrors(errors);
         return;
       }
-      await axios.post("/templates", templateData);
+      const { data } = await axios.post("/templates", templateData);
+      console.log(data);
       successToast("Template created successfully");
       navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       errorToast("Something went wrong. Could not create template.");
     }
   };
@@ -239,7 +240,7 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
           <Button
             variant="contained"
             className="customFont"
-            style={{ backgroundColor: "#0B0D12", marginBottom: "3rem" }}
+            style={{ backgroundColor: "#0B0D12" }}
             onClick={handleCreateTemplate}
           >
             Save Template

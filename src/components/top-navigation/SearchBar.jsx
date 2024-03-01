@@ -39,7 +39,6 @@ const SearchBar = () => {
     axios
       .get(`/users?query=${searchboxValue}`)
       .then(({ data }) => {
-        console.log(data);
         const updatedUsers = data.users.map((user) => ({
           ...user,
           isFollowed: user.followers.includes(userId),
@@ -53,8 +52,6 @@ const SearchBar = () => {
         if (err.request.status === 404) {
           setError("No users found");
         }
-
-        // errorToast("Something went wrong. Could not fetch the data.");
       });
   };
 

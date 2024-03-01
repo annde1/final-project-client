@@ -30,9 +30,7 @@ const CreateTemplatePage = () => {
   const handleTemplatesLength = (value) => {
     setTemplatesLength(value);
   };
-  useEffect(() => {
-    console.log(templatesLength);
-  }, [templatesLength]);
+
   return (
     <>
       <Box sx={{ height: templatesLength > 0 ? "100%" : "100vh" }}>

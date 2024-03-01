@@ -57,7 +57,8 @@ const TemplateManagmentTab = () => {
         setTemplates(templatesAndUsers);
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast("Something went wrong. Could not fetch the templates.");
       }
     };
 
@@ -65,7 +66,6 @@ const TemplateManagmentTab = () => {
   }, []);
 
   const handleRowClick = (params) => {
-    console.log(params.row._id);
     setSelectedTemplate(
       params.row._id === selectedTemplate ? null : params.row._id
     );

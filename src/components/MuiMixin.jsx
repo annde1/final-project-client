@@ -1,4 +1,5 @@
 const drawerWidth = 240;
+
 export const openedMixin = (theme) => ({
   width: drawerWidth,
   backgroundColor: "#0B0D12",

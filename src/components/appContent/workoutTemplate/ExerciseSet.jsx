@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import "../../../styles/styles.css";
 import Alert from "@mui/material/Alert";
 import { useMediaQuery } from "@mui/material";
-import { styled } from "@mui/system";
+
 const ExerciseSet = ({
   onAddReps,
   onAddWeight,
@@ -14,11 +14,7 @@ const ExerciseSet = ({
   errors,
 }) => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const CustomTextField = styled(TextField)({
-    [isSmallScreen && "& input"]: {
-      width: 80,
-    },
-  });
+
   const handleAddReps = (e) => {
     const reps = e.target.value;
     onAddReps(exerciseIndex, setIndex, reps);
@@ -44,7 +40,7 @@ const ExerciseSet = ({
         </Typography>
       </Box>
       <Box>
-        <CustomTextField
+        <TextField
           required
           id={`weight-${setIndex}`}
           name="kg"
@@ -52,18 +48,14 @@ const ExerciseSet = ({
           onChange={handleAddWeight}
           value={exercise.sets[setIndex].weight}
           size="small"
+          sx={isSmallScreen ? { width: 80 } : null}
         />
         {errors && errors.weight && (
-          <Alert
-            severity="error"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
-          >
-            {errors.weight}
-          </Alert>
+          <Alert severity="error">{errors.weight}</Alert>
         )}
       </Box>
       <Box>
-        <CustomTextField
+        <TextField
           required
           id={`reps-${setIndex}`}
           name="reps"
@@ -71,17 +63,12 @@ const ExerciseSet = ({
           onChange={handleAddReps}
           value={exercise.sets[setIndex].reps}
           size="small"
+          sx={isSmallScreen ? { width: 80 } : null}
         />
-        {errors && errors.reps && (
-          <Alert
-            severity="error"
-            style={{ fontFamily: "Montserrat, sans-serif" }}
-          >
-            {errors.reps}
-          </Alert>
-        )}
+        {errors && errors.reps && <Alert severity="error">{errors.reps}</Alert>}
       </Box>
     </Box>
   );
 };
+
 export default ExerciseSet;

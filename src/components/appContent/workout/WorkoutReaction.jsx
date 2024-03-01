@@ -1,10 +1,10 @@
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { errorToast, infoToast } from "../../../service/toastify-service";
 const WorkoutReaction = ({
   onDeleteWorkout,
   workoutId,
@@ -22,8 +22,15 @@ const WorkoutReaction = ({
     try {
       await onLikeWorkout(workoutId);
       setLike((prevIsLiked) => !prevIsLiked);
+      const updatedLikeStatus = !like;
+      const toastMessage = updatedLikeStatus
+        ? "You liked the workout"
+        : "You unliked the workout";
+
+      infoToast(toastMessage);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      errorToast("Something went wrong. Failed to update like status.");
     }
   };
   const handleDeleteWorkout = async (_id) => {

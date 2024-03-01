@@ -62,8 +62,7 @@ const MyProfilePage = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const { data } = await axios.delete(`/users/${userId}`);
-      console.log(data);
+      await axios.delete(`/users/${userId}`);
       logout();
       navigate(ROUTES.REGISTER);
       infoToast("Account deleted");
@@ -73,7 +72,7 @@ const MyProfilePage = () => {
     }
   };
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box sx={{ height: "100%", pb: 6 }}>
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
         My Profile
       </Typography>

@@ -1,6 +1,5 @@
 import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
-import { useEffect, useState } from "react";
 import ModeratorTabs from "../components/appContent/moderator/ModeratorTabs";
 const ModeratorPage = () => {
   return (

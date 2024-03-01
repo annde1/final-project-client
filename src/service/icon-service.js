@@ -11,10 +11,15 @@ import { ROUTES } from "../routes/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+
 export const getIcon = (to, isActive) => {
   switch (to) {
     case ROUTES.MYPROFILE:
-      return <PersonIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
+      return (
+        <>
+          <PersonIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
+        </>
+      );
     case ROUTES.EDITPROFILE:
       return <SettingsIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
     case ROUTES.MYTEMPLATES:

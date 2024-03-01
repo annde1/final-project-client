@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
-
+import WorkoutItem from "../components/appContent/workout/WorkoutItem";
 import axios from "axios";
 import { useState } from "react";
 
@@ -30,13 +30,22 @@ const FeedsPage = () => {
   };
   return (
     <>
-      <Box sx={{ pb: 5, height: feedsLength > 0 ? "auto" : "100vh" }}>
+      <Box
+        sx={{
+          pb: 5,
+          height: feedsLength > 0 ? "auto" : "100vh",
+          position: "relative",
+        }}
+      >
         <Typography
           variant="h4"
-          style={{ fontFamily: "Montserrat, sans-serif", marginBottom: "5rem" }}
+          style={{
+            fontFamily: "Montserrat, sans-serif",
+          }}
         >
           Feeds
         </Typography>
+
         <Container component="main" maxWidth="md" sx={{ marginTop: 5 }}>
           <Grid container spacing={2} justifyContent="center">
             <WorkoutsList

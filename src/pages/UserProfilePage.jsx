@@ -4,18 +4,18 @@ import { Box, Grid, Container } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Avatar from "@mui/material/Avatar";
 import ProfileSkeleton from "../components/ProfileSkeleton";
 import { UserProfile } from "../components/UserProfile";
 import { useSelector } from "react-redux";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
+import { errorToast } from "../service/toastify-service";
+
 const UserProfilePage = () => {
   const [userData, setUserData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingWorkouts, setIsLoadingWorkouts] = useState(true);
   const [userWorkouts, setUserWorkouts] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [updatedWorkouts, setUpdatedWorkouts] = useState([]);
+  const [feedsLength, setFeedsLength] = useState(0);
   const { id: _id } = useParams();
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
@@ -38,26 +38,36 @@ const UserProfilePage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        //Get user data
         const { data } = await axios.get(`/users/${_id}`);
-        console.log(data);
-
+        //Get their workouts (feeds)
         const { data: feeds } = await axios.get("/workouts/feeds");
+        //Filter out those belonging to he user
         const userWorkouts = feeds.feeds.filter((feed) => feed.userId === _id);
-        console.log("before setting", data.userData);
+        //Update the userData state
         setUserData(data.userData);
-        console.log(data.userData.followers.includes(userId));
+        //Update isFollowing state
         setIsFollowing(data.userData.followers.includes(userId));
+        //Update workouts state
         setUserWorkouts(userWorkouts);
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
+        errorToast(
+          "Something went wrong. Could not fetch the user's profile information."
+        );
       }
     };
     fetchUserData();
   }, [_id, userId]);
+
+  const handleFeedsLength = (value) => {
+    setFeedsLength(value);
+  };
+
   return (
     <>
-      <Box sx={{ height: isFollowing ? "100%" : "100vh" }}>
+      <Box sx={{ height: feedsLength > 0 ? "auto" : "100vh" }}>
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
@@ -102,13 +112,14 @@ const UserProfilePage = () => {
                 <WorkoutsList
                   dataSourceSupplier={fetchWorkoutsData}
                   message="workouts"
+                  onFeedsChange={handleFeedsLength}
                 />
               ) : (
                 <Typography
                   variant="subtitle2"
                   sx={{ fontFamily: "Montserrat" }}
                 >
-                  Follow the user to see theit workouts
+                  Follow the user to see their workouts
                 </Typography>
               )}
             </Box>
