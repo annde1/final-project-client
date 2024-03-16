@@ -16,20 +16,20 @@ const columns = [
     headerName: "Profile Image",
     width: 130,
     sortable: false,
-    renderCell: (params) => <Avatar src={params.row.image.url} alt="avatar" />,
+    renderCell: (params) => <Avatar src={params.row.file} alt="avatar" />,
   },
   {
     field: "name.firstName",
     headerName: "First name",
     width: 130,
-    valueGetter: (params) => `${params.row.name.firstName}`,
+    valueGetter: (params) => `${params.row.firstName}`,
   },
 
   {
     field: "name.lastName",
     headerName: "Last name",
     width: 130,
-    valueGetter: (params) => `${params.row.name.lastName}`,
+    valueGetter: (params) => `${params.row.lastName}`,
   },
   {
     field: "age",

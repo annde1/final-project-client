@@ -1,6 +1,6 @@
 import Search from "./Search";
-import SearchIconWrapper from "../SearchIconWrapper";
-import StyledInputBase from "../StyledInputBase";
+import SearchIconWrapper from "../appContent/ui/SearchIconWrapper";
+import StyledInputBase from "../appContent/ui/StyledInputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import { NavLink } from "react-router-dom";
 import { errorToast, infoToast } from "../../service/toastify-service";
+
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -140,7 +141,7 @@ const SearchBar = () => {
                 {searchResults.map((result, index) => (
                   <ListItem key={index} alignItems="center">
                     <ListItemAvatar>
-                      <Avatar alt={result.userName} src={result.image?.url} />
+                      <Avatar alt={result.userName} src={result.file} />
                     </ListItemAvatar>
                     <NavLink
                       to={`/user/${result._id}`}
@@ -150,7 +151,7 @@ const SearchBar = () => {
                         variant="subtitle2"
                         sx={{ fontFamily: "Montserrat" }}
                       >
-                        {result.name.firstName} {result.name.lastName}
+                        {result.firstName} {result.lastName}
                       </Typography>
                     </NavLink>
                     {result.isFollowed ? (

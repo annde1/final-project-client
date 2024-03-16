@@ -12,6 +12,7 @@ import { normalizeTemplateData } from "../../../service/normalize-template-data"
 import validateWorkout from "../../../validation/workout-validation";
 import { useCallback } from "react";
 import { successToast, errorToast } from "../../../service/toastify-service";
+import { validateTemplate } from "../../../validation/template-validation";
 const WorkoutExercisesList = ({
   onUpdateTemplateName,
   onFinishLoading,
@@ -26,6 +27,7 @@ const WorkoutExercisesList = ({
   const { id: _id } = useParams();
   const navigate = useNavigate();
   const startedAt = useRef(null);
+  const [errors, setErrros] = useState({});
 
   //Add current property to ref when the component mounts
   useEffect(() => {
@@ -57,8 +59,10 @@ const WorkoutExercisesList = ({
   );
 
   useEffect(() => {
-    fetchTemplateData(_id);
-  }, [_id, fetchTemplateData]);
+    if (isLoading) {
+      fetchTemplateData(_id);
+    }
+  }, [_id, fetchTemplateData, isLoading]);
 
   const handleAddWeight = (exerIndex, setIndex, weight) => {
     setExercises((prev) => {
@@ -149,13 +153,25 @@ const WorkoutExercisesList = ({
       //Post new workout
       await axios.post("/workouts", normalizedData);
 
+      //Normalize data
       const template = normalizeTemplateData({
         name: templateName,
         exercises: exercises,
       });
+      //Validate data
+      const templateErrors = validateTemplate(template);
+
+      if (templateErrors) {
+        setErrros(templateErrors);
+        return;
+      }
+      //Create form data
+      const fd = new FormData();
+      fd.append("data", JSON.stringify(template));
 
       //Update template
-      await axios.put(`/templates/${_id}`, template);
+      await axios.put(`/templates/${_id}`, fd);
+
       successToast("Workout created");
       navigate(ROUTES.MYWORKOUTS);
     } catch (err) {
@@ -187,6 +203,7 @@ const WorkoutExercisesList = ({
                 onAddVolume={onAddVolume}
                 onRemoveVolume={onRemoveVolume}
                 onDone={handleDoneSet}
+                errors={errors}
               />
             ))}
         </Box>

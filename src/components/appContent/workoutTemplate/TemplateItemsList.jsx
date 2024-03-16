@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import ExericseList from "../../ExerciseList";
+import ExericseList from "./ExerciseList";
 import TemplateItem from "./TemplateItem";
 import { Divider, Button, TextField, CircularProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -11,14 +11,19 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes/routes";
 import { useParams } from "react-router-dom";
 import { successToast, errorToast } from "../../../service/toastify-service";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
 const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [templateName, setTemplateName] = useState("");
+  const [templateDescription, setTemplateDescription] = useState("");
+  const [templateImage, setTemplateImage] = useState(null);
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { id: _id } = useParams();
+  const maxLength = 300;
 
   useEffect(() => {
     const fetchTemplateData = async () => {
@@ -26,6 +31,7 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
         if (isEdit) {
           const { data } = await axios.get(`/templates/${_id}`);
           setTemplateName(data.templateDetails.name);
+          setTemplateDescription(data.templateDetails.description);
           const exercises = data.templateDetails.exercises.map(
             ({ sets, name }) => ({
               sets: sets.map(({ _id, ...rest }) => rest),
@@ -33,11 +39,10 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
             })
           );
           setExercises(exercises);
-          // onTemplateLengthChange(exercises.length);
           setIsLoading(false);
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         errorToast("Something went wrong. Could not fetch the template data.");
       }
     };
@@ -47,7 +52,17 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
   const createDefaultSet = () => {
     return { weight: "", reps: "" };
   };
+  const handleAddTemplateDescription = (e) => {
+    const newValue = e.target.value;
+    if (newValue.length <= maxLength) {
+      setTemplateDescription(newValue);
+    }
+  };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setTemplateImage(file);
+  };
   const handleAddTemplateName = (e) => {
     setTemplateName(e.target.value);
   };
@@ -62,9 +77,6 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
         sets: [createDefaultSet()],
       },
     ]);
-
-    // Update parent state with the new length of the exercises array
-    onTemplateLengthChange(exercises.length);
   };
   const handleAddSet = (exerIndex) => {
     setExercises((prev) => {
@@ -142,21 +154,29 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
   const handleCreateTemplate = async (e) => {
     try {
       e.preventDefault();
-      const templateData = normalizeTemplateData({
+      const formData = {
         name: templateName,
         exercises: exercises,
-      });
+        description: templateDescription,
+      };
+
+      const templateData = normalizeTemplateData(formData);
       const errors = validateTemplate(templateData);
+
       if (errors) {
         setErrors(errors);
         return;
       }
-      const { data } = await axios.post("/templates", templateData);
-      console.log(data);
+
+      const fd = new FormData();
+      fd.append("data", JSON.stringify(templateData));
+      fd.append("file", templateImage);
+
+      await axios.post("/templates", fd);
       successToast("Template created successfully");
       navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       errorToast("Something went wrong. Could not create template.");
     }
   };
@@ -164,15 +184,27 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
   const handleEditTemplate = async (e) => {
     try {
       e.preventDefault();
-      const templateData = normalizeTemplateData({
+      //Temporary variable for storing nesesary data
+      const formData = {
         name: templateName,
         exercises: exercises,
-      });
+        description: templateDescription,
+      };
+
+      //Normalize
+      const templateData = normalizeTemplateData(formData);
 
       const errors = validateTemplate(templateData);
-      if (errors) return;
+      if (errors) {
+        setErrors(errors);
+        return;
+      }
+      const fd = new FormData();
+      fd.append("data", JSON.stringify(templateData));
+      fd.append("file", templateImage);
 
-      await axios.put(`/templates/${_id}`, templateData);
+      await axios.put(`/templates/${_id}`, fd);
+
       successToast("Template Updated Successfully!");
       navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
@@ -204,6 +236,7 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
               value={templateName}
               onChange={handleAddTemplateName}
               className="customFont"
+              sx={{ mb: 3 }}
             />
             {errors && errors.name && (
               <Alert
@@ -213,6 +246,59 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
                 {errors.name}
               </Alert>
             )}
+            <TextField
+              fullWidth
+              id="my-textfield"
+              label={
+                <Typography style={{ fontFamily: "Montserrat" }}>
+                  Template Description
+                </Typography>
+              }
+              multiline
+              maxLength={300}
+              value={templateDescription}
+              onChange={handleAddTemplateDescription}
+              helperText={
+                templateDescription.length >= maxLength
+                  ? `Maximum ${maxLength} characters allowed`
+                  : ""
+              }
+              FormHelperTextProps={{
+                sx: {
+                  color:
+                    templateDescription.length >= maxLength ? "red" : "inherit",
+                  fontFamily: "Montserrat",
+                },
+              }}
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <InputLabel htmlFor="file-input" sx={{ alignSelf: "flex-start" }}>
+                <Typography
+                  style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
+                >
+                  Template Image
+                </Typography>
+              </InputLabel>
+              <OutlinedInput
+                fullWidth
+                type="file"
+                id="file"
+                label={
+                  <Typography
+                    style={{
+                      fontFamily: "Montserrat",
+                      fontSize: "0.8rem",
+                    }}
+                  >
+                    Profile Image
+                  </Typography>
+                }
+                name="file"
+                sx={{ fontFamily: "Montserrat" }}
+                onChange={handleImageChange}
+              />
+            </Box>
             <ExericseList
               onExerciseChange={handleExercise}
               selectedExercise={selectedExercise}

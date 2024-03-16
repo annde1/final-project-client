@@ -4,8 +4,8 @@ import { Box, Grid, Container } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import ProfileSkeleton from "../components/ProfileSkeleton";
-import { UserProfile } from "../components/UserProfile";
+import ProfileSkeleton from "../components/appContent/userProfile/ProfileSkeleton";
+import { UserProfile } from "../components/appContent/userProfile/UserProfile";
 import { useSelector } from "react-redux";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 import { errorToast } from "../service/toastify-service";
@@ -15,7 +15,6 @@ const UserProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userWorkouts, setUserWorkouts] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [feedsLength, setFeedsLength] = useState(0);
   const { id: _id } = useParams();
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
@@ -61,17 +60,12 @@ const UserProfilePage = () => {
     fetchUserData();
   }, [_id, userId]);
 
-  const handleFeedsLength = (value) => {
-    setFeedsLength(value);
-  };
-
   return (
     <>
-      <Box sx={{ height: feedsLength > 0 ? "auto" : "100vh" }}>
+      <Box>
         <Container component="main" maxWidth="xs">
           <Box
             sx={{
-              marginTop: 2,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -112,12 +106,12 @@ const UserProfilePage = () => {
                 <WorkoutsList
                   dataSourceSupplier={fetchWorkoutsData}
                   message="workouts"
-                  onFeedsChange={handleFeedsLength}
+                  isOwner={false}
                 />
               ) : (
                 <Typography
                   variant="subtitle2"
-                  sx={{ fontFamily: "Montserrat" }}
+                  sx={{ fontFamily: "Montserrat", mb: 8 }}
                 >
                   Follow the user to see their workouts
                 </Typography>

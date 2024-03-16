@@ -80,6 +80,9 @@ dependencies:
   redux:
     specifier: ^5.0.1
     version: 5.0.1
+  swiper:
+    specifier: ^11.0.7
+    version: 11.0.7
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -10451,6 +10454,11 @@ packages:
       csso: 4.2.0
       picocolors: 1.0.0
       stable: 0.1.8
+    dev: false
+
+  /swiper@11.0.7:
+    resolution: {integrity: sha512-cDfglW1B6uSmB6eB6pNmzDTNLmZtu5bWWa1vak0RU7fOI9qHjMzl7gVBvYSl34b0RU2N11HxxETJqQ5LeqI1cA==}
+    engines: {node: '>= 4.7.0'}
     dev: false
 
   /symbol-tree@3.2.4:

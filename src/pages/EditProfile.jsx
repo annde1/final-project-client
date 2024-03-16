@@ -3,10 +3,6 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Visibility from "@mui/icons-material/Visibility";
-import IconButton from "@mui/material/IconButton";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useState, useEffect } from "react";
@@ -14,38 +10,31 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import validateEditProfile from "../validation/edit-profile-validation";
 import "../styles/styles.css";
-import normalizeEditProfile from "../service/normalize-edit-profile";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import { errorToast, successToast } from "../service/toastify-service";
 import Alert from "@mui/material/Alert";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import { constructEditProfileData } from "../service/form-data-service";
 
 const EditProfilePage = () => {
   const [userData, setUserData] = useState({});
-  const [url, setUrl] = useState("");
   const [alt, setAlt] = useState("");
   const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
     userName: "",
     email: "",
-    // url: "",
-    // alt: "",
-    password: "",
+    file: null,
     age: "",
     height: "",
     weight: "",
   });
-  const [showPassword, setShowPassword] = React.useState(false);
   const [errors, setErrors] = useState({});
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,7 +42,6 @@ const EditProfilePage = () => {
       try {
         const { data } = await axios.get(`/users/${userId}`);
         setUserData(data.userData);
-        setUrl(data.userData?.image?.url || "");
         setAlt(data.userData?.image?.alt || "");
       } catch (err) {
         // console.log(err);
@@ -62,6 +50,11 @@ const EditProfilePage = () => {
     };
     fetchUserData();
   }, [userId]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setInputs((current) => ({ ...current, file: file }));
+  };
 
   const handleInputsChange = (event) => {
     setInputs((current) => ({
@@ -73,18 +66,16 @@ const EditProfilePage = () => {
   const handleEditProfile = async (e) => {
     try {
       e.preventDefault();
-      const normalized = normalizeEditProfile({
-        ...inputs,
-        url: url,
-        alt: alt,
-      });
-      const errors = validateEditProfile(normalized);
+
+      const data = { ...inputs, alt: alt };
+      const errors = validateEditProfile(data);
+
       if (errors) {
         setErrors(errors);
         return;
       }
-
-      await axios.put(`/users/${userId}`, normalized);
+      const formData = constructEditProfileData(data);
+      await axios.put(`/users/${userId}`, formData);
       successToast("Profile edited successfully!");
       navigate(ROUTES.FEEDS);
     } catch (err) {
@@ -255,21 +246,36 @@ const EditProfilePage = () => {
                 )}
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  id="url"
-                  label={
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <InputLabel
+                    htmlFor="file-input"
+                    sx={{ alignSelf: "flex-start" }}
+                  >
                     <Typography
                       style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
                     >
-                      Profile Image Url
+                      Profile Image
                     </Typography>
-                  }
-                  name="profile"
-                  value={url}
-                  autoComplete="profile"
-                  onChange={(e) => setUrl(e.target.value)}
-                />
+                  </InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    type="file"
+                    id="file"
+                    label={
+                      <Typography
+                        style={{
+                          fontFamily: "Montserrat",
+                          fontSize: "0.8rem",
+                        }}
+                      >
+                        Profile Image
+                      </Typography>
+                    }
+                    name="file"
+                    onChange={handleImageChange}
+                    sx={{ fontFamily: "Montserrat" }}
+                  />
+                </Box>
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -288,43 +294,7 @@ const EditProfilePage = () => {
                   onChange={(e) => setAlt(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  id="password"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Password *
-                    </Typography>
-                  }
-                  fullWidth
-                  value={inputs.password}
-                  onChange={handleInputsChange}
-                  type={showPassword ? "text" : "password"}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          edge="end"
-                          onClick={handleTogglePasswordVisibility}
-                          aria-label="toggle password visibility"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                {errors && errors.password && (
-                  <Alert
-                    severity="error"
-                    sx={{ fontFamily: "Montserrat, sans-serif" }}
-                  >
-                    {errors.password}
-                  </Alert>
-                )}
-              </Grid>
+
               <Grid item xs={6}>
                 <TextField
                   fullWidth

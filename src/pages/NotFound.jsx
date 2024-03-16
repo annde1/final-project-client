@@ -1,17 +1,17 @@
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
-import { Grid, Container } from "@mui/material";
+import { Grid, Container, Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const NotFound = () => {
   const navigate = useNavigate();
   const handleRedirect = () => {
-    navigate(ROUTES.FEEDS);
+    navigate(ROUTES.HOME);
   };
   return (
-    <>
+    <Box sx={{ height: "100vh" }}>
       <Container component="main" maxWidth="md" sx={{ marginTop: 6 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
@@ -61,7 +61,7 @@ const NotFound = () => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </Box>
   );
 };
 export default NotFound;

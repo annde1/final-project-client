@@ -39,7 +39,7 @@ const registerSchema = Joi.object({
   height: Joi.number().min(1).optional().allow(""),
   isPremium: Joi.boolean().required(),
   alt: Joi.string().min(5).max(100).optional().allow(""),
-  url: Joi.string().uri().min(5).max(255).optional().allow(""),
+  file: Joi.any().allow(null),
 });
 
 const validateRegistration = (input) => {

@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import "../../../styles/styles.css";
 import Alert from "@mui/material/Alert";
 import { useMediaQuery } from "@mui/material";
-
+import { useState } from "react";
 const ExerciseSet = ({
   onAddReps,
   onAddWeight,
@@ -14,14 +14,22 @@ const ExerciseSet = ({
   errors,
 }) => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-
+  const [repsError, setRepsError] = useState(false);
+  const [weightError, setWeightError] = useState(false);
   const handleAddReps = (e) => {
     const reps = e.target.value;
+    //check is isNaN and setError
+    if (isNaN(reps)) {
+      setRepsError(true);
+    }
     onAddReps(exerciseIndex, setIndex, reps);
   };
 
   const handleAddWeight = (e) => {
     const weight = e.target.value;
+    if (isNaN(weight)) {
+      setWeightError(true);
+    }
     onAddWeight(exerciseIndex, setIndex, weight);
   };
 
@@ -50,9 +58,10 @@ const ExerciseSet = ({
           size="small"
           sx={isSmallScreen ? { width: 80 } : null}
         />
-        {errors && errors.weight && (
+        {exercise.sets[setIndex].weight === "" && errors && errors.weight && (
           <Alert severity="error">{errors.weight}</Alert>
         )}
+        {weightError && <Alert severity="error">Weight must be a number</Alert>}
       </Box>
       <Box>
         <TextField
@@ -65,7 +74,10 @@ const ExerciseSet = ({
           size="small"
           sx={isSmallScreen ? { width: 80 } : null}
         />
-        {errors && errors.reps && <Alert severity="error">{errors.reps}</Alert>}
+        {exercise.sets[setIndex].reps === "" && errors && errors.reps && (
+          <Alert severity="error">{errors.reps}</Alert>
+        )}
+        {repsError && <Alert severity="error">Reps must be a number</Alert>}
       </Box>
     </Box>
   );

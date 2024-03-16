@@ -12,9 +12,10 @@ const normalizeUserData = (data) => {
     height: Number(data.height),
     isPremium: Boolean(data.isPremium),
     userType: data.userType,
+    file: data.file,
     image: {
       alt: data.alt,
-      url: data.url,
+      // url: data.url,
     },
   };
 };

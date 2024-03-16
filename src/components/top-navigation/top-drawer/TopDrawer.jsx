@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, IconButton, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import UserStatus from "../../UserStatus";
+import UserStatus from "../../appContent/userProfile/UserStatus";
 import SearchBar from "../SearchBar";
 import DrawerLinksList from "../DrawerLinkList";
 import { useLocation } from "react-router-dom";
@@ -41,9 +41,7 @@ const TopDrawer = () => {
           >
             <MenuIcon />
           </IconButton>
-          {/*Add Logo Here */}
           <SearchBar />
-
           <UserStatus />
         </Toolbar>
       </AppBar>

@@ -11,7 +11,7 @@ import { ROUTES } from "../routes/routes";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
+import HomeIcon from "@mui/icons-material/Home";
 export const getIcon = (to, isActive) => {
   switch (to) {
     case ROUTES.MYPROFILE:
@@ -48,6 +48,10 @@ export const getIcon = (to, isActive) => {
       );
     case ROUTES.FAVORITEWORKOUTS:
       return <FavoriteIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }} />;
+    case ROUTES.HOME:
+      return (
+        <HomeIcon sx={{ color: isActive ? "#ADE32B" : "#EAEDF3" }}></HomeIcon>
+      );
     default:
       return null;
   }

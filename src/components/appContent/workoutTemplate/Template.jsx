@@ -1,8 +1,8 @@
 import Typography from "@mui/material/Typography";
-import { Box, Grid, Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ActionsList from "../../ActionsList";
+import ActionsList from "../ui/ActionsList";
 import { useState } from "react";
 import { Popover } from "@mui/material";
 const Template = (props) => {
@@ -42,7 +42,7 @@ const Template = (props) => {
               onClose={handleCloseList}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "right-32",
+                horizontal: "right",
               }}
               transformOrigin={{
                 vertical: "top",

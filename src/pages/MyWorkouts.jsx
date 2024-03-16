@@ -8,8 +8,10 @@ const MyWorkoutsPage = () => {
   const fetchMyWorkoutsData = async (userId, filter) => {
     const orderBy = filter?.filterBy;
     const { data } = await axios.get(`/workouts/${userId}?filter=${orderBy}`);
+
     // Enrichment with userData
     const { data: userData } = await axios.get(`/users/${userId}`);
+
     const updatedWorkouts = data.workouts.map((workout) => ({
       ...workout,
       isLiked: workout.likes.includes(userId),
@@ -35,6 +37,7 @@ const MyWorkoutsPage = () => {
               dataSourceSupplier={fetchMyWorkoutsData}
               message="workouts"
               onFeedsChange={handleFeedsLength}
+              isOwner={true}
             />
           </Grid>
         </Container>

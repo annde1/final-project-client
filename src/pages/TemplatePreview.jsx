@@ -5,9 +5,13 @@ import TemplatePreviewList from "../components/appContent/workoutTemplate/Templa
 
 const TemplatePreview = () => {
   const [templateName, setTemplateName] = useState("");
-
+  const [templateImage, setTemplateImage] = useState("");
   const handleTemplateName = (name) => {
     setTemplateName(name);
+  };
+
+  const handleTemplateImage = (url) => {
+    setTemplateImage(url);
   };
   return (
     <>
@@ -15,6 +19,14 @@ const TemplatePreview = () => {
       <Typography variant="h4" style={{ fontFamily: "Montserrat, sans-serif" }}>
         {templateName}
       </Typography>
+      {templateImage && (
+        <img
+          src={templateImage}
+          alt="Template"
+          style={{ height: "12rem", marginTop: "2rem", marginBottom: "1rem" }}
+        ></img>
+      )}
+
       <Typography
         variant="body1"
         style={{ fontFamily: "Montserrat, sans-serif", marginTop: "1rem" }}
@@ -30,7 +42,10 @@ const TemplatePreview = () => {
                 flexDirection: "column",
               }}
             >
-              <TemplatePreviewList onChangeTemplateName={handleTemplateName} />
+              <TemplatePreviewList
+                onChangeTemplateName={handleTemplateName}
+                onChangeTemplateImage={handleTemplateImage}
+              />
             </Box>
           </Grid>
         </Grid>

@@ -8,6 +8,7 @@ import { useState } from "react";
 const FavoriteWorkoutsPage = () => {
   const [feedsLength, setFeedsLength] = useState(0);
   const user = useSelector((store) => store.authenticationSlice.userData?._id);
+
   const fetchFavoriteWorkouts = async (userId, query) => {
     const filter = query?.filterBy ? query?.filterBy : "";
     const userName = query?.search ? query?.search : "";

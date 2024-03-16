@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import LinearProgress from "@mui/material/LinearProgress";
 import ModeratorModal from "./ModeratorModal";
 import { errorToast, infoToast } from "../../../service/toastify-service";
+import Avatar from "@mui/material/Avatar";
+
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
 
@@ -20,6 +22,13 @@ const columns = [
     headerName: "Template Name",
     width: 130,
     valueGetter: (params) => `${params.row.name}`,
+  },
+  {
+    field: "image",
+    headerName: "Template Image",
+    width: 130,
+    sortable: false,
+    renderCell: (params) => <Avatar src={params.row.image} alt="avatar" />,
   },
 
   {
@@ -49,6 +58,7 @@ const TemplateManagmentTab = () => {
     const fetchTemplates = async () => {
       try {
         const { data } = await axios.get("/templates");
+        console.log(data);
         const { data: userData } = await axios.get("/users");
         const templatesAndUsers = getDataAndUsers(
           userData.users,

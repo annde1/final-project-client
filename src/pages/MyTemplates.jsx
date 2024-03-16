@@ -7,9 +7,9 @@ import axios from "axios";
 import { ROUTES } from "../routes/routes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { errorToast } from "../service/toastify-service";
-import ToggleComponent from "../components/ToggleComponent";
-import TemplateCard from "../components/TemplateCard";
-import TemplateModal from "../components/TemplateModal";
+import ToggleComponent from "../components/appContent/ui/ToggleComponent";
+import TemplateCard from "../components/appContent/workoutTemplate/TemplateCard";
+import TemplateModal from "../components/appContent/workoutTemplate/TemplateModal";
 
 const MyTemplatesPage = () => {
   const [userTemplates, setUserTemplates] = useState([]);
@@ -40,7 +40,6 @@ const MyTemplatesPage = () => {
       );
       setShowModal(false);
     } catch (err) {
-      console.log(err);
       errorToast("Something went wrong. Could not delete the template.");
     }
   };
@@ -112,7 +111,7 @@ const MyTemplatesPage = () => {
             />
           )}
           {displayMode === "list" && (
-            <Container maxWidth="md" sx={{ marginTop: 5 }}>
+            <Container maxWidth="md" sx={{ marginTop: 5, width: "83%" }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={12}>
                   <Box
@@ -121,7 +120,9 @@ const MyTemplatesPage = () => {
                       flexDirection: "column",
                     }}
                   >
-                    <Typography sx={{ fontFamily: "Montserrat, sans-serif" }}>
+                    <Typography
+                      sx={{ fontFamily: "Montserrat, sans-serif", mb: "2rem" }}
+                    >
                       My Templates ({userTemplates.length})
                     </Typography>
 
@@ -155,6 +156,9 @@ const MyTemplatesPage = () => {
                       onStartWorkout={handleStartWorkout}
                       onShowModal={handleOpenModal}
                       onCloseModal={handleCloseModal}
+                      templateImage={template.image}
+                      templateDescription={template.description}
+                      userId={template.userId}
                     />
                   </Grid>
                 ))}

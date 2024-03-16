@@ -3,9 +3,9 @@ import Typography from "@mui/material/Typography";
 import { Box, Grid, Container } from "@mui/material";
 import { useState } from "react";
 import "../styles/styles.css";
-import WorkoutTimer from "../components/Timer";
+import WorkoutTimer from "../components/appContent/ui/Timer";
 import WorkoutCardData from "../components/appContent/workout/WorkoutCardData";
-import ModalComponent from "../components/Modal";
+import ModalComponent from "../components/appContent/ui/Modal";
 import WorkoutExercisesList from "../components/appContent/workout/WorkoutExercisesList";
 
 const NewWorkout = () => {

@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import WorkoutCard from "./WorkoutCard";
 import Pagination from "@mui/material/Pagination";
-import ContentFilter from "../ContentFilter";
+import ContentFilter from "../ui/ContentFilter";
 import { errorToast, successToast } from "../../../service/toastify-service";
 
 const WorkoutsList = ({
@@ -16,6 +16,7 @@ const WorkoutsList = ({
   message,
   showLiked,
   onFeedsChange,
+  isOwner,
 }) => {
   const [workoutsData, setWorkoutsData] = useState([]);
   const [filter, setFilter] = useState({ search: "", filterBy: "" });
@@ -24,7 +25,7 @@ const WorkoutsList = ({
   );
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [userNameError, setUserNameError] = useState(null);
   const workoutsPerPage = 6;
   const indexOfLastWorkout = currentPage * workoutsPerPage;
   const indexOfFirstWorkout = indexOfLastWorkout - workoutsPerPage;
@@ -37,8 +38,11 @@ const WorkoutsList = ({
         onFeedsChange(workouts.length);
         setIsLoading(false);
       } catch (err) {
-        console.log(err);
-        errorToast("Something went wrong. Could not fetch the workouts.");
+        if (err.response.status === 404) {
+          setUserNameError(err.response.data.message);
+        } else {
+          errorToast("Something went wrong. Could not fetch the workouts.");
+        }
       }
     };
     fetchWorkoutData();
@@ -52,7 +56,6 @@ const WorkoutsList = ({
       );
       successToast("Workout deleted successfully!");
     } catch (err) {
-      // console.log(err);
       errorToast("Something went wrong. Could not delete workout.");
     }
   };
@@ -90,7 +93,9 @@ const WorkoutsList = ({
   const updateFilter = (filter) => {
     setFilter(filter);
   };
-
+  const handleCloseAlert = () => {
+    setUserNameError(null);
+  };
   return (
     <>
       {isLoading && (
@@ -105,7 +110,7 @@ const WorkoutsList = ({
           </Typography>
         </Grid>
       )}
-      {!isLoading && workoutsData.length <= 0 && (
+      {!isLoading && workoutsData.length <= 0 && isOwner && (
         <Grid item xs={8} md={8}>
           <Typography
             variant="body1"
@@ -118,11 +123,26 @@ const WorkoutsList = ({
           </Typography>
         </Grid>
       )}
+      {!isLoading && workoutsData.length <= 0 && !isOwner && (
+        <Grid item xs={8} md={8}>
+          <Typography
+            variant="body1"
+            style={{
+              fontFamily: "Montserrat, sans-serif",
+              textAlign: "center",
+            }}
+          >
+            The user doesn't have any {message}
+          </Typography>
+        </Grid>
+      )}
       {!isLoading && workoutsData.length > 0 && (
         <ContentFilter
           onUpdateWorkouts={updateWorkouts}
           onUpdateFilter={updateFilter}
           showSearch={showSearch}
+          userNameError={userNameError}
+          onCloseAlert={handleCloseAlert}
         />
       )}
       {workoutsData

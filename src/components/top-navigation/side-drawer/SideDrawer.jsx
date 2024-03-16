@@ -13,16 +13,13 @@ import "../../../styles/styles.css";
 import { AppBarStyled } from "../AppBarStyled";
 import { DrawerHeader } from "./DrawerHeader";
 import { DrawerStyled } from "./DrawerStyled";
-import UserStatus from "../../UserStatus";
+import UserStatus from "../../appContent/userProfile/UserStatus";
 import SearchBar from "../SearchBar";
 import DrawerLinksList from "../DrawerLinkList";
-import { useSelector } from "react-redux";
+
 const SideDrawer = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const isLoggedIn = useSelector(
-    (store) => store.authenticationSlice.isLoggedIn
-  );
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -52,7 +49,6 @@ const SideDrawer = () => {
             onClick={handleDrawerOpen}
             edge="start"
             sx={{
-              marginRight: -30,
               ...(open && { display: "none" }),
             }}
           >
@@ -61,7 +57,9 @@ const SideDrawer = () => {
           <Typography
             style={{
               fontFamily: "Montserrat",
-              ...(isLoggedIn ? {} : { marginLeft: "-40rem" }),
+              position: "absolute",
+              left: !open && 60,
+              display: open && "none",
             }}
           >
             Zen Fit

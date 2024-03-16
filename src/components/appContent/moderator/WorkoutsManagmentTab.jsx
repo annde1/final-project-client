@@ -82,7 +82,6 @@ const WorkoutsManagmentTab = () => {
   }, []);
 
   const handleRowClick = (params) => {
-    console.log(params.row._id);
     setSelectedWorkout(
       params.row._id === selectedWorkout ? null : params.row._id
     );

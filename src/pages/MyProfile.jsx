@@ -1,4 +1,4 @@
-import { UserProfile } from "../components/UserProfile";
+import { UserProfile } from "../components/appContent/userProfile/UserProfile";
 import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
 import axios from "axios";
@@ -6,10 +6,10 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Grid, Container } from "@mui/material";
 import { calculateBMI } from "../service/user-profile";
-import BmiModal from "../components/BmiModal";
-import ProfileSkeleton from "../components/ProfileSkeleton";
+import BmiModal from "../components/appContent/userProfile/BmiModal";
+import ProfileSkeleton from "../components/appContent/userProfile/ProfileSkeleton";
 import { errorToast } from "../service/toastify-service";
-import UserProfileModal from "../components/UserProfileModal";
+import UserProfileModal from "../components/appContent/userProfile/UserProfileModal";
 import { useLogout } from "../hooks/useLogout";
 import { infoToast } from "../service/toastify-service";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ const MyProfilePage = () => {
   const handleCloseProfileModal = () => {
     setShowProfileModal(false);
   };
-  const handleCalculateBmi = (height, weight) => {
+  const handleCalculateBmi = () => {
     const bmi = calculateBMI(userData.height, userData.weight);
     setBmi(bmi);
     setShowBmiModal(true);

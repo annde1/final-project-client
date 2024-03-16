@@ -7,10 +7,7 @@ import "../../styles/styles.css";
 const Footer = () => {
   return (
     <Box>
-      <BottomNavigation
-        showLabels
-        sx={{ backgroundColor: "#0B0D12", height: "8rem" }}
-      >
+      <BottomNavigation sx={{ backgroundColor: "#0B0D12", height: "8rem" }}>
         <Box
           sx={{
             display: "flex",

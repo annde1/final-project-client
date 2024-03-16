@@ -27,6 +27,5 @@ export const normalizeWorkout = (data) => {
     },
     volume: data.volume,
   };
-
   return normalizedWorkout;
 };

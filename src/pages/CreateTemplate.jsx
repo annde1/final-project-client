@@ -10,7 +10,6 @@ import TemplateMessage from "../components/appContent/workoutTemplate/TemplateMe
 import TemplateItemsList from "../components/appContent/workoutTemplate/TemplateItemsList";
 const CreateTemplatePage = () => {
   const [numTemplates, setNumTemplates] = useState(0);
-  const [templatesLength, setTemplatesLength] = useState(0);
   const isPremium = useSelector(
     (store) => store.authenticationSlice.userData?.isPremium
   );
@@ -27,13 +26,9 @@ const CreateTemplatePage = () => {
     fetchUserTemplates();
   }, []);
 
-  const handleTemplatesLength = (value) => {
-    setTemplatesLength(value);
-  };
-
   return (
     <>
-      <Box sx={{ height: templatesLength > 0 ? "100%" : "100vh" }}>
+      <Box sx={{ pb: 4 }}>
         <Typography
           variant="h4"
           style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -54,9 +49,7 @@ const CreateTemplatePage = () => {
                   <TemplateMessage />
                 ) : (
                   <>
-                    <TemplateItemsList
-                      onTemplateLengthChange={handleTemplatesLength}
-                    />
+                    <TemplateItemsList />
                   </>
                 )}
               </Box>

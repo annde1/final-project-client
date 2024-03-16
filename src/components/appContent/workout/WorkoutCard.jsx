@@ -76,7 +76,8 @@ const WorkoutCard = ({
         <WorkoutUserDetails
           userName={userData.userName}
           createdAt={createdAt}
-          image={userData.image}
+          image={userData.file}
+          alt={userData.alt}
         />
         <Typography
           style={{

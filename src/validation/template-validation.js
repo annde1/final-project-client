@@ -7,6 +7,7 @@ const templateSchema = Joi.object({
     .max(80)
     .required()
     .messages({ "string.empty": "Template name is required" }),
+  description: Joi.string().max(300).optional().allow(""),
   exercises: Joi.array()
     .items(
       Joi.object({

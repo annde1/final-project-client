@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
-import WorkoutItem from "../components/appContent/workout/WorkoutItem";
+
 import axios from "axios";
 import { useState } from "react";
 

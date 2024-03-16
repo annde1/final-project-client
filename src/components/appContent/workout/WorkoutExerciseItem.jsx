@@ -5,7 +5,8 @@ import "../../../styles/styles.css";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import { useMediaQuery } from "@mui/material";
-import { styled } from "@mui/system";
+import { useState } from "react";
+import Alert from "@mui/material/Alert";
 
 const WorkoutExerciseItem = ({
   exercise,
@@ -14,23 +15,30 @@ const WorkoutExerciseItem = ({
   exerciseIndex,
   onAddVolume,
   onDone,
+  errors,
 }) => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-
-  const CustomTextField = styled(TextField)({
-    [isSmallScreen && "& input"]: {
-      width: 80,
-    },
-  });
+  const [weightError, setWeightError] = useState(false);
+  const [repsError, setRepsError] = useState(false);
 
   const handleAddReps = (e, setIndex) => {
     const reps = e.target.value;
-    onAddReps(exerciseIndex, setIndex, reps);
+    if (!isNaN(reps)) {
+      setRepsError(false);
+      onAddReps(exerciseIndex, setIndex, reps);
+    } else {
+      setRepsError(true);
+    }
   };
 
   const handleAddWeight = (e, setIndex) => {
     const weight = e.target.value;
-    onAddWeight(exerciseIndex, setIndex, weight);
+    if (!isNaN(weight)) {
+      setWeightError(false);
+      onAddWeight(exerciseIndex, setIndex, weight);
+    } else {
+      setWeightError(true);
+    }
   };
 
   const handleDoneSet = (checked, exerciseIndex, setIndex) => {
@@ -69,8 +77,8 @@ const WorkoutExerciseItem = ({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-around",
-
             marginTop: "2rem",
+            marginLeft: -20,
           }}
         >
           <Typography className="customFont">SET</Typography>
@@ -92,13 +100,13 @@ const WorkoutExerciseItem = ({
                 marginTop: "1rem",
               }}
             >
-              <Box>
+              <Box sx={{ mr: isSmallScreen && 2 }}>
                 <Typography className="customFont" sx={{ fontSize: "25px" }}>
                   {index + 1}
                 </Typography>
               </Box>
               <Box>
-                <CustomTextField
+                <TextField
                   required
                   id={`weight-${index}`}
                   name="kg"
@@ -106,13 +114,19 @@ const WorkoutExerciseItem = ({
                   onChange={(e) => {
                     handleAddWeight(e, index);
                   }}
-                  placeholder={exercise.sets[index].weight}
+                  placeholder={exercise.sets[index].weight.toString()}
                   value={exercise.sets[index].weight}
+                  helperText={weightError ? "Weight must be a number" : ""}
+                  error={weightError}
                   size="small"
+                  sx={{ mr: isSmallScreen && 1 }}
                 />
+                {errors && errors.weight && (
+                  <Alert severity="error">{errors.weight}</Alert>
+                )}
               </Box>
               <Box>
-                <CustomTextField
+                <TextField
                   required
                   id={`reps-${index}`}
                   name="reps"
@@ -120,10 +134,15 @@ const WorkoutExerciseItem = ({
                   onChange={(e) => {
                     handleAddReps(e, index);
                   }}
-                  placeholder={exercise.sets[index].reps}
+                  placeholder={exercise.sets[index].reps.toString()}
                   value={exercise.sets[index].reps}
+                  helperText={repsError ? "Reps must be a number" : ""}
+                  error={repsError}
                   size="small"
                 />
+                {errors && errors.reps && (
+                  <Alert severity="error">{errors.reps}</Alert>
+                )}
               </Box>
               <Checkbox
                 color="success"

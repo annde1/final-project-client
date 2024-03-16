@@ -5,4 +5,3 @@ const Main = ({ children }) => {
 };
 
 export default Main;
-//#EAEDF3
