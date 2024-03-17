@@ -5,10 +5,16 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import "../../../styles/styles.css";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes/routes";
-const UserProfilePopover = ({ anchorEl, onClosePopover, onShowModal }) => {
+const UserProfilePopover = ({
+  anchorEl,
+  onClosePopover,
+  onShowModal,
+  onShowPremiumModal,
+}) => {
   const navigate = useNavigate();
   const handleRedirectWorkouts = () => {
     navigate(ROUTES.MYWORKOUTS);
@@ -19,6 +25,9 @@ const UserProfilePopover = ({ anchorEl, onClosePopover, onShowModal }) => {
   };
   const handleShowModal = () => {
     onShowModal();
+  };
+  const handleShowPremiumModal = () => {
+    onShowPremiumModal();
   };
 
   return (
@@ -86,6 +95,23 @@ const UserProfilePopover = ({ anchorEl, onClosePopover, onShowModal }) => {
               sx={{ mr: 2 }}
             >
               My Workouts
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {" "}
+            <IconButton
+              aria-label="My Workouts"
+              onClick={handleShowPremiumModal}
+            >
+              <WorkspacePremiumIcon />
+            </IconButton>
+            <Typography
+              variant="body2"
+              className="customFont"
+              color="text.secondary"
+              sx={{ mr: 2 }}
+            >
+              Premium Status
             </Typography>
           </Box>
         </Box>

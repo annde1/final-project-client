@@ -17,6 +17,7 @@ import Alert from "@mui/material/Alert";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import { constructEditProfileData } from "../service/form-data-service";
+import normalizeUserData from "../service/nomralizeUserData";
 
 const EditProfilePage = () => {
   const [userData, setUserData] = useState({});
@@ -68,7 +69,8 @@ const EditProfilePage = () => {
       e.preventDefault();
 
       const data = { ...inputs, alt: alt };
-      const errors = validateEditProfile(data);
+      const normalized = normalizeUserData(data);
+      const errors = validateEditProfile(normalized);
 
       if (errors) {
         setErrors(errors);
@@ -323,6 +325,14 @@ const EditProfilePage = () => {
                   }
                   onChange={handleInputsChange}
                 />
+                {errors && errors.age && (
+                  <Alert
+                    severity="error"
+                    sx={{ fontFamily: "Montserrat, sans-serif" }}
+                  >
+                    {errors.age}
+                  </Alert>
+                )}
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -352,6 +362,14 @@ const EditProfilePage = () => {
                   }
                   onChange={handleInputsChange}
                 />
+                {errors && errors.height && (
+                  <Alert
+                    severity="error"
+                    sx={{ fontFamily: "Montserrat, sans-serif" }}
+                  >
+                    {errors.height}
+                  </Alert>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -381,6 +399,14 @@ const EditProfilePage = () => {
                   }
                   onChange={handleInputsChange}
                 />
+                {errors && errors.weight && (
+                  <Alert
+                    severity="error"
+                    sx={{ fontFamily: "Montserrat, sans-serif" }}
+                  >
+                    {errors.weight}
+                  </Alert>
+                )}
               </Grid>
             </Grid>
             <Button

@@ -17,6 +17,7 @@ import { constructFormData } from "../service/form-data-service";
 import { getToken } from "../service/login-service";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import normalizeUserData from "../service/nomralizeUserData";
 
 const RegisterPage = () => {
   const [inputs, setInputs] = useState({
@@ -60,7 +61,9 @@ const RegisterPage = () => {
     try {
       event.preventDefault();
       //Validate user data
-      const errors = validateRegistration(inputs);
+      const normalized = normalizeUserData(inputs);
+      const errors = validateRegistration(normalized);
+
       if (errors) {
         setErrors(errors);
         return;
@@ -262,12 +265,12 @@ const RegisterPage = () => {
                     value={inputs.alt}
                     onChange={handleInputsChange}
                   />
-                  {errors && errors.image?.alt && (
+                  {errors && errors.alt && (
                     <Alert
                       severity="error"
                       sx={{ fontFamily: "Montserrat, sans-serif" }}
                     >
-                      {errors.image?.alt}
+                      {errors.alt}
                     </Alert>
                   )}
                 </Grid>
@@ -326,6 +329,10 @@ const RegisterPage = () => {
                     value={inputs.age}
                     onChange={handleInputsChange}
                     autoComplete="new-age"
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                    }}
                   />
                   {errors && errors.age && (
                     <Alert

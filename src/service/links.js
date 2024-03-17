@@ -11,6 +11,7 @@ export const testLinks = [
 ];
 
 export const loggedInLinks = [
+  { to: ROUTES.HOME, children: "Home" },
   { to: ROUTES.MYPROFILE, children: "My Profile" },
   { to: ROUTES.MYTEMPLATES, children: "My Templates" },
   { to: ROUTES.CREATETEMPLATE, children: "Create Template" },
@@ -19,14 +20,13 @@ export const loggedInLinks = [
   { to: ROUTES.FEEDS, children: "Feeds" },
   { to: ROUTES.FAVORITEWORKOUTS, children: "Favorite Workouts" },
   { to: ROUTES.EDITPROFILE, children: "Settings" },
-  { to: ROUTES.HOME, children: "Home" },
   { to: ROUTES.ABOUT, children: "About" },
 ];
 
 export const loggedOutLinks = [
+  { to: ROUTES.HOME, children: "Home" },
   { to: ROUTES.REGISTER, children: "Register" },
   { to: ROUTES.LOGIN, children: "Login" },
-  { to: ROUTES.HOME, children: "Home" },
   { to: ROUTES.ABOUT, children: "About" },
 ];
 

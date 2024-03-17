@@ -22,12 +22,13 @@ const WorkoutExercisesList = ({
   templateName,
   onShowModal,
   workoutDetails,
+  setWorkoutDetails,
 }) => {
   const [exercises, setExercises] = useState([]);
   const { id: _id } = useParams();
   const navigate = useNavigate();
   const startedAt = useRef(null);
-  const [errors, setErrros] = useState({});
+  const [templateErrors, setTemplateErrors] = useState({});
 
   //Add current property to ref when the component mounts
   useEffect(() => {
@@ -162,7 +163,7 @@ const WorkoutExercisesList = ({
       const templateErrors = validateTemplate(template);
 
       if (templateErrors) {
-        setErrros(templateErrors);
+        setTemplateErrors(templateErrors);
         return;
       }
       //Create form data
@@ -203,7 +204,8 @@ const WorkoutExercisesList = ({
                 onAddVolume={onAddVolume}
                 onRemoveVolume={onRemoveVolume}
                 onDone={handleDoneSet}
-                errors={errors}
+                errors={templateErrors}
+                setWorkoutDetails={setWorkoutDetails}
               />
             ))}
         </Box>

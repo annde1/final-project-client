@@ -5,7 +5,6 @@ import "../../../styles/styles.css";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import { useMediaQuery } from "@mui/material";
-import { useState } from "react";
 import Alert from "@mui/material/Alert";
 
 const WorkoutExerciseItem = ({
@@ -14,30 +13,24 @@ const WorkoutExerciseItem = ({
   onAddReps,
   exerciseIndex,
   onAddVolume,
+  onRemoveVolume,
   onDone,
   errors,
+  setWorkoutDetails,
 }) => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const [weightError, setWeightError] = useState(false);
-  const [repsError, setRepsError] = useState(false);
 
   const handleAddReps = (e, setIndex) => {
     const reps = e.target.value;
     if (!isNaN(reps)) {
-      setRepsError(false);
       onAddReps(exerciseIndex, setIndex, reps);
-    } else {
-      setRepsError(true);
     }
   };
 
   const handleAddWeight = (e, setIndex) => {
     const weight = e.target.value;
     if (!isNaN(weight)) {
-      setWeightError(false);
       onAddWeight(exerciseIndex, setIndex, weight);
-    } else {
-      setWeightError(true);
     }
   };
 
@@ -51,6 +44,10 @@ const WorkoutExerciseItem = ({
     if (checked) {
       onDone(checked, exerciseIndex, setIndex);
       onAddVolume(total);
+    }
+
+    if (!checked) {
+      onRemoveVolume(total);
     }
   };
   return (
@@ -116,8 +113,8 @@ const WorkoutExerciseItem = ({
                   }}
                   placeholder={exercise.sets[index].weight.toString()}
                   value={exercise.sets[index].weight}
-                  helperText={weightError ? "Weight must be a number" : ""}
-                  error={weightError}
+                  // helperText={weightError ? "Weight must be a number" : ""}
+                  // error={weightError}
                   size="small"
                   sx={{ mr: isSmallScreen && 1 }}
                 />
@@ -136,8 +133,8 @@ const WorkoutExerciseItem = ({
                   }}
                   placeholder={exercise.sets[index].reps.toString()}
                   value={exercise.sets[index].reps}
-                  helperText={repsError ? "Reps must be a number" : ""}
-                  error={repsError}
+                  // helperText={repsError ? "Reps must be a number" : ""}
+                  // error={repsError}
                   size="small"
                 />
                 {errors && errors.reps && (

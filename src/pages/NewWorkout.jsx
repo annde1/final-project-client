@@ -89,6 +89,7 @@ const NewWorkout = () => {
               templateName={templateName}
               onShowModal={handleShowModal}
               workoutDetails={workoutDetails}
+              setWorkoutDetails={setWorkoutDetails}
             />
           </Grid>
           <Grid item xs={12} md={12}>

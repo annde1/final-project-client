@@ -35,10 +35,9 @@ const WorkoutsList = ({
       try {
         const workouts = await dataSourceSupplier(userId, filter);
         setWorkoutsData(workouts);
-        onFeedsChange(workouts.length);
         setIsLoading(false);
       } catch (err) {
-        if (err.response.status === 404) {
+        if (err.response?.status === 404) {
           setUserNameError(err.response.data.message);
         } else {
           errorToast("Something went wrong. Could not fetch the workouts.");

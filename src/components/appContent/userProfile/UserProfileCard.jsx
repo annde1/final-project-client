@@ -32,6 +32,7 @@ const UserProfileCard = ({
   userId,
   onCalculateBmi,
   onShowModal,
+  onShowPremiumModal,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
@@ -82,6 +83,7 @@ const UserProfileCard = ({
                 anchorEl={anchorEl}
                 onClosePopover={handlePopoverClose}
                 onShowModal={onShowModal}
+                onShowPremiumModal={onShowPremiumModal}
               />
             </div>
           ) : null

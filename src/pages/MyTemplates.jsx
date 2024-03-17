@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ROUTES } from "../routes/routes";
 import CircularProgress from "@mui/material/CircularProgress";
-import { errorToast } from "../service/toastify-service";
+import { errorToast, infoToast } from "../service/toastify-service";
 import ToggleComponent from "../components/appContent/ui/ToggleComponent";
 import TemplateCard from "../components/appContent/workoutTemplate/TemplateCard";
 import TemplateModal from "../components/appContent/workoutTemplate/TemplateModal";
@@ -39,6 +39,7 @@ const MyTemplatesPage = () => {
         current.filter((template) => template._id !== _id)
       );
       setShowModal(false);
+      infoToast("Template Deleted");
     } catch (err) {
       errorToast("Something went wrong. Could not delete the template.");
     }

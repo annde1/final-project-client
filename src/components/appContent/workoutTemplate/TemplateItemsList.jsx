@@ -176,8 +176,11 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
       successToast("Template created successfully");
       navigate(ROUTES.MYTEMPLATES);
     } catch (err) {
-      // console.log(err);
-      errorToast("Something went wrong. Could not create template.");
+      if (err.response.status === 403) {
+        errorToast(`${err.response.data.message}`);
+      } else {
+        errorToast("Something went wrong. Could not create template.");
+      }
     }
   };
 
@@ -241,7 +244,10 @@ const TemplateItemsList = ({ isEdit, onTemplateLengthChange }) => {
             {errors && errors.name && (
               <Alert
                 severity="error"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
+                style={{
+                  fontFamily: "Montserrat, sans-serif",
+                  marginBottom: "1.5rem",
+                }}
               >
                 {errors.name}
               </Alert>

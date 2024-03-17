@@ -60,6 +60,17 @@ const SocialTab = ({ isFollowersTab }) => {
   const handleUnfollow = async (_id) => {
     try {
       await axios.patch(`/users/follow/${_id}`);
+      if (isFollowersTab) {
+        setSocialData((prevData) =>
+          prevData.map((user) =>
+            user._id === _id
+              ? { ...user, isFollowing: !user.isFollowing }
+              : user
+          )
+        );
+        infoToast("User unfollowed");
+        return;
+      }
       setSocialData((prevData) => prevData.filter((user) => user._id !== _id));
       infoToast("User unfollowed");
     } catch (err) {
@@ -89,8 +100,8 @@ const SocialTab = ({ isFollowersTab }) => {
             <Follower
               key={item._id}
               userId={item._id}
-              url={item.image.url}
-              alt={item.image.alt}
+              url={item.file}
+              alt={item.alt}
               username={item.userName}
               isFollowing={item.isFollowing}
               onUnfollow={handleUnfollow}

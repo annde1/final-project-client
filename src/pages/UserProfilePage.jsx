@@ -100,6 +100,7 @@ const UserProfilePage = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 mt: 2,
+                pb: 4,
               }}
             >
               {isFollowing ? (

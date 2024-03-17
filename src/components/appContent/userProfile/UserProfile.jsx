@@ -10,6 +10,7 @@ const UserProfile = ({
   following,
   onCalculateBmi,
   onShowModal,
+  onShowPremiumModal,
 }) => {
   return (
     <Container>
@@ -30,6 +31,7 @@ const UserProfile = ({
           following={following}
           onCalculateBmi={onCalculateBmi}
           onShowModal={onShowModal}
+          onShowPremiumModal={onShowPremiumModal}
         />
       </Box>
     </Container>

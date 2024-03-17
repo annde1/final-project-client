@@ -14,6 +14,7 @@ import { useLogout } from "../hooks/useLogout";
 import { infoToast } from "../service/toastify-service";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
+import PremiumStatusModal from "../components/appContent/userProfile/PremiumStatusModal";
 const MyProfilePage = () => {
   const [userData, setUserData] = useState({});
   const [workouts, setWorkouts] = useState([]);
@@ -21,6 +22,7 @@ const MyProfilePage = () => {
   const [bmiModal, setShowBmiModal] = useState(false);
   const [bmi, setBmi] = useState(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
@@ -50,6 +52,12 @@ const MyProfilePage = () => {
   const handleCloseProfileModal = () => {
     setShowProfileModal(false);
   };
+  const handleShowPremiumModal = () => {
+    setShowPremiumModal(true);
+  };
+  const handleClosePremiumModal = () => {
+    setShowPremiumModal(false);
+  };
   const handleCalculateBmi = () => {
     const bmi = calculateBMI(userData.height, userData.weight);
     setBmi(bmi);
@@ -69,6 +77,18 @@ const MyProfilePage = () => {
     } catch (err) {
       // console.log(err);
       errorToast("Something went wrong. Could not delete the account.");
+    }
+  };
+
+  const handleChangePremiumStatus = async () => {
+    try {
+      const { data } = await axios.patch(`/users/${userId}`);
+
+      setUserData(data.userDetails);
+      infoToast("Premium status changed");
+    } catch (err) {
+      // console.log(err);
+      errorToast("Something went wrong. Could not change premium status.");
     }
   };
   return (
@@ -100,6 +120,14 @@ const MyProfilePage = () => {
                 onDeleteProfile={handleDeleteAccount}
               />
             )}
+            {showPremiumModal && (
+              <PremiumStatusModal
+                open={setShowPremiumModal}
+                onClose={handleClosePremiumModal}
+                onChangePremiumStatus={handleChangePremiumStatus}
+                isPremium={userData.isPremium}
+              />
+            )}
             <Grid item xs={12} sm={12}>
               <UserProfile
                 userData={userData}
@@ -108,6 +136,7 @@ const MyProfilePage = () => {
                 followers={userData?.followers?.length}
                 onCalculateBmi={handleCalculateBmi}
                 onShowModal={handleShowProfileModal}
+                onShowPremiumModal={handleShowPremiumModal}
               />
             </Grid>
             <Grid item xs={12} sm={12}>
