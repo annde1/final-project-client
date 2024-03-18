@@ -26,6 +26,10 @@ const MyProfilePage = () => {
   const userId = useSelector(
     (store) => store.authenticationSlice.userData?._id
   );
+
+  useEffect(() => {
+    console.log(bmi);
+  }, [bmi]);
   const logout = useLogout();
   const navigate = useNavigate();
   useEffect(() => {
@@ -59,7 +63,7 @@ const MyProfilePage = () => {
     setShowPremiumModal(false);
   };
   const handleCalculateBmi = () => {
-    const bmi = calculateBMI(userData.height, userData.weight);
+    const bmi = calculateBMI(userData.weight, userData.height);
     setBmi(bmi);
     setShowBmiModal(true);
   };
