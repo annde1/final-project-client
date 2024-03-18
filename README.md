@@ -1,5 +1,7 @@
 # ZenFit App
 
+[CLICK HERE FOR DEMO](https://final-project-client-zut2.onrender.com/)
+
 ZenFit is an application designed to help users create and manage workout templates, connect with others in the fitness community, and find inspiration for their fitness journey. Whether you're a beginner or an experienced fitness enthusiast, ZenFit provides the tools and resources to support your goals.
 
 ## Features
