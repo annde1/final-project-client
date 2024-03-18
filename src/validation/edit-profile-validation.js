@@ -25,7 +25,7 @@ const editProfileSchema = Joi.object({
         "Invalid last name. Last name can only contain only letters and spaces.",
     }),
   userName: Joi.string()
-    .pattern(new RegExp(/^[a-zA-Z\s]+$/))
+    .pattern(new RegExp(/^[a-zA-Z0-9\s]+$/))
     .min(2)
     .max(20)
     .required()
