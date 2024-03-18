@@ -128,17 +128,20 @@ const MyProfilePage = () => {
                 isPremium={userData.isPremium}
               />
             )}
-            <Grid item xs={12} sm={12}>
-              <UserProfile
-                userData={userData}
-                workouts={workouts}
-                following={userData?.following?.length}
-                followers={userData?.followers?.length}
-                onCalculateBmi={handleCalculateBmi}
-                onShowModal={handleShowProfileModal}
-                onShowPremiumModal={handleShowPremiumModal}
-              />
-            </Grid>
+            {!isLoading && (
+              <Grid item xs={12} sm={12}>
+                <UserProfile
+                  userData={userData}
+                  workouts={workouts}
+                  following={userData?.following?.length}
+                  followers={userData?.followers?.length}
+                  onCalculateBmi={handleCalculateBmi}
+                  onShowModal={handleShowProfileModal}
+                  onShowPremiumModal={handleShowPremiumModal}
+                />
+              </Grid>
+            )}
+
             <Grid item xs={12} sm={12}>
               {bmiModal && (
                 <BmiModal
