@@ -50,7 +50,7 @@ const TopDrawer = () => {
         anchor="top"
         open={drawerOpen}
         onClose={handleDrawerClose}
-        ModalProps={{ onBackdropClick: handleDrawerClose }}
+        // ModalProps={{ onBackdropClick: handleDrawerClose }}
       >
         <DrawerLinksList />
       </Drawer>

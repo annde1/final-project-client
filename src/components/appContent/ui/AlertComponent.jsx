@@ -6,9 +6,15 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function AlertComponent({ userNameError, onCloseAlert }) {
+  let bool;
+  if (userNameError === "") {
+    bool = false;
+  } else {
+    bool = true;
+  }
   return (
     <Box sx={{ width: "100%" }}>
-      <Collapse in={userNameError}>
+      <Collapse in={bool}>
         <Alert
           action={
             <IconButton
@@ -23,6 +29,7 @@ export default function AlertComponent({ userNameError, onCloseAlert }) {
             </IconButton>
           }
           severity="info"
+          sx={{ fontFamily: "Montserrat" }}
         >
           {userNameError}
         </Alert>

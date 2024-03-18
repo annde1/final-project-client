@@ -47,6 +47,7 @@ const DrawerLinksList = ({ open, isSideDrawer }) => {
             children={link.children}
             open={open}
             isSideDrawer={isSideDrawer}
+            isActive={location.pathname === link.to}
           />
         ))}
       {!isLoggedIn &&
@@ -57,6 +58,7 @@ const DrawerLinksList = ({ open, isSideDrawer }) => {
             children={link.children}
             open={open}
             isSideDrawer={isSideDrawer}
+            isActive={location.pathname === link.to}
           />
         ))}
     </List>

@@ -111,27 +111,22 @@ const EditProfilePage = () => {
                   name="firstName"
                   fullWidth
                   id="firstName"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      First Name *
-                    </Typography>
-                  }
+                  label="First Name *"
                   autoFocus
                   className="customFont"
                   value={inputs.firstName}
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.name?.firstName}
-                    </Typography>
-                  }
+                  helperText={userData.name?.firstName}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.firstName && (
                   <Alert
@@ -146,27 +141,22 @@ const EditProfilePage = () => {
                 <TextField
                   fullWidth
                   id="lastName"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Last Name *
-                    </Typography>
-                  }
+                  label="Last Name *"
                   name="lastName"
                   autoComplete="family-name"
                   value={inputs.lastName}
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.name?.lastName}
-                    </Typography>
-                  }
+                  helperText={userData.name?.lastName}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.lastName && (
                   <Alert
@@ -182,26 +172,21 @@ const EditProfilePage = () => {
                   fullWidth
                   id="userName"
                   value={inputs.userName}
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Username *
-                    </Typography>
-                  }
+                  label="Username *"
                   name="userName"
                   autoComplete="user-name"
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.userName}
-                    </Typography>
-                  }
+                  helperText={userData.userName}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.userName && (
                   <Alert
@@ -216,27 +201,22 @@ const EditProfilePage = () => {
                 <TextField
                   fullWidth
                   id="email"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Email Address *
-                    </Typography>
-                  }
+                  label="Email Address *"
                   name="email"
                   autoComplete="email"
                   value={inputs.email}
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.email}
-                    </Typography>
-                  }
+                  helperText={userData.email}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.email && (
                   <Alert
@@ -254,7 +234,7 @@ const EditProfilePage = () => {
                     sx={{ alignSelf: "flex-start" }}
                   >
                     <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
+                      style={{ fontFamily: "Montserrat", fontSize: "0.6rem" }}
                     >
                       Profile Image
                     </Typography>
@@ -263,16 +243,6 @@ const EditProfilePage = () => {
                     fullWidth
                     type="file"
                     id="file"
-                    label={
-                      <Typography
-                        style={{
-                          fontFamily: "Montserrat",
-                          fontSize: "0.8rem",
-                        }}
-                      >
-                        Profile Image
-                      </Typography>
-                    }
                     name="file"
                     onChange={handleImageChange}
                     sx={{ fontFamily: "Montserrat" }}
@@ -283,17 +253,21 @@ const EditProfilePage = () => {
                 <TextField
                   fullWidth
                   id="alt"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Profile Image Alt
-                    </Typography>
-                  }
+                  label="Profile Image Alt"
                   name="profile"
                   value={alt}
                   autoComplete="profile"
                   onChange={(e) => setAlt(e.target.value)}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
               </Grid>
 
@@ -301,29 +275,24 @@ const EditProfilePage = () => {
                 <TextField
                   fullWidth
                   name="Age"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Age
-                    </Typography>
-                  }
+                  label="Age"
                   type="number"
                   id="age"
                   value={inputs.age}
                   autoComplete="new-age"
                   inputProps={{ min: 0 }}
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.age} years
-                    </Typography>
-                  }
+                  helperText={`${userData.age} years`}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.age && (
                   <Alert
@@ -338,29 +307,24 @@ const EditProfilePage = () => {
                 <TextField
                   fullWidth
                   name="Height"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Height
-                    </Typography>
-                  }
+                  label="Height"
                   type="number"
                   id="height"
                   value={inputs.height}
                   autoComplete="new-height"
                   inputProps={{ min: 0 }}
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.height} cm
-                    </Typography>
-                  }
+                  helperText={`${userData.height} cm`}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.height && (
                   <Alert
@@ -375,29 +339,24 @@ const EditProfilePage = () => {
                 <TextField
                   fullWidth
                   name="Weight"
-                  label={
-                    <Typography
-                      style={{ fontFamily: "Montserrat", fontSize: "0.8rem" }}
-                    >
-                      Weight
-                    </Typography>
-                  }
+                  label="Weight"
                   type="number"
                   id="weight"
                   value={inputs.weight}
                   autoComplete="new-weight"
                   inputProps={{ min: 0 }}
-                  helperText={
-                    <Typography
-                      sx={{
-                        fontFamily: "Montserrat, sans-serif",
-                        fontSize: "0.7rem",
-                      }}
-                    >
-                      {userData.weight} kg
-                    </Typography>
-                  }
+                  helperText={`${userData.weight} kg`}
                   onChange={handleInputsChange}
+                  sx={{
+                    "& .MuiInputLabel-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.8rem",
+                    },
+                    "& .MuiFormHelperText-root": {
+                      fontFamily: "Montserrat, sans-serif",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
                 {errors && errors.weight && (
                   <Alert

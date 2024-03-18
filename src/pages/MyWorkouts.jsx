@@ -2,9 +2,8 @@ import Typography from "@mui/material/Typography";
 import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 import axios from "axios";
-import { useState } from "react";
+
 const MyWorkoutsPage = () => {
-  const [feedsLength, setFeedsLength] = useState(0);
   const fetchMyWorkoutsData = async (userId, filter) => {
     const orderBy = filter?.filterBy;
     const { data } = await axios.get(`/workouts/${userId}?filter=${orderBy}`);
@@ -19,12 +18,10 @@ const MyWorkoutsPage = () => {
     }));
     return updatedWorkouts;
   };
-  const handleFeedsLength = (value) => {
-    setFeedsLength(value);
-  };
+
   return (
     <>
-      <Box sx={{ pb: 5, height: feedsLength > 0 ? "auto" : "100vh" }}>
+      <Box sx={{ pb: 4 }}>
         <Typography
           variant="h4"
           style={{ fontFamily: "Montserrat, sans-serif" }}
@@ -36,7 +33,6 @@ const MyWorkoutsPage = () => {
             <WorkoutsList
               dataSourceSupplier={fetchMyWorkoutsData}
               message="workouts"
-              onFeedsChange={handleFeedsLength}
               isOwner={true}
             />
           </Grid>

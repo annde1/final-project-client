@@ -35,6 +35,7 @@ const SliderBottom = () => {
                   textAlign: "center",
                   color: "#EAEDF3",
                   fontWeight: "bold",
+                  fontSize: "70%",
                 }}
               >
                 Are you ready to embark on a transformative fitness experience?
@@ -58,6 +59,7 @@ const SliderBottom = () => {
                   textAlign: "center",
                   color: "#EAEDF3",
                   fontWeight: "bold",
+                  fontSize: "70%",
                 }}
               >
                 With Zen Fit, you have the power to sculpt your ideal workout
@@ -82,6 +84,7 @@ const SliderBottom = () => {
                   textAlign: "center",
                   color: "#EAEDF3",
                   fontWeight: "bold",
+                  fontSize: "60%",
                 }}
               >
                 Zen Fit is more than just a workout planner – it's a community
@@ -107,6 +110,7 @@ const SliderBottom = () => {
                   textAlign: "center",
                   color: "#EAEDF3",
                   fontWeight: "bold",
+                  fontSize: "70%",
                 }}
               >
                 Join the Zen Fit revolution today and unlock the door to a

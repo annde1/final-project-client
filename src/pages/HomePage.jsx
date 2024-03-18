@@ -17,7 +17,7 @@ const HomePage = () => {
   const [originalTemplates, setOriginalTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [templateSearch, setTemplateSearch] = useState("");
-  const [searchError, setSearchError] = useState(null);
+  const [searchError, setSearchError] = useState("");
   useEffect(() => {
     const fetchRandomWorkouts = async () => {
       try {

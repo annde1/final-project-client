@@ -1,12 +1,9 @@
 import Typography from "@mui/material/Typography";
 import { Grid, Container, Box } from "@mui/material";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
-
 import axios from "axios";
-import { useState } from "react";
 
 const FeedsPage = () => {
-  const [feedsLength, setFeedsLength] = useState(0);
   const fetchFeedWorkoutsData = async (userId, filter) => {
     const orderBy = filter?.filterBy;
     const userName = filter?.search ? filter?.search : "";
@@ -25,15 +22,11 @@ const FeedsPage = () => {
     return dataSource;
   };
 
-  const handleFeedsLength = (value) => {
-    setFeedsLength(value);
-  };
   return (
     <>
       <Box
         sx={{
           pb: 5,
-          height: feedsLength > 0 ? "auto" : "100vh",
           position: "relative",
         }}
       >
@@ -52,7 +45,6 @@ const FeedsPage = () => {
               message="feeds"
               dataSourceSupplier={fetchFeedWorkoutsData}
               showSearch={true}
-              onFeedsChange={handleFeedsLength}
             />
           </Grid>
         </Container>

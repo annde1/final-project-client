@@ -332,6 +332,7 @@ const RegisterPage = () => {
                     inputProps={{
                       inputMode: "numeric",
                       pattern: "[0-9]*",
+                      min: 0,
                     }}
                   />
                   {errors && errors.age && (
@@ -357,6 +358,7 @@ const RegisterPage = () => {
                     type="number"
                     id="height"
                     autoComplete="new-height"
+                    inputProps={{ min: 0 }}
                     value={inputs.height}
                     onChange={handleInputsChange}
                   />
@@ -382,6 +384,7 @@ const RegisterPage = () => {
                     }
                     type="number"
                     id="weight"
+                    inputProps={{ min: 0 }}
                     autoComplete="new-weight"
                     value={inputs.weight}
                     onChange={handleInputsChange}
@@ -419,7 +422,14 @@ const RegisterPage = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "#0B0D12",
+                  "&:hover": {
+                    backgroundColor: "#393A3E",
+                  },
+                }}
                 className="customFont"
                 onClick={handleSubmit}
               >
@@ -428,12 +438,14 @@ const RegisterPage = () => {
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Link
-                    href="#"
+                    component="button"
                     variant="body2"
                     sx={{
                       fontFamily: "Montserrat, sans-serif",
                       color: "#0B0D12",
+                      textDecoration: "none",
                     }}
+                    onClick={() => navigate(ROUTES.LOGIN)}
                   >
                     Already have an account? Sign in
                   </Link>

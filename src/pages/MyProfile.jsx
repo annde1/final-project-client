@@ -122,7 +122,7 @@ const MyProfilePage = () => {
             )}
             {showPremiumModal && (
               <PremiumStatusModal
-                open={setShowPremiumModal}
+                open={showPremiumModal}
                 onClose={handleClosePremiumModal}
                 onChangePremiumStatus={handleChangePremiumStatus}
                 isPremium={userData.isPremium}

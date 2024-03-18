@@ -59,7 +59,7 @@ const SocialTab = ({ isFollowersTab }) => {
 
   const handleUnfollow = async (_id) => {
     try {
-      await axios.patch(`/users/follow/${_id}`);
+      await axios.patch(`/users/unfollow/${_id}`);
       if (isFollowersTab) {
         setSocialData((prevData) =>
           prevData.map((user) =>

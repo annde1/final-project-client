@@ -30,6 +30,7 @@ const TemplatePreviewList = ({
     <>
       {templateData.exercises?.map((exercise) => (
         <TemplatePreviewItem
+          key={exercise._id}
           exerciseName={exercise.name}
           sets={exercise.sets}
         />

@@ -164,7 +164,14 @@ const LoginPage = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, backgroundColor: "#0B0D12" }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "#0B0D12",
+                  "&:hover": {
+                    backgroundColor: "#393A3E",
+                  },
+                }}
                 className="customFont"
                 onClick={handleUserLogin}
               >
@@ -173,10 +180,13 @@ const LoginPage = () => {
               <Grid container>
                 <Grid item>
                   <Link
-                    href="#"
+                    component="button"
                     variant="body2"
                     className="customFont"
-                    style={{ color: "#0B0D12" }}
+                    style={{ color: "#0B0D12", textDecoration: "none" }}
+                    onClick={() => {
+                      navigate(ROUTES.REGISTER);
+                    }}
                   >
                     {"Don't have an account? Sign Up"}
                   </Link>

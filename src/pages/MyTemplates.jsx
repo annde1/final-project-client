@@ -97,7 +97,13 @@ const MyTemplatesPage = () => {
         </Typography>
       ) : (
         <>
-          <Box sx={{ position: "absolute", top: 130, right: 130 }}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 100,
+              right: 10,
+            }}
+          >
             <ToggleComponent
               onDisplayModeChange={handleDisplayMode}
               view={displayMode}

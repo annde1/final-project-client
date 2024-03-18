@@ -4,9 +4,8 @@ import axios from "axios";
 import WorkoutsList from "../components/appContent/workout/WorkoutsList";
 import { filterWorkouts } from "../service/workout-service";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+
 const FavoriteWorkoutsPage = () => {
-  const [feedsLength, setFeedsLength] = useState(0);
   const user = useSelector((store) => store.authenticationSlice.userData?._id);
 
   const fetchFavoriteWorkouts = async (userId, query) => {
@@ -24,13 +23,9 @@ const FavoriteWorkoutsPage = () => {
     return likedWorkouts;
   };
 
-  const handleFeedsLength = (value) => {
-    setFeedsLength(value);
-  };
-
   return (
     <>
-      <Box sx={{ pb: 5, height: feedsLength > 0 ? "auto" : "100vh" }}>
+      <Box sx={{ pb: 4 }}>
         <Typography
           variant="h4"
           style={{
@@ -47,7 +42,6 @@ const FavoriteWorkoutsPage = () => {
               showSearch={true}
               message="favorite workouts"
               showLiked={true}
-              onFeedsChange={handleFeedsLength}
             />
           </Grid>
         </Container>

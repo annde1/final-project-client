@@ -39,13 +39,17 @@ export default function AboutSlider() {
             <div className="slide-content">
               <p
                 className="slide-title"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
+                style={{
+                  fontFamily: "Montserrat, sans-serif",
+                }}
               >
                 Customizable Templates
               </p>
               <p
                 className="slide-description"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
+                style={{
+                  fontFamily: "Montserrat, sans-serif",
+                }}
               >
                 Create personalized workout routines tailored to your fitness
                 goals. Our intuitive Create Template page allows you to design
