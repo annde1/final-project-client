@@ -17,7 +17,8 @@ import Alert from "@mui/material/Alert";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import { constructEditProfileData } from "../service/form-data-service";
-import normalizeUserData from "../service/nomralizeUserData";
+
+import normalizeEditProfileData from "../service/normalize-edit-profile";
 
 const EditProfilePage = () => {
   const [userData, setUserData] = useState({});
@@ -69,7 +70,7 @@ const EditProfilePage = () => {
       e.preventDefault();
 
       const data = { ...inputs, alt: alt };
-      const normalized = normalizeUserData(data);
+      const normalized = normalizeEditProfileData(data);
       const errors = validateEditProfile(normalized);
 
       if (errors) {
