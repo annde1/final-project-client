@@ -15,6 +15,7 @@ import { infoToast } from "../service/toastify-service";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../routes/routes";
 import PremiumStatusModal from "../components/appContent/userProfile/PremiumStatusModal";
+
 const MyProfilePage = () => {
   const [userData, setUserData] = useState({});
   const [workouts, setWorkouts] = useState([]);
@@ -27,9 +28,6 @@ const MyProfilePage = () => {
     (store) => store.authenticationSlice.userData?._id
   );
 
-  useEffect(() => {
-    console.log(bmi);
-  }, [bmi]);
   const logout = useLogout();
   const navigate = useNavigate();
   useEffect(() => {
@@ -124,6 +122,7 @@ const MyProfilePage = () => {
                 onDeleteProfile={handleDeleteAccount}
               />
             )}
+
             {showPremiumModal && (
               <PremiumStatusModal
                 open={showPremiumModal}
