@@ -48,7 +48,7 @@ ZenFit is an application designed to help users create and manage workout templa
 
 ## Login Details for regular user
 
-- Email: nichdoe123@gmail.com
+- Email: nicholas.doe@example.com
 - Password: Letmein1234!
 
 ## Feedback and Support
