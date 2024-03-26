@@ -21,7 +21,6 @@ import { constructEditProfileData } from "../service/form-data-service";
 import normalizeEditProfileData from "../service/normalize-edit-profile";
 
 const EditProfilePage = () => {
-  const [userData, setUserData] = useState({});
   const [alt, setAlt] = useState("");
   const [inputs, setInputs] = useState({
     firstName: "",
@@ -43,7 +42,7 @@ const EditProfilePage = () => {
     const fetchUserData = async () => {
       try {
         const { data } = await axios.get(`/users/${userId}`);
-        setUserData(data.userData);
+        setInputs(data.userData);
         setAlt(data.userData?.image?.alt || "");
       } catch (err) {
         // console.log(err);
@@ -116,7 +115,6 @@ const EditProfilePage = () => {
                   autoFocus
                   className="customFont"
                   value={inputs.firstName}
-                  helperText={userData.name?.firstName}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
@@ -146,7 +144,6 @@ const EditProfilePage = () => {
                   name="lastName"
                   autoComplete="family-name"
                   value={inputs.lastName}
-                  helperText={userData.name?.lastName}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
@@ -176,7 +173,6 @@ const EditProfilePage = () => {
                   label="Username *"
                   name="userName"
                   autoComplete="user-name"
-                  helperText={userData.userName}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
@@ -206,7 +202,6 @@ const EditProfilePage = () => {
                   name="email"
                   autoComplete="email"
                   value={inputs.email}
-                  helperText={userData.email}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
@@ -282,7 +277,6 @@ const EditProfilePage = () => {
                   value={inputs.age}
                   autoComplete="new-age"
                   inputProps={{ min: 0 }}
-                  helperText={`${userData.age} years`}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
@@ -314,7 +308,6 @@ const EditProfilePage = () => {
                   value={inputs.height}
                   autoComplete="new-height"
                   inputProps={{ min: 0 }}
-                  helperText={`${userData.height} cm`}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
@@ -346,7 +339,6 @@ const EditProfilePage = () => {
                   value={inputs.weight}
                   autoComplete="new-weight"
                   inputProps={{ min: 0 }}
-                  helperText={`${userData.weight} kg`}
                   onChange={handleInputsChange}
                   sx={{
                     "& .MuiInputLabel-root": {
